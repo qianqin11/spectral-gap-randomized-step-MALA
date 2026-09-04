@@ -1,0 +1,419 @@
+import UniformRandomMALA.EndpointCorollaries
+import UniformRandomMALA.DefectiveArithmetic
+import UniformRandomMALA.Concrete.HessianMainTheorem
+import UniformRandomMALA.Concrete.LazyKernel
+import UniformRandomMALA.Concrete.SqrtDimensionCorollary
+import UniformRandomMALA.Concrete.FractionalAggregation
+import UniformRandomMALA.Concrete.AllParameterMALAFlow
+import UniformRandomMALA.Concrete.SpectralGapUpperBounds
+import UniformRandomMALA.Concrete.FixedStepHardPotential
+import UniformRandomMALA.Concrete.HardPotentialLogRatio
+import UniformRandomMALA.Concrete.GaussianTrigonometricConcentration
+import UniformRandomMALA.Concrete.HardPotentialShiftedConcentration
+import UniformRandomMALA.Concrete.StickyRegionCut
+import UniformRandomMALA.Concrete.HardPotentialLocalObstruction
+import UniformRandomMALA.Concrete.HardPotentialStickyObstruction
+import UniformRandomMALA.Concrete.FixedStepHardPotentialObstruction
+import UniformRandomMALA.Concrete.FixedStepMinimax
+import UniformRandomMALA.Concrete.RandomWalkMetropolis
+import UniformRandomMALA.Concrete.BakryLedouxReduction
+import UniformRandomMALA.Concrete.WeakLimitEnlargement
+import UniformRandomMALA.Concrete.GaussianWeakLimit
+import UniformRandomMALA.Concrete.GaussianNormalProfile
+import UniformRandomMALA.Concrete.GaussianOU
+import UniformRandomMALA.Concrete.GaussianBobkov
+import UniformRandomMALA.Concrete.GaussianBobkovFunctional
+import UniformRandomMALA.Concrete.GaussianOUGenerator
+import UniformRandomMALA.Concrete.GaussianOUCanonicalFields
+import UniformRandomMALA.Concrete.GaussianEnlargement
+import UniformRandomMALA.Concrete.GaussianRampSmoothApproximation
+import UniformRandomMALA.Concrete.GaussianRampMollification
+import UniformRandomMALA.Concrete.GaussianRampThirdDerivative
+import UniformRandomMALA.Concrete.GaussianOUHigherFields
+import UniformRandomMALA.Concrete.GaussianOUCoordinateFields
+import UniformRandomMALA.Concrete.GaussianBobkovDiagonal
+import UniformRandomMALA.Concrete.GaussianOUCanonicalDiagonalFields
+import UniformRandomMALA.Concrete.GaussianOUBackwardPDE
+import UniformRandomMALA.Concrete.GaussianOUCanonicalResidual
+import UniformRandomMALA.Concrete.GaussianOUCanonicalInterpolation
+import UniformRandomMALA.Concrete.FiniteEulerEnlargement
+import UniformRandomMALA.Concrete.FiniteEulerTargetIdentification
+import UniformRandomMALA.Concrete.GaussianRampCanonicalInterpolation
+import UniformRandomMALA.DiscreteTime.Acceptance
+import UniformRandomMALA.DiscreteTime.Averaging
+import UniformRandomMALA.DiscreteTime.Recursion
+import UniformRandomMALA.DiscreteTime.EndpointContraction
+import UniformRandomMALA.DiscreteTime.MetropolisMeet
+import UniformRandomMALA.DiscreteTime.FiniteProduct
+import UniformRandomMALA.DiscreteTime.GaussianPositivePart
+import UniformRandomMALA.DiscreteTime.GaussianMaximum
+import UniformRandomMALA.DiscreteTime.ElementaryMGFTail
+import UniformRandomMALA.DiscreteTime.GaussianLawBridge
+import UniformRandomMALA.DiscreteTime.FiniteEnergy
+import UniformRandomMALA.DiscreteTime.ProductEnergyMGF
+import UniformRandomMALA.DiscreteTime.ExplicitRWMBalance
+import UniformRandomMALA.DiscreteTime.FiniteGaussianLikelihood
+import UniformRandomMALA.DiscreteTime.FiniteGaussianEndpointLaw
+import UniformRandomMALA.DiscreteTime.EulerRWMPairChain
+import UniformRandomMALA.DiscreteTime.EulerRWMRecurrence
+import UniformRandomMALA.DiscreteTime.EulerRWMFiniteRecurrence
+import UniformRandomMALA.DiscreteTime.EulerRWMVanishingStep
+import UniformRandomMALA.DiscreteTime.EulerRWMEdgeCoupling
+import UniformRandomMALA.DiscreteTime.EulerRWMEdgeVanishing
+import UniformRandomMALA.DiscreteTime.FiniteEulerEdgeBridge
+import UniformRandomMALA.DiscreteTime.ProkhorovBridge
+import UniformRandomMALA.DiscreteTime.DensityTestHolder
+import UniformRandomMALA.DiscreteTime.MovingDensityClosure
+import UniformRandomMALA.DiscreteTime.CouplingClosure
+import UniformRandomMALA.DiscreteTime.SetwiseAcceptReject
+import UniformRandomMALA.DiscreteTime.RejectionGoodSet
+import UniformRandomMALA.DiscreteTime.MeasureMeet
+import UniformRandomMALA.Concrete.RWMExpansion
+import UniformRandomMALA.Concrete.PotentialCentering
+import UniformRandomMALA.Concrete.Cocoercivity
+import UniformRandomMALA.Concrete.FiniteEulerEnergyMGF
+import UniformRandomMALA.Concrete.FiniteEulerLikelihoodBounds
+import UniformRandomMALA.Concrete.FiniteEulerRealMoments
+import UniformRandomMALA.Concrete.FiniteEulerEndpointContraction
+import UniformRandomMALA.Concrete.FiniteEulerProposalEndpointMoments
+import UniformRandomMALA.Concrete.GaussianProposalTV
+import UniformRandomMALA.Concrete.SetwiseTV
+import UniformRandomMALA.Concrete.SafeAcceptance
+import UniformRandomMALA.Concrete.MALASetwiseTV
+import UniformRandomMALA.Concrete.MALARejectionGoodSet
+import UniformRandomMALA.Concrete.MALALocalOverlap
+import UniformRandomMALA.Concrete.MALAOverlapFromRejection
+import UniformRandomMALA.Concrete.MALAAcceptedMeet
+import UniformRandomMALA.Concrete.MALAMetropolisMeet
+import UniformRandomMALA.Concrete.MALAWeakLimitAssembly
+import UniformRandomMALA.Concrete.MALAFullPathAssembly
+import UniformRandomMALA.Concrete.MALAOverlapBounds
+import UniformRandomMALA.MALAOverlap
+import UniformRandomMALA.Concrete.MALADefectiveConductance
+import UniformRandomMALA.Concrete.GaussianMills
+import UniformRandomMALA.Concrete.StandardGaussianShift
+import UniformRandomMALA.Concrete.ComponentAggregationFinal
+import UniformRandomMALA.Concrete.SafeComponent
+import UniformRandomMALA.Concrete.LadderComponents
+import UniformRandomMALA.Concrete.GlobalFromBakryLedoux
+import UniformRandomMALA.Concrete.UniversalConstants
+import UniformRandomMALA.Concrete.FiniteEulerGaussianImage
+
+/-!
+# Dependency audit
+
+The declarations below make the trusted boundary mechanically visible.
+There are no project-specific `axiom` declarations and no `sorry` terms.
+The legacy interface theorems below take
+`a : PaperAnalyticInterfaces p`. The current concrete final theorem, audited
+near the end of this file, instead supplies the required analytic results
+internally once a `FirstOrderPotential` is given.
+-/
+
+namespace UniformRandomMALA
+
+noncomputable section
+
+/-- One-line end-to-end implication from all interfaces to the expanded bound. -/
+theorem paper_interfaces_imply_expanded_main_theorem
+    (p : Parameters) (a : PaperAnalyticInterfaces p) :
+    p.c0 * (p.m / p.H) *
+        (min p.H
+          ((p.b0 / p.L) *
+            max
+              (1 / Real.sqrt (p.pStar * (p.d + p.pStar)))
+              (1 / p.d))) ^ 2 ≤
+      a.kernelObjects.spectralGap (a.kernelObjects.uniformMALA p.H) := by
+  exact global_gap_for_every_endpoint_expanded p
+    (GapCertificates.ofAnalyticInterfaces p a)
+
+/-- Adapted endpoint corollary extracted from all interfaces. -/
+theorem paper_interfaces_imply_adapted_endpoint
+    (p : Parameters) (a : PaperAnalyticInterfaces p)
+    (c : ℝ) (hc : 0 < c)
+    (hendpoint : p.H = c * p.M / p.L) :
+    (p.c0 / p.kappa) * (min c p.b0) ^ 2 / c * p.M ≤
+      a.kernelObjects.spectralGap (a.kernelObjects.uniformMALA p.H) := by
+  exact p.adapted_endpoint c hc hendpoint
+    (GapCertificates.ofAnalyticInterfaces p a)
+
+/-- Square-root-dimension endpoint corollary extracted from all interfaces. -/
+theorem paper_interfaces_imply_sqrt_dimension_endpoint
+    (p : Parameters) (a : PaperAnalyticInterfaces p)
+    (c : ℝ) (hc : 0 < c)
+    (hendpoint : p.H = c / (p.L * Real.sqrt p.d)) :
+    p.c0 * Real.sqrt p.d / (c * p.kappa) *
+        (min (c / Real.sqrt p.d) (p.b0 * p.M)) ^ 2 ≤
+      a.kernelObjects.spectralGap (a.kernelObjects.uniformMALA p.H) := by
+  exact p.sqrt_dimension_endpoint c hc hendpoint
+    (GapCertificates.ofAnalyticInterfaces p a)
+
+/-- The displayed `pStar ≤ d` corollary extracted from all interfaces. -/
+theorem paper_interfaces_imply_sqrt_dimension_endpoint_small_moment
+    (p : Parameters) (a : PaperAnalyticInterfaces p)
+    (c : ℝ) (hc : 0 < c)
+    (hendpoint : p.H = c / (p.L * Real.sqrt p.d))
+    (hpd : p.pStar ≤ p.d) :
+    (p.c0 / (p.kappa * Real.sqrt p.d)) *
+        ((min c (p.b0 / Real.sqrt (2 * p.pStar))) ^ 2 / c) ≤
+      a.kernelObjects.spectralGap (a.kernelObjects.uniformMALA p.H) := by
+  exact p.sqrt_dimension_endpoint_small_moment_paper
+    c hc hendpoint hpd (GapCertificates.ofAnalyticInterfaces p a)
+
+end
+
+end UniformRandomMALA
+
+-- Run these commands locally to inspect Lean's logical dependencies.
+#print axioms UniformRandomMALA.global_gap_for_every_endpoint
+#print axioms UniformRandomMALA.PaperAnalyticInterfaces.elementary_proof_implies_proposition32
+#print axioms UniformRandomMALA.DiscreteTime.meet_rejection_le_deviations
+#print axioms UniformRandomMALA.DiscreteTime.coupling_recursion_bound_fixed_horizon
+#print axioms UniformRandomMALA.DiscreteTime.rpow_integral_le_integral_rpow
+#print axioms UniformRandomMALA.DiscreteTime.centeredRNDeriv_memLp_of_weakLimit
+#print axioms UniformRandomMALA.DiscreteTime.boundedContinuous_holder_of_withDensity_moment
+#print axioms UniformRandomMALA.DiscreteTime.rnDeriv_memLp_of_moving_withDensity
+#print axioms UniformRandomMALA.DiscreteTime.integral_centered_rnDeriv_fst_rpow_le
+#print axioms UniformRandomMALA.DiscreteTime.integral_rejectionMarginal_rpow_le
+#print axioms UniformRandomMALA.DiscreteTime.integral_scaledGaussian_positivePart_smul
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.norm_integral_scaledRWMRejectionExpansionError_le
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.iteratedIntegral_bernoulliRWMRejectedIncrement_eq
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.rwmKernel_isReversible
+#print axioms UniformRandomMALA.DiscreteTime.finite_euler_path_energy_le_full_horizon
+#print axioms UniformRandomMALA.DiscreteTime.integral_exp_productEnergy_le
+#print axioms UniformRandomMALA.DiscreteTime.integral_exp_step_sum_gaussianPartialSums_le
+#print axioms UniformRandomMALA.DiscreteTime.TwoSidedMGFBound.realMomentRoot_le_subgamma_scale
+#print axioms UniformRandomMALA.DiscreteTime.gaussianProposal_eq_gaussianDensityProposal
+#print axioms UniformRandomMALA.DiscreteTime.explicitRWMKernel_invariant
+#print axioms UniformRandomMALA.DiscreteTime.integral_finiteGaussianDRec_initial
+#print axioms UniformRandomMALA.DiscreteTime.lintegral_finiteGaussianLikelihoodRec_centered
+#print axioms UniformRandomMALA.DiscreteTime.map_finiteEulerEndpointRec_DRec_withDensity
+#print axioms UniformRandomMALA.DiscreteTime.finiteFrozenEndpointRec_initial_eq_closedForm
+#print axioms UniformRandomMALA.DiscreteTime.map_finiteEulerTiltedEdge_eq_compProd_gaussianDensityProposal
+#print axioms UniformRandomMALA.DiscreteTime.finiteEulerLikelihoodEdgeLaw_eq_finiteEulerEdgeMeasure
+#print axioms UniformRandomMALA.DiscreteTime.finiteEulerLikelihoodTiltedEdgeLaw_eq_compProd_gaussianDensityProposal
+#print axioms UniformRandomMALA.DiscreteTime.finiteEulerLikelihoodTiltedEdgeLaw_absolutelyContinuous
+#print axioms UniformRandomMALA.DiscreteTime.compProd_gaussianDensityProposal_eq_finiteEulerEdgeMeasure_withDensity_toReal_endpointRNDensity
+#print axioms UniformRandomMALA.DiscreteTime.finiteEulerV_le_energy
+#print axioms UniformRandomMALA.DiscreteTime.finiteGaussianDRec_centered_sq_integrable_and_integral_le_of_energy_exp
+#print axioms UniformRandomMALA.DiscreteTime.finiteGaussianDRec_centered_abs_integrable_and_integral_le_of_energy_exp
+#print axioms UniformRandomMALA.DiscreteTime.finiteGaussianDRec_centered_tail_le_of_energy_exp
+#print axioms UniformRandomMALA.DiscreteTime.map_explicitRWMUniformUpdate_gaussianUniformNoise
+#print axioms UniformRandomMALA.DiscreteTime.snd_eulerRWMPairChainKernel
+#print axioms UniformRandomMALA.DiscreteTime.explicitRWMKernel_finiteIterate_invariant
+#print axioms UniformRandomMALA.DiscreteTime.integral_pairOneStepSquaredDistance_le
+#print axioms UniformRandomMALA.DiscreteTime.stationaryEulerRWMPairChain_energy_le
+#print axioms UniformRandomMALA.DiscreteTime.tendsto_stationaryEulerRWMPairChain_energy_fixedHorizon
+#print axioms UniformRandomMALA.DiscreteTime.lintegral_retainedInitial_pairCost_eq_ofReal_energy
+#print axioms UniformRandomMALA.DiscreteTime.exists_positive_vanishing_fixedHorizonOffsetSchedule
+#print axioms UniformRandomMALA.DiscreteTime.exists_common_tendsto_subseq_fixedHorizonEulerRWMEdgeLaws_with_structure
+#print axioms UniformRandomMALA.DiscreteTime.fst_finiteEulerRWMEdgeCouplingMeasure
+#print axioms UniformRandomMALA.DiscreteTime.snd_finiteEulerRWMEdgeCouplingMeasure
+#print axioms UniformRandomMALA.DiscreteTime.exists_tendsto_subseq_finiteRWMEdgeLaw
+#print axioms UniformRandomMALA.DiscreteTime.exists_common_tendsto_subseq_finiteEulerEdgeLaw_finiteRWMEdgeLaw_with_structure
+#print axioms UniformRandomMALA.DiscreteTime.map_swap_finiteRWMEdgeMeasure
+#print axioms UniformRandomMALA.DiscreteTime.levyProkhorovEDist_finiteEulerEdgeMeasure_finiteRWMEdgeMeasure_le
+#print axioms UniformRandomMALA.DiscreteTime.levyProkhorovEDist_le_of_coupling_lintegral_sq_le_cube
+#print axioms UniformRandomMALA.DiscreteTime.map_swap_eq_self_of_probabilityMeasure_tendsto
+#print axioms UniformRandomMALA.DiscreteTime.exists_tendsto_subseq_of_tight_marginals
+#print axioms UniformRandomMALA.DiscreteTime.weak_limit_coupling_of_fixed_marginals_with_tail_slack
+#print axioms UniformRandomMALA.DiscreteTime.weak_limit_symmetric_coupling_of_fixed_marginals_with_sq_control
+#print axioms UniformRandomMALA.DiscreteTime.abs_metropolisKernel_apply_toReal_sub_proposal_le_rejection
+#print axioms UniformRandomMALA.DiscreteTime.exists_averagedRejection_goodSet_one_third
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.gradU_norm_sq_le_potentialGap
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.integral_exp_neg_mul_potentialGap_le
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.integral_exp_potentialGap_le
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.integrable_gradU_norm_fourth
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.integral_exp_gradU_norm_sq_le
+#print axioms UniformRandomMALA.DiscreteTime.integral_exp_finiteEulerEnergy_le
+#print axioms UniformRandomMALA.DiscreteTime.integral_exp_finiteEulerEnergy_le_exp
+#print axioms UniformRandomMALA.DiscreteTime.integrable_exp_finiteEulerEnergy
+#print axioms UniformRandomMALA.DiscreteTime.finiteEulerLikelihood_centered_sq_integrable_and_integral_le
+#print axioms UniformRandomMALA.DiscreteTime.finiteEulerLikelihood_centered_abs_integrable_and_integral_le
+#print axioms UniformRandomMALA.DiscreteTime.finiteEulerLikelihood_centered_tail_le
+#print axioms UniformRandomMALA.DiscreteTime.finiteEulerLikelihood_centered_sq_integrable_and_integral_le_linear
+#print axioms UniformRandomMALA.DiscreteTime.finiteEulerLikelihood_centered_abs_integrable_and_integral_le_sqrt
+#print axioms UniformRandomMALA.DiscreteTime.finiteGaussianMRec_twoSidedMGFBound
+#print axioms UniformRandomMALA.DiscreteTime.finiteGaussianMRec_realMomentRoot_le
+#print axioms UniformRandomMALA.DiscreteTime.finiteGaussianVRec_rpow_integrable_and_integral_le
+#print axioms UniformRandomMALA.DiscreteTime.finiteGaussianDRec_rpow_integrable_and_integral_le
+#print axioms UniformRandomMALA.DiscreteTime.finiteGaussianDRec_two_p_root_le
+#print axioms UniformRandomMALA.DiscreteTime.finiteGaussianDRec_centered_rpow_root_le_of_moments
+#print axioms UniformRandomMALA.DiscreteTime.finiteGaussianDRec_centered_rpow_root_le_paper_scale
+#print axioms UniformRandomMALA.DiscreteTime.finiteEulerLikelihoodEndpointRNDensity_centered_rpow_integrable_and_integral_le
+#print axioms UniformRandomMALA.DiscreteTime.finiteGaussianProposalEdge_rnDeriv_centered_rpow_integrable_and_root_le
+#print axioms UniformRandomMALA.DiscreteTime.withDensity_min_invariant
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.gradU_cocoercive
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.norm_proposalMean_sub_le
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.abs_gaussianDensityProposal_apply_toReal_sub_le_one_div_32
+#print axioms UniformRandomMALA.setwiseTV_le_of_forall
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.malaAcceptanceMass_ge_invSqrtPow
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.malaAcceptanceMass_ge_exp
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.abs_malaKernel_apply_toReal_sub_le_seventeen_div_32
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.abs_dyadicMALA_apply_toReal_sub_le_three_quarters
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.setwiseTV_dyadicMALA_le_three_quarters
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.exists_dyadicMALARejection_goodSet_one_third
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.exists_dyadicMALALocalOverlap_goodSet
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.proposition32_of_stationaryMALARejectionMomentBound
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.malaAcceptedEdge_eq_rnMeet
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.stationaryMALARejectionMomentBound_of_meetCertificates
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.stationaryMALARejectionMomentBound_of_moving_reference_family
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.fixedHorizonOffsetFullPathMomentBound_paperScale
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.stationaryMALARejectionMomentBound_paperScale
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.proposition32_discreteTime
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.gaussianResidual_firstOrderConvex
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.gradU_strongMonotone
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.eulerDrift_sq_le
+#print axioms UniformRandomMALA.DiscreteTime.reverseGeometricAccum_eq_sum
+#print axioms UniformRandomMALA.DiscreteTime.reverseGeometricAccum_sq_le
+#print axioms UniformRandomMALA.DiscreteTime.finiteEulerState_innovationSensitivity_sq
+#print axioms UniformRandomMALA.DiscreteTime.finiteEuler_geometricCoefficient_le
+#print axioms UniformRandomMALA.DiscreteTime.finiteEulerState_innovationSensitivity_sq_le
+#print axioms UniformRandomMALA.DiscreteTime.sum_norm_euclideanInnovationBlocks_sub_sq
+#print axioms UniformRandomMALA.DiscreteTime.finiteEulerEuclideanEndpoint_sq_le
+#print axioms UniformRandomMALA.DiscreteTime.finiteEulerEuclideanEndpoint_lipschitzWith
+#print axioms UniformRandomMALA.DiscreteTime.tendsto_finiteEulerSensitivityCoefficient_fixedTime
+#print axioms UniformRandomMALA.DiscreteTime.eventually_finiteEuler_fixedTime_smallStep
+#print axioms UniformRandomMALA.Concrete.mills_lower
+#print axioms UniformRandomMALA.Concrete.mills_upper
+#print axioms UniformRandomMALA.Concrete.standardGaussianShift
+#print axioms UniformRandomMALA.Concrete.separatedSets_of_bakryLedoux
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.safe_dyadicMALA_boundaryFlow_lower_of_bakryLedoux
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.local_dyadicMALA_boundaryFlow_lower_of_bakryLedoux
+#print axioms UniformRandomMALA.Concrete.componentAggregation_poincareLower
+#print axioms UniformRandomMALA.Concrete.componentAggregation_le_spectralGap
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.safe_spectralGap_lower_of_bakryLedoux
+#print axioms UniformRandomMALA.Concrete.ladderHarmonicReal_le
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.ladderGap_lower_of_bakryLedoux
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.global_spectralGap_lower_of_bakryLedoux
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.universal_masterRHS_spectralGap_lower_of_bakryLedoux
+#print axioms UniformRandomMALA.paper_interfaces_imply_expanded_main_theorem
+#print axioms UniformRandomMALA.Concrete.enlargement_profile_of_weakLimit
+#print axioms UniformRandomMALA.Concrete.gaussianShift_compact_le_closedThickening_of_weakLimit
+#print axioms UniformRandomMALA.Concrete.bakryLedouxEnlargement_of_weakLimit
+#print axioms UniformRandomMALA.Concrete.normalProfile_mul_secondDeriv
+#print axioms UniformRandomMALA.Concrete.normalProfile_one_sub
+#print axioms UniformRandomMALA.Concrete.strictConcaveOn_normalProfile
+#print axioms UniformRandomMALA.Concrete.map_gaussianOUMap_prod_stdGaussian
+#print axioms UniformRandomMALA.Concrete.gaussianOUSemigroup_comp
+#print axioms UniformRandomMALA.Concrete.integral_gaussianOUSemigroup
+#print axioms UniformRandomMALA.Concrete.tendsto_gaussianOUSemigroup_atTop
+#print axioms UniformRandomMALA.Concrete.hasFDerivAt_gaussianOUSemigroup
+#print axioms UniformRandomMALA.Concrete.fderiv_gaussianOUSemigroup
+#print axioms UniformRandomMALA.Concrete.bobkov_g2_scalar_cancellation
+#print axioms UniformRandomMALA.Concrete.bobkov_weighted_block_cauchy_schwarz
+#print axioms UniformRandomMALA.Concrete.bobkov_sqrt_chain_nonneg
+#print axioms UniformRandomMALA.Concrete.continuous_normalProfileClosed
+#print axioms UniformRandomMALA.Concrete.bobkov_g3_gradient
+#print axioms UniformRandomMALA.Concrete.gaussianOU_bochner_coordinate_identity
+#print axioms UniformRandomMALA.Concrete.tendsto_gaussianBobkovOUIntegral_atTop
+#print axioms UniformRandomMALA.Concrete.gaussianBobkov_functionalClosed_of_local
+#print axioms UniformRandomMALA.Concrete.gaussianBobkov_functionalClosed_of_truncations
+#print axioms UniformRandomMALA.Concrete.gaussianBobkov_functionalClosed_of_localTruncations
+#print axioms UniformRandomMALA.Concrete.bobkov_g3_full
+#print axioms UniformRandomMALA.Concrete.bobkovSqrtResidual_nonneg
+#print axioms UniformRandomMALA.Concrete.bobkov_interpolation_endpoint_le
+#print axioms UniformRandomMALA.Concrete.integral_partial_stdGaussian_eq_integral_mul
+#print axioms UniformRandomMALA.Concrete.hasDerivAt_gaussianOUSemigroup_time_direct
+#print axioms UniformRandomMALA.Concrete.hasDerivAt_gaussianOUSemigroup_time_generatorCoordinates
+#print axioms UniformRandomMALA.Concrete.hasDerivAt_gaussianOUSemigroup_timeDependent_generatorCoordinates
+#print axioms UniformRandomMALA.Concrete.GaussianBobkovSmoothInterpolation.ofSmoothGeneratorFamily
+#print axioms UniformRandomMALA.Concrete.gaussianBobkov_local_of_smoothInterpolation
+#print axioms UniformRandomMALA.Concrete.gaussianBobkov_functionalClosed_of_smoothInterpolations
+#print axioms UniformRandomMALA.Concrete.gaussianBobkovSmooth_of_smoothInterpolations
+#print axioms UniformRandomMALA.Concrete.continuous_gaussianOUAverage
+#print axioms UniformRandomMALA.Concrete.continuous_gaussianOUAverage_joint
+#print axioms UniformRandomMALA.Concrete.hasFDerivAt_backwardGaussianOUValueBCF
+#print axioms UniformRandomMALA.Concrete.canonicalGaussianBobkovQ_initial
+#print axioms UniformRandomMALA.Concrete.canonicalGaussianBobkovQ_terminal
+#print axioms UniformRandomMALA.Concrete.continuousOn_canonicalTruncatedGaussianBobkovFlow
+#print axioms UniformRandomMALA.Concrete.CanonicalGaussianBobkovInterpolation.toSmoothInterpolation
+#print axioms UniformRandomMALA.Concrete.gaussianBobkovSmoothInterpolationProperty_of_canonical
+#print axioms UniformRandomMALA.Concrete.tendsto_integral_gaussianRamp
+#print axioms UniformRandomMALA.Concrete.gaussianRamp_functional_le_strip
+#print axioms UniformRandomMALA.Concrete.gaussianRamp_functional_le_strip_of_distanceRamps
+#print axioms UniformRandomMALA.Concrete.gaussianRampClosedStripBound_of_distanceRamps
+#print axioms UniformRandomMALA.Concrete.gaussianRampSmooth_bobkovIntegrand_le_closedStrip
+#print axioms UniformRandomMALA.Concrete.gaussianRampClosedStripBound_of_smooth
+#print axioms UniformRandomMALA.Concrete.lipschitzWith_normedBumpConvolution
+#print axioms UniformRandomMALA.Concrete.tendsto_gaussianRamp_cthickening
+#print axioms UniformRandomMALA.Concrete.tendsto_integral_gaussianRampMollified
+#print axioms UniformRandomMALA.Concrete.gaussianRampMollified_one_on
+#print axioms UniformRandomMALA.Concrete.gaussianRampMollified_zero_off
+#print axioms UniformRandomMALA.Concrete.concreteGaussianRampSmoothApproximation
+#print axioms UniformRandomMALA.Concrete.gaussianRampSmoothApproximationProperty
+#print axioms UniformRandomMALA.Concrete.backwardGaussianOUValueTimeDeriv_eq_neg_generator
+#print axioms UniformRandomMALA.Concrete.hasDerivAt_backwardGaussianOURieszGradientBCF_time
+#print axioms UniformRandomMALA.Concrete.backwardGaussianOURieszGradientTimeDeriv_eq_neg_generator
+#print axioms UniformRandomMALA.Concrete.bobkovQ_time_add_generator_eq_residual_of_PDE
+#print axioms UniformRandomMALA.Concrete.hasDerivAt_canonicalGaussianBobkovQ_time_of_rieszHessian
+#print axioms UniformRandomMALA.Concrete.canonicalGaussianBobkovQ_time_add_generator_eq_residual
+#print axioms UniformRandomMALA.Concrete.closedGaussianPerimeter_of_functionalLipschitz
+#print axioms UniformRandomMALA.Concrete.closedGaussianPerimeter_of_closedStrip
+#print axioms UniformRandomMALA.Concrete.normalCDF_shift_le_of_lowerRightSlope
+#print axioms UniformRandomMALA.Concrete.lowerRightSlope_endpoint_of_monotone
+#print axioms UniformRandomMALA.Concrete.continuousWithinAt_closedEnlargementMass_right
+#print axioms UniformRandomMALA.Concrete.normalCDF_shift_le_of_lowerRightSlope_monotone
+#print axioms UniformRandomMALA.Concrete.normalCDF_shift_le_thickening_of_closedPerimeter
+#print axioms UniformRandomMALA.Concrete.normalCDF_shift_le_thickening_of_closedPerimeter_monotone
+#print axioms UniformRandomMALA.Concrete.bakryLedouxEnlargement_of_closed
+#print axioms UniformRandomMALA.Concrete.bakryLedouxEnlargement_of_closedPerimeter_monotone
+#print axioms UniformRandomMALA.Concrete.bakryLedouxEnlargement_of_closedStrip
+#print axioms UniformRandomMALA.Concrete.bakryLedouxEnlargement_of_smoothBobkovAndRampApproximation
+#print axioms UniformRandomMALA.Concrete.bakryLedouxEnlargement_of_smoothInterpolationsAndRampApproximation
+#print axioms UniformRandomMALA.Concrete.bakryLedouxEnlargement_of_smoothInterpolations
+#print axioms UniformRandomMALA.Concrete.bakryLedouxEnlargement_of_canonicalInterpolations
+#print axioms UniformRandomMALA.Concrete.bakryLedouxEnlargement_of_functionalLipschitz
+#print axioms UniformRandomMALA.Concrete.enlargement_map_of_lipschitzWith
+#print axioms UniformRandomMALA.Concrete.finiteEulerEuclideanEndpoint_enlargement
+#print axioms UniformRandomMALA.Concrete.finiteEulerEuclideanEndpoint_enlargement_of_smoothInterpolations
+#print axioms UniformRandomMALA.Concrete.finiteEulerEuclideanEndpoint_enlargement_of_canonicalInterpolations
+#print axioms UniformRandomMALA.Concrete.finiteEulerEuclideanEndpointLaw_toMeasure
+#print axioms UniformRandomMALA.Concrete.finiteEulerEndpointLimit_bakryLedoux_of_canonicalInterpolations
+#print axioms UniformRandomMALA.DiscreteTime.map_euclideanInnovationBlocks_stdGaussian
+#print axioms UniformRandomMALA.DiscreteTime.map_finiteEulerEuclideanEndpoint_eq_finiteKernelIterate
+#print axioms UniformRandomMALA.DiscreteTime.levyProkhorovEDist_finiteEuler_target_le
+#print axioms UniformRandomMALA.DiscreteTime.tendsto_finiteEulerTargetDiagonalEndpointLaw
+#print axioms UniformRandomMALA.DiscreteTime.target_bakryLedoux_of_canonicalInterpolations
+#print axioms UniformRandomMALA.Concrete.gaussianBobkovSmoothInterpolation_of_boundedThirdJet
+#print axioms UniformRandomMALA.Concrete.gaussianRampMollified_bobkov
+#print axioms UniformRandomMALA.Concrete.bakryLedouxEnlargement_stdGaussian_finiteIndex
+#print axioms UniformRandomMALA.DiscreteTime.target_bakryLedoux
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.masterRHS_spectralGap_lower
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.universal_masterRHS_spectralGap_lower
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.mala_overlap_bounds
+#print axioms UniformRandomMALA.Concrete.HessianBoundedPotential.toFirstOrderPotential
+#print axioms UniformRandomMALA.Concrete.HessianBoundedPotential.universal_masterRHS_rayleighSpectralGap_lower
+#print axioms UniformRandomMALA.Concrete.exists_universal_nonlazy_paperMasterRHS_lower
+#print axioms UniformRandomMALA.Concrete.rayleighSpectralGap_halfLazyKernel
+#print axioms UniformRandomMALA.Concrete.HessianBoundedPotential.universal_half_masterRHS_lazy_rayleighSpectralGap_lower
+#print axioms UniformRandomMALA.Concrete.exists_universal_lazy_paperMasterRHS_lower
+#print axioms UniformRandomMALA.Concrete.HessianBoundedPotential.sqrtDimensionCorollary_rayleighSpectralGap_lower
+#print axioms UniformRandomMALA.Concrete.HessianBoundedPotential.sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower
+#print axioms UniformRandomMALA.Concrete.fractionalAggregation_poincareLower
+#print axioms UniformRandomMALA.Concrete.fractionalAggregation_le_spectralGap
+#print axioms UniformRandomMALA.Concrete.hardAssignmentAggregation_poincareLower
+#print axioms UniformRandomMALA.Concrete.hardAssignmentAggregation_le_spectralGap
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.local_dyadicMALA_boundaryFlow_allParameters
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.safe_dyadicMALA_boundaryFlow_allParameters
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.allParameterMALAFlowBounds
+#print axioms UniformRandomMALA.Concrete.rayleighSpectralGap_le_boundaryFlow_div_cutVariance
+#print axioms UniformRandomMALA.Concrete.contDiff_infty_fixedStepHardPotential
+#print axioms UniformRandomMALA.Concrete.fixedStepHardPotential_hessian_lower
+#print axioms UniformRandomMALA.Concrete.fixedStepHardPotential_hessian_upper
+#print axioms UniformRandomMALA.Concrete.hard_malaLogRatio_zero_le_shape_sum
+#print axioms UniformRandomMALA.Concrete.integral_cos_gaussianReal_zero_two
+#print axioms UniformRandomMALA.Concrete.integral_mul_sin_gaussianReal_zero_two
+#print axioms UniformRandomMALA.Concrete.exists_universal_contraction_factor_for_pi_scaledGaussian_tail
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.continuous_malaAcceptanceProfile
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.exists_target_ball_rayleighSpectralGap_le_two_mul
+#print axioms UniformRandomMALA.Concrete.fixedStepHardMALA_rayleighSpectralGap_le_local
+#print axioms UniformRandomMALA.Concrete.fixedStepHard_malaAcceptanceProfile_zero_le_mgf_pow
+#print axioms UniformRandomMALA.Concrete.exists_universal_fixedStepHard_sticky_rayleighSpectralGap_upper
+#print axioms UniformRandomMALA.Concrete.exists_universal_fixedStepHardPotential_raw_obstruction
+#print axioms UniformRandomMALA.Concrete.fixedStepHardPotential_mem_smoothHessianPotentialGapValues
+#print axioms UniformRandomMALA.Concrete.exists_universal_fixedStepWorstPotentialGap_raw_upper
+#print axioms UniformRandomMALA.Concrete.exists_universal_fixedStepHardPotential_obstruction_allDimensions
+#print axioms UniformRandomMALA.Concrete.exists_universal_fixedStepWorstPotentialGap_le_twoBranchEnvelope
+#print axioms UniformRandomMALA.Concrete.exists_universal_fixedStepMinimaxGap_explicit_upper
+#print axioms UniformRandomMALA.Concrete.exists_universal_fixedStepMinimaxGap_paper_upper

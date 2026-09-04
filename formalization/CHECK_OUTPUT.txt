@@ -1,0 +1,28 @@
+PACKAGE AUDIT -- 2026-08-30
+
+STATIC AUDIT PASSED
+Lean files: 151
+Declarations: 2036
+Explicit `by` proof blocks: 5719
+Placeholders (`sorry`, `admit`, project `axiom`): none
+Local imports: resolved
+Comments, strings, and (), [], {} delimiters: balanced
+
+NUMERIC SANITY PASSED
+Seed: 20260815
+Random trials: 2000
+
+LEAN KERNEL BUILD PASSED
+Build completed successfully (3435 jobs).
+Pinned toolchain: Lean/mathlib v4.33.0.
+
+PUBLIC ENTRY-POINT BUILD PASSED
+UniformRandomMALA.AllResults elaborated successfully.
+
+DEPENDENCY AUDIT PASSED
+All principal Milestones 1--5 endpoints expose only the standard logical
+dependencies propext, Classical.choice, and Quot.sound.
+
+MANUSCRIPT BUILD PASSED
+latexmk and BibTeX completed successfully; paper/main.pdf has 43 pages.
+No undefined citation, undefined reference, or duplicate active label remains.

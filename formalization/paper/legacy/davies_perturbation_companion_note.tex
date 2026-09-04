@@ -1,0 +1,750 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,tabularx,array}
+\usepackage{enumitem}
+\usepackage[style=authoryear,natbib=true,maxcitenames=2,maxbibnames=30,doi=true,url=true,isbn=false]{biblatex}
+\addbibresource{davies_perturbation_companion_note.bib}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black,urlcolor=blue!55!black]{hyperref}
+\usepackage[nameinlink,noabbrev,capitalize]{cleveref}
+
+\allowdisplaybreaks
+\setlength{\parindent}{1.5em}
+\setlength{\parskip}{0pt}
+\setlength{\emergencystretch}{2em}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+\crefname{theorem}{theorem}{theorems}
+\Crefname{theorem}{Theorem}{Theorems}
+\crefname{proposition}{proposition}{propositions}
+\Crefname{proposition}{Proposition}{Propositions}
+\crefname{lemma}{lemma}{lemmas}
+\Crefname{lemma}{Lemma}{Lemmas}
+\crefname{corollary}{corollary}{corollaries}
+\Crefname{corollary}{Corollary}{Corollaries}
+\crefname{remark}{remark}{remarks}
+\Crefname{remark}{Remark}{Remarks}
+\crefname{example}{example}{examples}
+\Crefname{example}{Example}{Examples}
+
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\ip}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\abs}[1]{\left\lvert #1\right\rvert}
+\newcommand{\1}{\mathbf 1}
+\newcommand{\D}{\mathsf D}
+
+\title{A Detailed Davies-Perturbation Proof for Stationary Langevin Increments}
+\author{Qian Qin}
+\date{August 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let \((X_t)_{t\geq0}\) be stationary overdamped Langevin diffusion with
+invariant distribution \(\pi(dx)\propto e^{-U(x)}dx\) and noise coefficient
+\(\sqrt2\).  This note proves, for every \(v\in\R^d\), \(\lambda\in\R\),
+and \(t\geq0\),
+\[
+ \E\exp\{\lambda\ip{v}{X_t-X_0}\}
+ \leq \exp\{\lambda^2t\norm v^2\}.
+\]
+The result is a standard corollary of the Davies exponential-perturbation
+estimate for symmetric semigroups.  The purpose of the note is to supply a
+complete proof in the weighted Euclidean setting used by the companion MALA
+paper and to explain the functional-analytic terms that a brief citation
+normally suppresses: strongly continuous semigroup, generator domain,
+core, semigroup equation, conjugated generator, and closed Dirichlet form.
+A second part explains carefully when a deterministic-time process identity
+may be evaluated at a stopping time, and applies those principles to the
+localized stochastic-exponential calculation used in the MALA rejection
+proof.
+\end{abstract}
+
+\tableofcontents
+
+\section{The result and its place in the literature}\label{sec:intro}
+
+Let \(U:\R^d\to\R\) be continuously differentiable, assume that
+\(\nabla U\) is globally Lipschitz, and suppose
+\[
+ Z=\int_{\R^d}e^{-U(x)}\,dx<\infty.
+\]
+Define
+\[
+ \pi(dx)=Z^{-1}e^{-U(x)}\,dx.
+\]
+On a filtered probability space carrying a \(d\)-dimensional Brownian
+motion \(B\), consider
+\begin{equation}\label{eq:langevin}
+ dX_t=-\nabla U(X_t)\,dt+\sqrt2\,dB_t,
+ \qquad X_0\sim\pi.
+\end{equation}
+Global Lipschitz continuity gives a unique nonexplosive strong solution; see
+\citet[Chapter~5]{KaratzasShreve1991}.  The process is stationary and
+reversible with respect to \(\pi\).  One standard construction uses the
+closed symmetric Dirichlet form
+\begin{equation}\label{eq:dirichlet-form-intro}
+ \cE(f,g)=\int_{\R^d}\ip{\nabla f(x)}{\nabla g(x)}\,\pi(dx),
+\end{equation}
+and identifies its diffusion with the solution of \eqref{eq:langevin}; see
+\citet[Chapters~1 and~7]{FukushimaOshimaTakeda2011} and
+\citet{BakryGentilLedoux2014}.
+
+The estimate needed in the MALA paper is the following.
+
+\begin{theorem}[Stationary linear-increment bound]\label{thm:increment}
+For every \(v\in\R^d\), \(\lambda\in\R\), and \(t\geq0\),
+\begin{equation}\label{eq:increment-mgf}
+ \E\exp\{\lambda\ip{v}{X_t-X_0}\}
+ \leq
+ \exp\{\lambda^2t\norm v^2\}.
+\end{equation}
+\end{theorem}
+
+The exact display \eqref{eq:increment-mgf} is not usually isolated as a
+named theorem.  It is an immediate specialization of the exponential
+perturbation, or Davies perturbation, method for symmetric semigroups.
+Davies develops this method as part of the proof of Gaussian heat-kernel
+bounds; see \citet[Chapter~3]{Davies1989}.  A systematic treatment through
+closed forms and semigroups is given by
+\citet[Sections~1.3--1.5 and~6.3]{Ouhabaz2005}.  The proof below records the
+specialization with all constants and domains made explicit.
+
+There is also a probabilistic proof.  The Lyons--Zheng decomposition writes
+a stationary increment of a symmetric Markov process as one half of a
+forward martingale minus one half of a reverse-time martingale.  Applied to
+the coordinate function \(x\mapsto\ip{v}{x}\), it gives
+\eqref{eq:increment-mgf} by Cauchy--Schwarz and Gaussian moment-generating
+functions.  See \citet[Section~5.7, especially Theorem~5.7.1]{FukushimaOshimaTakeda2011},
+the original paper of \citet{LyonsZheng1988}, and the later formulation of
+\citet{KuwaeUemura1997}.  That route is developed in the first continuous-time
+companion note \citep{QinContinuousTimeCompanion2026}.  The present note
+concentrates on the shorter analytic route.
+
+\section{A dictionary for semigroups and generators}\label{sec:dictionary}
+
+This section gives the minimum functional analysis needed for the proof.
+All Hilbert spaces below are real; this avoids irrelevant complex
+conjugations.
+
+\subsection{Strongly continuous semigroups}
+
+Let \(H\) be a Hilbert space.  A family of bounded linear operators
+\((T_t)_{t\geq0}\) on \(H\) is a \emph{strongly continuous semigroup}, or a
+\(C_0\)-semigroup, if
+\[
+ T_0=I,\qquad T_{s+t}=T_sT_t,
+ \qquad \lim_{t\downarrow0}\norm{T_tf-f}_H=0
+ \quad\text{for every }f\in H.
+\]
+The last condition is continuity in the Hilbert-space norm, not pointwise
+continuity in the state variable.
+
+For a Markov process with invariant law \(\pi\), the transition operators
+\[
+ S_tf(x)=\E[f(X_t)\mid X_0=x]
+\]
+form a contraction semigroup on \(L^2(\pi)\).  In the reversible case they
+are self-adjoint:
+\[
+ \ip{f}{S_tg}_{L^2(\pi)}
+ =\ip{S_tf}{g}_{L^2(\pi)}.
+\]
+For the Langevin diffusion \eqref{eq:langevin}, strong continuity and
+self-adjointness follow from the standard Dirichlet-form construction cited
+above.
+
+\subsection{The generator and its domain}
+
+The generator \(A\) of a \(C_0\)-semigroup \((T_t)\) is defined by
+\[
+ Af=\lim_{h\downarrow0}\frac{T_hf-f}{h},
+\]
+but this limit need not exist for every \(f\in H\).  Its domain is
+\begin{equation}\label{eq:generator-domain}
+ \D(A)=
+ \left\{
+ f\in H:
+ \lim_{h\downarrow0}\frac{T_hf-f}{h}
+ \text{ exists in }H
+ \right\}.
+\end{equation}
+The generator is generally unbounded, but it is closed and its domain is
+dense in \(H\).
+
+The basic semigroup differentiation theorem is the following.  It is a
+standard result in any text on \(C_0\)-semigroups; see
+\citet[Chapter~1]{Pazy1983} or
+\citet[Chapter~II]{EngelNagel2000}.
+
+\begin{proposition}[Semigroup equation]\label{prop:semigroup-equation}
+If \(f\in\D(A)\), then \(T_tf\in\D(A)\) for every \(t\geq0\), and the map
+\(t\mapsto T_tf\) is differentiable in \(H\), with
+\begin{equation}\label{eq:semigroup-equation}
+ \frac{d}{dt}T_tf=AT_tf=T_tAf.
+\end{equation}
+\end{proposition}
+
+Thus the ``semigroup equation'' is the infinite-dimensional analogue of
+\[
+ \frac{d}{dt}e^{tA}f=Ae^{tA}f
+\]
+for a matrix \(A\).  The domain condition is what makes the derivative
+legitimate.
+
+\subsection{What a core is, and why the proof below does not need one}
+
+A subspace \(\mathcal C\subseteq\D(A)\) is a \emph{core} for \(A\) if it is
+dense in \(\D(A)\) for the graph norm
+\[
+ \norm f_A:=\norm f_H+\norm{Af}_H.
+\]
+Equivalently, the closure of the restricted operator
+\(A|_{\mathcal C}\) is the full generator \(A\).  A core is useful when one
+first identifies a differential expression on a convenient class, such as
+\(C_c^\infty(\R^d)\), and then wishes to conclude that its closure is the
+actual generator.
+
+The proof in \cref{sec:davies} does not say ``take a function in a core.''
+Instead, it works directly with the full generator domain
+\(\D(A_\psi)\) of the conjugated semigroup.  The semigroup equation is then
+available from \cref{prop:semigroup-equation}.  The only differential
+calculation is performed through the already closed Dirichlet form, where
+bounded Lipschitz multiplication is legitimate.
+
+\section{The Langevin Dirichlet form}\label{sec:form}
+
+Let \(H=L^2(\pi)\).  The closure of
+\eqref{eq:dirichlet-form-intro}, initially defined on
+\(C_c^\infty(\R^d)\), has domain
+\begin{equation}\label{eq:form-domain}
+ \D(\cE)=
+ \left\{
+ f\in L^2(\pi):
+ f\text{ has a weak gradient and }
+ \int\norm{\nabla f}^2\,d\pi<\infty
+ \right\}.
+\end{equation}
+This is the weighted Sobolev space \(H^1(\pi)\).  The associated
+self-adjoint generator is denoted by \(\mathcal L\).  Our sign convention is
+that \(\mathcal L\) is nonpositive.  For smooth compactly supported
+functions,
+\[
+ \mathcal Lf=\Delta f-\ip{\nabla U}{\nabla f}.
+\]
+The generator and form are related by
+\begin{equation}\label{eq:form-generator-relation}
+ \ip{g}{\mathcal Lf}_{L^2(\pi)}=-\cE(g,f),
+ \qquad f\in\D(\mathcal L),\quad g\in\D(\cE).
+\end{equation}
+In particular, \(\D(\mathcal L)\subseteq\D(\cE)\).
+
+We will repeatedly multiply form-domain functions by bounded Lipschitz
+functions.  The needed product rule is standard for weak derivatives, but
+we record it explicitly.
+
+\begin{lemma}[Bounded Lipschitz multipliers]\label{lem:multipliers}
+Let \(a:\R^d\to\R\) be bounded and belong to \(W^{1,\infty}(\R^d)\).  If
+\(f\in\D(\cE)\), then \(af\in\D(\cE)\) and
+\begin{equation}\label{eq:weak-product}
+ \nabla(af)=a\nabla f+f\nabla a
+\end{equation}
+in the weak sense.  In particular, if \(\psi\in W^{1,\infty}\) is bounded,
+then multiplication by \(e^{\psi}\) and by \(e^{-\psi}\) maps
+\(\D(\cE)\) into itself.
+\end{lemma}
+
+\begin{proof}
+Choose smooth functions \(f_n\) converging to \(f\) in the norm
+\[
+ \norm f_{\D(\cE)}^2=\norm f_{L^2(\pi)}^2+\cE(f,f).
+\]
+The weak product rule for a Sobolev function and a bounded Lipschitz
+function gives \eqref{eq:weak-product}; alternatively, approximate \(a\) by
+smooth Lipschitz functions with the same uniform bounds.  The estimates
+\[
+ \norm{af}_{L^2(\pi)}\leq\norm a_\infty\norm f_{L^2(\pi)},
+\]
+and
+\[
+ \norm{\nabla(af)}_{L^2(\pi)}
+ \leq
+ \norm a_\infty\norm{\nabla f}_{L^2(\pi)}
+ +\norm{\nabla a}_\infty\norm f_{L^2(\pi)}
+\]
+show that \(af\in\D(\cE)\).  Taking \(a=e^{\pm\psi}\) gives the last
+assertion because \(\psi\) is bounded and Lipschitz.  Standard Sobolev
+multiplier facts of this type are discussed, for example, in
+\citet[Chapter~1]{Ouhabaz2005}.
+\end{proof}
+
+\section{The Davies perturbation estimate}\label{sec:davies}
+
+Let \(\psi\in W^{1,\infty}(\R^d)\) be bounded.  Define multiplication
+operators
+\[
+ M_{\psi}f=e^{\psi}f,
+ \qquad
+ M_{-\psi}f=e^{-\psi}f.
+\]
+They are bounded inverses on \(L^2(\pi)\).  Define the conjugated operators
+\begin{equation}\label{eq:conjugated-semigroup}
+ T_t^\psi=M_{-\psi}S_tM_\psi,
+ \qquad
+ T_t^\psi f=e^{-\psi}S_t(e^\psi f).
+\end{equation}
+
+\begin{lemma}[The conjugated generator]\label{lem:conjugated-generator}
+The family \((T_t^\psi)_{t\geq0}\) is a strongly continuous semigroup.  Its
+generator \(\mathcal L_\psi\) has domain
+\begin{equation}\label{eq:conjugated-domain}
+ \D(\mathcal L_\psi)
+ =M_{-\psi}\D(\mathcal L)
+ =\{f:e^\psi f\in\D(\mathcal L)\},
+\end{equation}
+and
+\begin{equation}\label{eq:conjugated-generator}
+ \mathcal L_\psi f=e^{-\psi}\mathcal L(e^\psi f).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The semigroup property follows by cancellation of the middle multiplication
+operators:
+\[
+ T_s^\psi T_t^\psi
+ =M_{-\psi}S_sM_\psi M_{-\psi}S_tM_\psi
+ =M_{-\psi}S_{s+t}M_\psi
+ =T_{s+t}^\psi.
+\]
+Strong continuity follows from boundedness of the multiplication operators:
+\[
+ \norm{T_t^\psi f-f}_2
+ \leq
+ \norm{e^{-\psi}}_\infty
+ \norm{S_t(e^\psi f)-e^\psi f}_2
+ \longrightarrow0.
+\]
+Finally,
+\[
+ \frac{T_t^\psi f-f}{t}
+ =e^{-\psi}
+ \frac{S_t(e^\psi f)-e^\psi f}{t}.
+\]
+Because multiplication by \(e^{-\psi}\) is a bounded invertible operator,
+the limit on the left exists in \(L^2(\pi)\) if and only if the limit inside
+on the right exists.  By the definition of the generator domain, this is
+equivalent to \(e^\psi f\in\D(\mathcal L)\), and the limit is
+\eqref{eq:conjugated-generator}.
+\end{proof}
+
+\begin{lemma}[Numerical-range estimate]\label{lem:numerical-range}
+For every \(f\in\D(\mathcal L_\psi)\),
+\begin{equation}\label{eq:numerical-range}
+ \ip{f}{\mathcal L_\psi f}_{L^2(\pi)}
+ \leq
+ \norm{\nabla\psi}_\infty^2\norm f_{L^2(\pi)}^2.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Let \(f\in\D(\mathcal L_\psi)\) and set \(g=e^\psi f\).  Then
+\(g\in\D(\mathcal L)\subseteq\D(\cE)\).  By
+\cref{lem:multipliers}, both \(f=e^{-\psi}g\) and
+\(e^{-\psi}f=e^{-2\psi}g\) belong to \(\D(\cE)\).  Therefore the
+form-generator identity \eqref{eq:form-generator-relation} applies:
+\begin{align*}
+ \ip{f}{\mathcal L_\psi f}_{L^2(\pi)}
+ &=\ip{e^{-\psi}f}{\mathcal L(e^\psi f)}_{L^2(\pi)}\\
+ &=-\cE(e^{-\psi}f,e^\psi f).
+\end{align*}
+Using the weak product rule,
+\[
+ \nabla(e^{-\psi}f)=e^{-\psi}(\nabla f-f\nabla\psi),
+ \qquad
+ \nabla(e^\psi f)=e^\psi(\nabla f+f\nabla\psi).
+\]
+The cross terms cancel pointwise, so
+\begin{align*}
+ \cE(e^{-\psi}f,e^\psi f)
+ &=\int
+ \ip{\nabla f-f\nabla\psi}{\nabla f+f\nabla\psi}
+ \,d\pi\\
+ &=\int\norm{\nabla f}^2\,d\pi
+   -\int f^2\norm{\nabla\psi}^2\,d\pi.
+\end{align*}
+Consequently,
+\[
+ \ip{f}{\mathcal L_\psi f}
+ =-\int\norm{\nabla f}^2\,d\pi
+  +\int f^2\norm{\nabla\psi}^2\,d\pi
+ \leq
+ \norm{\nabla\psi}_\infty^2\norm f_2^2,
+\]
+which is \eqref{eq:numerical-range}.
+\end{proof}
+
+\begin{theorem}[Davies perturbation estimate]\label{thm:davies}
+For every bounded \(\psi\in W^{1,\infty}(\R^d)\) and every \(t\geq0\),
+\begin{equation}\label{eq:davies}
+ \norm{e^{-\psi}S_t(e^\psi\,\cdot)}_{L^2(\pi)\to L^2(\pi)}
+ \leq
+ \exp\{t\norm{\nabla\psi}_\infty^2\}.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+First take \(f\in\D(\mathcal L_\psi)\) and put
+\(u(t)=T_t^\psi f\).  By \cref{prop:semigroup-equation},
+\(u(t)\in\D(\mathcal L_\psi)\) and
+\[
+ u'(t)=\mathcal L_\psi u(t)
+\]
+in \(L^2(\pi)\).  The Hilbert-space chain rule therefore gives
+\begin{align*}
+ \frac{d}{dt}\norm{u(t)}_2^2
+ &=2\ip{u(t)}{u'(t)}_2\\
+ &=2\ip{u(t)}{\mathcal L_\psi u(t)}_2\\
+ &\leq2\norm{\nabla\psi}_\infty^2\norm{u(t)}_2^2,
+\end{align*}
+where the last line is \cref{lem:numerical-range}.  Gronwall's inequality
+gives
+\begin{equation}\label{eq:davies-domain}
+ \norm{T_t^\psi f}_2
+ \leq
+ e^{t\norm{\nabla\psi}_\infty^2}\norm f_2,
+ \qquad f\in\D(\mathcal L_\psi).
+\end{equation}
+The domain \(\D(\mathcal L)\) is dense in \(L^2(\pi)\), and multiplication
+by \(e^{-\psi}\) is bounded and invertible.  Hence
+\(\D(\mathcal L_\psi)=e^{-\psi}\D(\mathcal L)\) is also dense.  For an
+arbitrary \(f\in L^2(\pi)\), choose
+\(f_n\in\D(\mathcal L_\psi)\) with \(f_n\to f\) in \(L^2(\pi)\).
+Since \(T_t^\psi\) is bounded for each fixed \(t\),
+\(T_t^\psi f_n\to T_t^\psi f\).  Passing to the limit in
+\eqref{eq:davies-domain} proves \eqref{eq:davies}.
+\end{proof}
+
+\begin{remark}[Where the usual core argument went]\label{rem:core}
+A shorter presentation often verifies
+\cref{lem:numerical-range} first on \(C_c^\infty\), says that this class is
+a core, differentiates \(T_t^\psi f\), and then extends by closure.  That is
+valid once the core statement and the passage to the conjugated generator
+are justified.  The proof above avoids that compressed language: the
+Dirichlet form supplies the identity on the full generator domain, and
+\cref{lem:conjugated-generator} identifies the conjugated domain directly.
+\end{remark}
+
+\section{Proof of the stationary increment bound}\label{sec:application}
+
+We now apply \cref{thm:davies}.  Choose smooth functions
+\(\chi_R:\R\to\R\) such that
+\[
+ \chi_R(s)=s\quad\text{when }\abs s\leq R,
+ \qquad
+ \abs{\chi_R'(s)}\leq1,
+ \qquad
+ \chi_R\text{ is bounded}.
+\]
+For example, one may begin with a smooth function whose derivative is one
+on \([-1,1]\), vanishes outside \([-2,2]\), and lies between zero and one,
+and then rescale.  Set
+\[
+ \psi_R(x)=\lambda\chi_R(\ip{v}{x}).
+\]
+Then \(\psi_R\) is bounded and
+\[
+ \norm{\nabla\psi_R}_\infty\leq\abs\lambda\norm v.
+\]
+Stationarity, the Markov property, and the definition of the semigroup give
+\begin{align}
+ \E e^{\psi_R(X_t)-\psi_R(X_0)}
+ &=\int e^{-\psi_R(x)}S_t(e^{\psi_R})(x)\,\pi(dx)\notag\\
+ &=\ip{1}{T_t^{\psi_R}1}_{L^2(\pi)}.\label{eq:stationary-conjugation}
+\end{align}
+Because \(\pi\) is a probability measure,
+\(\norm1_{L^2(\pi)}=1\).  Cauchy--Schwarz and \cref{thm:davies} imply
+\begin{align*}
+ \E e^{\psi_R(X_t)-\psi_R(X_0)}
+ &\leq\norm{T_t^{\psi_R}}_{2\to2}\\
+ &\leq e^{\lambda^2t\norm v^2}.
+\end{align*}
+For every sample path,
+\[
+ \psi_R(X_t)-\psi_R(X_0)
+ \longrightarrow
+ \lambda\ip{v}{X_t-X_0}
+ \qquad\text{as }R\to\infty.
+\]
+The exponential is nonnegative.  Fatou's lemma therefore gives
+\[
+ \E e^{\lambda\ip{v}{X_t-X_0}}
+ \leq e^{\lambda^2t\norm v^2},
+\]
+which proves \cref{thm:increment}.
+
+\begin{remark}[Interpretation of the constant]
+The right-hand side is the moment-generating function of a centered Gaussian
+with variance \(2t\norm v^2\).  Thus \(X_t-X_0\) is sub-Gaussian with
+covariance proxy \(2tI_d\).  The conclusion does not assert that the
+increment itself is Gaussian.  The constant reflects the normalization
+\(\sqrt2\,dB_t\) in \eqref{eq:langevin}; with diffusion coefficient
+\(dB_t\), the corresponding exponent would be divided by two.
+\end{remark}
+
+\section{A concise Lyons--Zheng cross-check}\label{sec:lz}
+
+For completeness, we record why the probabilistic literature gives the same
+estimate.  Let \(f_v(x)=\ip{v}{x}\).  The coordinate function belongs to the
+Dirichlet-form domain whenever it is square integrable under \(\pi\), and
+\[
+ \cE(f_v,f_v)=\norm v^2.
+\]
+For a symmetric process started from its symmetrizing measure, the
+Lyons--Zheng decomposition at the terminal time \(t\) gives
+\[
+ f_v(X_t)-f_v(X_0)
+ =\frac12\left(M_t^v-\widehat M_t^{v,t}\right),
+\]
+where \(M^v\) is the forward martingale part and
+\(\widehat M^{v,t}\) is the reverse-time martingale part.  In the present
+Langevin diffusion,
+\[
+ [M^v]_t=[\widehat M^{v,t}]_t=2t\norm v^2,
+\]
+and each terminal martingale is centered Gaussian because its integrand is
+the deterministic vector \(\sqrt2v\) in its respective Brownian filtration.
+They are generally dependent.  Cauchy--Schwarz, rather than independence,
+gives
+\begin{align*}
+ \E e^{\lambda(f_v(X_t)-f_v(X_0))}
+ &\leq
+ \left(\E e^{\lambda M_t^v}\right)^{1/2}
+ \left(\E e^{-\lambda\widehat M_t^{v,t}}\right)^{1/2}\\
+ &=e^{\lambda^2t\norm v^2}.
+\end{align*}
+This reproduces \cref{thm:increment}.  The abstract theorem and the passage
+to unbounded coordinate functions are discussed in the references cited in
+\cref{sec:intro}.
+
+\section{Stopping times: what may and may not be substituted}\label{sec:stopping}
+
+The MALA appendix repeatedly writes a process at \(t\wedge\tau\), where
+\(\tau\) is a stopping time.  This is legitimate, but not for the reason
+that an identity holds ``for every deterministic \(t\), almost surely'' if
+the exceptional null set is allowed to depend on \(t\).  This section makes
+the distinction precise.  Standard references for the stopping results
+used here are \citet[Chapter~3]{KaratzasShreve1991},
+\citet[Chapter~IV]{RevuzYor1999}, and
+\citet[Chapter~II]{Protter2005}.
+
+\subsection{Why fixed-time almost-sure equality is not enough}
+
+Suppose that, for every deterministic \(t\), random variables \(Y_t\) and
+\(Z_t\) satisfy \(Y_t=Z_t\) almost surely.  This statement alone does not
+imply \(Y_\tau=Z_\tau\) for a random time \(\tau\), because the exceptional
+null set may depend on \(t\).  A simple illustration is obtained on
+\(\Omega=[0,1]\) with Lebesgue measure: set
+\[
+ Y_t(\omega)=\1_{\{\omega=t\}},\qquad Z_t(\omega)=0,
+ \qquad \tau(\omega)=\omega.
+\]
+For each fixed \(t\), \(Y_t=Z_t\) almost surely, but
+\(Y_\tau=1\) everywhere.  If one equips this space with the completed
+filtration generated by the events \({\tau\leq s}\) up to time \(t\), then
+\(\tau\) is a stopping time (and \(Y_t\) is adapted), so the pathology is
+not removed merely by the stopping-time property.  This example is
+deliberately irregular, but it shows why the order of the quantifiers
+matters.
+
+What is sufficient is an \emph{indistinguishable process identity}: there
+is one event \(\Omega_0\) of probability one such that
+\[
+ Y_t(\omega)=Z_t(\omega)
+ \quad\text{for every }t\geq0\text{ and every }\omega\in\Omega_0.
+\]
+Then the equality may plainly be evaluated at \(t=\tau(\omega)\).  If two
+continuous processes agree almost surely at every rational time, continuity
+and countability imply that they are indistinguishable.  This is why
+continuous versions are especially convenient.
+
+\subsection{Standard stopped-process identities}
+
+Let \(M\) be a continuous local martingale and \(\tau\) a stopping time.
+The stopped process is
+\[
+ M_t^\tau=M_{t\wedge\tau}.
+\]
+The following are standard process identities, valid up to
+indistinguishability:
+\begin{equation}\label{eq:stopped-bracket}
+ [M^\tau]_t=[M]_{t\wedge\tau},
+\end{equation}
+and, if
+\(M_t=\int_0^t\ip{H_s}{dB_s}\),
+\begin{equation}\label{eq:stopped-integral}
+ M_{t\wedge\tau}
+ =\int_0^t\1_{\{s\leq\tau\}}\ip{H_s}{dB_s}.
+\end{equation}
+The distinction between \(s<\tau\) and \(s\leq\tau\) is immaterial for a
+continuous It\^o integral.  Formula \eqref{eq:stopped-integral} can first be
+checked for simple predictable integrands and then extended by the It\^o
+isometry.  Formula \eqref{eq:stopped-bracket} follows from the defining
+quadratic-variation theorem or from \eqref{eq:stopped-integral} when the
+martingale is a Brownian integral.
+
+Ordinary algebraic identities between continuous processes may also be
+stopped.  For example, if
+\[
+ D_t=\exp\{M_t-V_t/2\}
+\]
+for every \(t\) on one probability-one event, then
+\[
+ D_{t\wedge\tau}
+ =\exp\{M_{t\wedge\tau}-V_{t\wedge\tau}/2\}
+\]
+on the same event.  If \(V\) is increasing, then
+\[
+ V_{t\wedge\tau}\leq V_t
+\]
+pathwise.  Neither statement uses optional sampling.
+
+By contrast, an expectation identity such as \(\E M_t=\E M_0\) for every
+deterministic \(t\) does not automatically imply
+\(\E M_\tau=\E M_0\).  That conclusion is an optional-sampling statement
+and requires its own hypotheses.  The localized MALA proof uses the
+process identities above, not an unjustified optional-sampling step.
+
+\subsection{Line-by-line application to the path-likelihood lemma}
+
+For clarity, we match the stopping operations in the MALA proof to the
+results above.  Let
+\[
+ M_t=\int_0^t\ip{\theta_s}{dB_s},
+ \qquad
+ V_t=[M]_t=\int_0^t\norm{\theta_s}^2\,ds,
+ \qquad
+ D_t=e^{M_t-V_t/2},
+\]
+and let
+\[
+ \tau_n=\inf\{t:V_t\geq n\}.
+\]
+
+\begin{enumerate}[label=\textnormal{(\roman*)},leftmargin=2.7em]
+\item The identity
+\[
+ [M^{\tau_n}]_t=V_{t\wedge\tau_n}
+\]
+is exactly \eqref{eq:stopped-bracket}.  It is not obtained by taking a
+fixed-time equality and informally replacing \(t\) by a random time.
+
+\item The factorization of \(D_{h\wedge\tau_n}^q\) into a stopped
+stochastic exponential and an ordinary exponential is pointwise algebra
+applied to the indistinguishable process identity defining \(D\).  The
+inequality
+\(V_{h\wedge\tau_n}\leq V_h\) is pathwise because \(V\) is increasing.
+
+\item It\^o's formula gives the process identity
+\[
+ D_t-1=\int_0^tD_s\ip{\theta_s}{dB_s},
+ \qquad t\geq0,
+\]
+up to indistinguishability.  Stopping this identity at a further stopping
+time \(\sigma_n\) and using \eqref{eq:stopped-integral} gives
+\[
+ D_{t\wedge\sigma_n}-1
+ =\int_0^t\1_{\{s\leq\sigma_n\}}
+ D_s\ip{\theta_s}{dB_s}.
+\]
+This is the square-integrable martingale to which BDG is applied.
+
+\item The stopping is finally removed pathwise.  On a fixed compact time
+interval, the continuous processes \(V\) and \(D\) are bounded on every
+sample path.  Hence the stopping times eventually exceed the terminal
+horizon, and the stopped variables equal the unstopped variables for all
+large \(n\).  Fatou's lemma then transfers the uniform moment bound to the
+unstopped limit.
+\end{enumerate}
+
+Thus the answer to the motivating question is: \emph{partly, but the
+relevant assertion is stronger}.  One needs process identities that hold
+simultaneously for all times outside one null set, or the standard theorem
+identifying the stopped process, stochastic integral, and quadratic
+variation.  Merely knowing a separate almost-sure statement for each fixed
+\(t\) would not suffice.
+
+\section{Which parts are imported and which are specialized}\label{sec:status}
+
+The following table separates literature results from calculations specific
+to the MALA project.
+
+\begin{center}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.24\textwidth}
+>{\raggedright\arraybackslash}X
+>{\raggedright\arraybackslash}X}
+\toprule
+Ingredient & Imported result & Specialization in the MALA paper \\
+\midrule
+Stationary linear increments
+& Davies' exponential perturbation estimate; alternatively, the
+Lyons--Zheng decomposition
+& Apply the estimate to a truncated linear function and retain the exact
+constant for the \(\sqrt2\)-Langevin normalization. \\
+\addlinespace
+Quadratic and integrated increments
+& Gaussian randomization is a standard device for turning linear
+sub-Gaussian bounds into quadratic-form bounds; compare
+\citet[Theorem~1 and Remark~2]{HsuKakadeZhang2012}
+& Use an auxiliary standard Gaussian, then Jensen's inequality in time, to
+obtain the exact moment-generating and \(L^p\) bounds for
+\(\int_0^h\norm{X_t-X_0}^2dt\). \\
+\addlinespace
+Path likelihood
+& Novikov, Girsanov, stopped stochastic exponentials, Doob, and
+quantitative BDG are standard.  General reverse-H\"older theory for
+continuous stochastic exponentials is developed by
+\citet{Kazamaki1994}; related MALA diffusion comparisons appear in
+\citet[Appendix~A]{ChewiEtAl2021}
+& Choose the drift difference, prove the dimension- and moment-dependent
+step restriction, and exploit
+\(V_h\leq L^2\int_0^h\norm{X_t-X_0}^2dt/2\). \\
+\addlinespace
+Endpoint conditioning
+& The likelihood ratio of a statistic is the conditional expectation of
+the full likelihood ratio; see, for example, \citet{Kallenberg2021}
+& Condition the path likelihood on \((X_0,X_h)\) and identify the exact and
+Euler endpoint measures. \\
+\addlinespace
+Metropolis rejection
+& The accepted Metropolis--Hastings flow is the meet of proposal flow and
+its transpose \citep{Tierney1998,BilleraDiaconis2001}
+& Use the symmetric exact endpoint measure as a dominating reference and
+bound the pointwise rejection function. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+The first row is the only lemma in the MALA appendix that is essentially a
+direct specialization of one standard literature theorem.  The remaining
+lemmas combine standard tools in a way adapted to the rejection problem;
+they should cite those tools and nearby diffusion-comparison literature,
+but should not be described as verbatim quotations.
+
+\printbibliography
+
+\end{document}
