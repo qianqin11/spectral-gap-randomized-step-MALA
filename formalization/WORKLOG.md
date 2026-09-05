@@ -1,7 +1,9 @@
 # Formalization worklog
 
-Canonical manuscript: `paper/main.tex` from
-`UniformRandomMALA-Lean-Complete-2026-08-29-updated.zip`.
+Canonical manuscript: `paper/main.pdf`, copied without alteration from the
+author-supplied `main.pdf` on 2026-09-05. The paper directory is PDF-only.
+Entries dated 2026-08-30 below describe earlier checkpoints, including
+manuscript source and legacy materials no longer in this distribution.
 
 Pinned toolchain: Lean `v4.33.0`, mathlib `v4.33.0`.
 
@@ -306,5 +308,32 @@ Complete:
 - Added `COMPLETION_REPORT.md` and synchronized all reader-facing status,
   theorem-map, trust-boundary, build, manifest, and audit-summary files.
 
-Next task: create and verify the clean distribution archive and copy the
-requested standalone manuscript source and bibliography to `outputs/`.
+Next task at that checkpoint: create and verify the clean distribution
+archive and copy the then-requested standalone manuscript source and
+bibliography to `outputs/`. This is a historical task, superseded by the
+PDF-only synchronization below.
+
+
+## 2026-09-05: time-reversal documentation and PDF-only synchronization
+
+- Updated the paper/Lean comparison to describe the stationary time-reversal
+  argument and credit Lyons--Zheng (1988, Section 1, equation (1.7)).
+- Updated the increment references to Lemmas B.2--B.3 and the path-moment
+  reference to Lemma B.5 in the current PDF. Kept subsection B.4 references
+  unchanged; they identify the overlap-proof subsection.
+- Preserved the finite Gaussian likelihood, Euler/RWM, and weak-limit Lean
+  proof and every existing Lean/build/check source byte-for-byte.
+- Replaced all contents of `paper/` with the author-supplied `main(3).pdf`,
+  named `paper/main.pdf`. Removed the legacy companion directory rather than
+  moving it elsewhere in the package. The PDF was not edited or recompiled.
+- Synchronized current author/title metadata to the supplied PDF. Marked
+  prior kernel-build, axiom, LaTeX, and bibliography audit results as
+  historical rather than treating them as new validation.
+- Added a documentation-only patch and a guarded PowerShell updater for
+  existing repositories, plus `GITHUB_UPDATE_GUIDE.md`. The updater neither
+  commits nor pushes and does not replace Lean or simulation sources.
+- Reran the existing static and deterministic numerical checks. Compared
+  source/configuration hashes and the PDF hash; see
+  `DOCUMENTATION_UPDATE_2026-09-05.md` for the checks and their scope.
+- No new Lean kernel build was run: Lean/Lake is not installed in the update
+  environment. No live repository contents were fetched or modified.
