@@ -1,11 +1,20 @@
 # Completion report
 
-Status date: **2026-08-30**
+Formalization-completion record: **2026-08-30**
 
-This report covers the Lean 4 package for Qian Qin and Guanyang Wang's
-*A Global Spectral Gap for MALA with a Uniformly Randomized Step Size*.  The
-canonical manuscript is `paper/main.tex`, with bibliography
-`paper/uniform_random_mala.bib` and compiled output `paper/main.pdf`.
+Documentation/PDF synchronization: **2026-09-05**; no new Lean build.
+
+This report covers the Lean 4 package accompanying Qian Qin's
+*A global spectral gap for Metropolis-adjusted Langevin algorithm
+with a uniformly randomized step size*. The current
+canonical manuscript is the author-supplied `paper/main.pdf`, synchronized
+on 2026-09-05. The `paper/` directory contains only that PDF.
+
+The outcomes and build/axiom checks below are retained historical records of
+the 2026-08-30 formalization, not fresh verification results. The
+2026-09-05 revision only synchronizes documentation with the time-reversal
+proof and replaces the paper materials; it leaves all Lean sources and build
+inputs unchanged. The new checks are in `DOCUMENTATION_UPDATE_2026-09-05.md`.
 
 ## Outcome
 
@@ -118,12 +127,14 @@ Public import and audit surfaces changed in
 verification section of `paper/main.tex` was synchronized with the checked
 results.  The bibliography remains the canonical attached bibliography.
 
-The unique Davies companion note formerly mixed with draft material is
-retained under `paper/legacy/` with a README identifying it as background,
-not as the current manuscript.  Superseded paper drafts are not presented as
-current.
+At the 2026-08-30 checkpoint, the unique Davies companion note was retained
+under `paper/legacy/` as background. In the 2026-09-05 distribution, that
+legacy directory and all manuscript source/bibliography files have been
+removed: `paper/` now contains only the author-supplied PDF. The historical
+source-synchronization and compilation statements in this report do not
+describe files included in the current distribution.
 
-## Verification
+## Verification recorded on 2026-08-30
 
 Pinned tools:
 
@@ -180,9 +191,13 @@ Concrete.exists_universal_fixedStepMinimaxGap_paper_upper
 
 No new axiom is introduced by any of them.
 
-## Manuscript audit
+## Historical manuscript audit (2026-08-30)
 
-The manuscript and bibliography were compiled with:
+This section concerns the earlier manuscript, not the 46-page PDF supplied
+for the 2026-09-05 update. The new PDF was copied without alteration and was
+not recompiled; no LaTeX-source or bibliography audit is claimed for it.
+
+The earlier manuscript and bibliography were compiled with:
 
 ```text
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
