@@ -1,9 +1,11 @@
 # Uniform-random MALA in Lean 4
 
-This package accompanies Qian Qin and Guanyang Wang's paper **A Global
-Spectral Gap for MALA with a Uniformly Randomized Step Size**. The current
-manuscript is `paper/main.pdf`; its source is `paper/main.tex`, with references
-in `paper/uniform_random_mala.bib`.
+This package accompanies Qian Qin's paper **A global spectral gap for Metropolis-adjusted Langevin algorithm
+with a uniformly randomized step size**. The current
+manuscript is [paper/main.pdf](paper/main.pdf), the author-supplied PDF
+synchronized on 2026-09-05. The `paper/` directory contains only this PDF;
+LaTeX sources, separate bibliographies, and legacy companion notes are not
+included in this distribution.
 
 The development formalizes the paper's lower bound for uniformly randomized
 MALA from the displayed `C²` Hessian assumptions. It also proves the concrete
@@ -259,10 +261,20 @@ overlap + target enlargement
   → global randomized-MALA spectral-gap lower bound.
 ```
 
-The paper derives one stationary rejection estimate using continuous-time
-Langevin diffusion. The Lean development instead uses a finite,
-discrete-time Gaussian-product argument. It does not claim to formalize the
-continuous-time SDE derivation.
+The manuscript proves the stationary linear-increment estimate using
+stationary time reversal, an elementary Langevin specialization of the
+Lyons--Zheng forward--backward decomposition (1988, Section 1, equation
+(1.7)). Gaussian randomization and Jensen's inequality then control
+integrated increments, and Girsanov's theorem and martingale moment
+estimates give stationary rejection control.
+
+The Lean development instead uses finite Gaussian likelihoods, an
+Euler/random-walk-Metropolis comparison, and weak-limit closure. It proves
+the stationary-rejection and overlap conclusions, not the continuous-time
+time-reversal identity or the exact continuous-time increment inequalities.
+The 2026-09-05 manuscript synchronization changes no Lean source or
+assumption. See `DOCUMENTATION_UPDATE_2026-09-05.md` for the revision and
+its validation scope.
 
 ## Main reader-facing files
 
@@ -297,9 +309,12 @@ lake env lean UniformRandomMALA/AllResults.lean
 lake env lean UniformRandomMALA/DependencyAudit.lean
 ```
 
-`lake build` is the authoritative package check. The current full build
-reports `Build completed successfully (3435 jobs).` `DependencyAudit.lean`
-runs `#print axioms` on the principal endpoints. The full scripted audit is:
+`lake build` is the authoritative package check. The last full build
+recorded in the supplied package, dated 2026-08-30, reports
+`Build completed successfully (3435 jobs).` No new Lean build was run for
+the 2026-09-05 documentation/PDF update; all Lean files and pinned build
+inputs are byte-for-byte unchanged. `DependencyAudit.lean` runs
+`#print axioms` on the principal endpoints. The full scripted audit is:
 
 ```bash
 ./scripts/check.sh
@@ -340,7 +355,10 @@ Save the snippet as a `.lean` file and compile it with
 - `PROOF_STRATEGY_LEDGER.md`: dependency ledger for the lower-bound proof;
 - `WORKLOG.md`: chronological commands, milestones, and current next task;
 - `TRUST_BOUNDARY.md`: foundations and deliberately out-of-scope material;
-- `BUILD_STATUS.md`: recorded validation commands and results.
+- `BUILD_STATUS.md`: recorded validation commands and results;
+- `DOCUMENTATION_UPDATE_2026-09-05.md`: manuscript synchronization and checks;
+- `GITHUB_UPDATE_GUIDE.md`: PowerShell instructions for applying this
+  documentation/PDF update without replacing Lean or simulation sources.
 
 Compatibility modules and declarations ending in `_of_bakryLedoux` expose
 useful intermediate implications—for example, converting an enlargement
