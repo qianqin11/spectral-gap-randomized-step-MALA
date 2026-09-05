@@ -1,9 +1,10 @@
 # Guide for readers of the paper
 
-This guide connects the mathematical narrative of the August 2026 paper by
-Qian Qin and Guanyang Wang, **A Global Spectral Gap for MALA with a Uniformly
-Randomized Step Size**, to the Lean 4 source tree. The current paper is
-`paper/main.pdf`, generated from `paper/main.tex`.
+This guide connects Qian Qin's paper, **A global spectral gap for Metropolis-adjusted Langevin algorithm
+with a uniformly randomized step size**, to the Lean 4 source
+tree. The current manuscript is `paper/main.pdf`, supplied as a PDF and
+synchronized on 2026-09-05. No manuscript source or legacy companion note
+is bundled.
 
 ## The main claim
 
@@ -147,10 +148,16 @@ these steps.
 ## Why the Lean appendix looks different
 
 The paper's stationary rejection appendix uses stationary Langevin
-diffusion, Davies perturbation, Girsanov, and martingale estimates. A suitable
-general SDE and perturbation library was not available in the pinned Lean
-ecosystem. The formalization therefore proves the same rejection-moment and
-overlap conclusions through elementary finite objects:
+diffusion. Its linear-increment estimate follows by reversing the stationary
+path and subtracting the forward and reversed SDE expressions to cancel the
+drift. This is an elementary specialization of the Lyons--Zheng
+forward--backward decomposition (1988, Section 1, equation (1.7)); see also
+Fukushima, Oshima, and Takeda (2011), Theorem 5.7.1. The paper retains
+Gaussian randomization and Jensen's inequality for integrated increments,
+followed by Girsanov and martingale estimates for rejection control.
+
+The formalization uses a different proof of the rejection-moment and overlap
+conclusions through elementary finite objects:
 
 ```text
 finite Gaussian likelihood recursion
@@ -175,6 +182,11 @@ asserting an unidentified diffusion limit.
 The continuous-time SDE proof in Appendix B itself is therefore **not** a
 claimed Lean result. What is kernel-checked is the discrete-time proof of the
 same rejection-moment and overlap statements used by the rest of the paper.
+In the supplied PDF, the linear and integrated increment estimates are
+Lemmas B.2 and B.3; the change of measure and path-moment bound are
+Lemmas B.4 and B.5. None of those continuous-time derivations is added to the
+formalization by this documentation update. The existing finite proof and
+its assumptions are unchanged.
 
 ## The fixed-step minimax obstruction
 
