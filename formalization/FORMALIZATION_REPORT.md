@@ -1,10 +1,15 @@
 # Formalization report: uniform-random MALA
 
-Status date: **2026-08-30**
+Last recorded Lean validation: **2026-08-30**
+
+Documentation/PDF synchronization: **2026-09-05**; no new Lean build.
 
 This package kernel-checks the main randomized-step lower bound and the
-fixed-step minimax upper bound in Qian Qin and Guanyang Wang's *A Global
-Spectral Gap for MALA with a Uniformly Randomized Step Size*.
+fixed-step minimax upper bound in Qian Qin's *A global spectral gap for Metropolis-adjusted Langevin algorithm
+with a uniformly randomized step size*.
+The verification statements below refer to the recorded 2026-08-30 checks;
+this synchronization preserves every Lean source and build input. See
+`DOCUMENTATION_UPDATE_2026-09-05.md` for the new static/package checks.
 
 The main manuscript-facing declarations are:
 
