@@ -1,10 +1,13 @@
 # MALA local-overlap formalization note
 
-Status date: **2026-08-30**
+Last recorded Lean validation: **2026-08-30**
+
+Documentation/PDF synchronization: **2026-09-05**; no new Lean build.
 
 This note concerns the moment-indexed local-overlap result labeled
-`prop:overlap` and numbered Proposition 3.2 in the current August 2026 draft
-of **A Global Spectral Gap for MALA with a Uniformly Randomized Step Size**.
+`prop:overlap` and numbered Proposition 3.2 in `paper/main.pdf`,
+**A global spectral gap for Metropolis-adjusted Langevin algorithm
+with a uniformly randomized step size**.
 It is the input that converts stationary rejection-moment control into local
 total-variation overlap for dyadic mixtures of MALA step sizes.
 
@@ -53,6 +56,15 @@ PaperAnalyticInterfaces.elementary_proof_implies_proposition32
 belongs to `PaperAnalyticInterfaces`, a legacy record that represented several
 analytic inputs as fields. It is available for modular experiments and old
 imports, but it is not used by the concrete theorem above.
+
+## Relation to the revised manuscript
+
+The manuscript now obtains its linear-increment estimate (Lemma B.2) by
+stationary time reversal, an elementary specialization of the Lyons--Zheng
+forward--backward decomposition (1988, Section 1, equation (1.7)). The
+integrated-increment proof (Lemma B.3) retains Gaussian randomization and
+Jensen's inequality. The finite discrete-time proof documented below is
+unchanged and does not formalize those continuous-time identities.
 
 ## Compiled elementary dependency graph
 
