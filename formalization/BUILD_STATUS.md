@@ -1,12 +1,21 @@
 # Build status
 
-Paper-synchronization date: **2026-08-30**  
+Paper-synchronization date: **2026-09-05**
+
 Last recorded full Lean build: **2026-08-30**
 
 This is the recorded validation status for the Lean package accompanying
-Qian Qin and Guanyang Wang's **A Global Spectral Gap for MALA with a Uniformly
-Randomized Step Size**. It is a build report; mathematical notation and the paper-to-Lean map
+Qian Qin's **A global spectral gap for Metropolis-adjusted Langevin algorithm
+with a uniformly randomized step size**. It is a build report; mathematical notation and the paper-to-Lean map
 are explained in `PAPER_READER_GUIDE.md`.
+
+The full-build and axiom-audit results below are historical records from
+2026-08-30, not new checks of this distribution. The 2026-09-05 update changes
+only documentation and the supplied manuscript PDF. All Lean sources and
+existing build/check inputs are byte-for-byte unchanged. Static and numerical
+checks were rerun for the update; their results and limitations are recorded
+in `DOCUMENTATION_UPDATE_2026-09-05.md`. No Lean executable is available in
+the update environment, so no new `lake build` or axiom audit was run.
 
 - Target toolchain: `leanprover/lean4:v4.33.0`.
 - Target mathlib tag: `v4.33.0`.
