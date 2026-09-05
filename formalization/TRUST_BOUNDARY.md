@@ -1,10 +1,12 @@
 # Trust boundary
 
-Status date: **2026-08-30**
+Last recorded Lean validation: **2026-08-30**
+
+Documentation/PDF synchronization: **2026-09-05**; no new Lean build.
 
 This document states what must be trusted when checking the Lean formalization
-of the main lower-bound theorem in Qian Qin and Guanyang Wang's **A Global
-Spectral Gap for MALA with a Uniformly Randomized Step Size**. Mathematical assumptions on the target are described
+of the main lower-bound theorem in Qian Qin's **A global spectral gap for Metropolis-adjusted Langevin algorithm
+with a uniformly randomized step size**. Mathematical assumptions on the target are described
 separately in `PAPER_READER_GUIDE.md`.
 
 ## Project trust boundary
@@ -100,10 +102,14 @@ image estimate.  `FiniteEulerTargetIdentification.lean` proves the explicit
 diagonal endpoint laws converge to the normalized `exp(-U)` target, entirely
 in discrete time.
 
-The continuous-time Langevin/Davies/Girsanov derivation in Appendix B is not
-formalized line by line. The package replaces it with the finite
+The continuous-time derivation in Appendix B, including stationary time
+reversal for Langevin increments and the subsequent Girsanov comparison,
+is not formalized line by line. The package replaces it with the finite
 discrete-time argument above and proves the same public stationary-rejection
-and overlap conclusions. No SDE theorem is included in the trust claim.
+and overlap conclusions. No continuous-time reversal identity or SDE theorem
+is included in the trust claim. The manuscript's revised increment proof
+introduces no new assumption, axiom, or dependency in Lean; the Lean source
+and pinned build inputs are unchanged.
 
 ## Fixed-step minimax theorem
 
