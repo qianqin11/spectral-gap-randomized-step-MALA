@@ -1,13 +1,15 @@
 # Lean proof-strategy ledger
 
 This ledger gives a reviewer-oriented path through the completed formalization
-of the main lower-bound theorem in Qian Qin and Guanyang Wang's **A Global
-Spectral Gap for MALA with a Uniformly Randomized Step Size**. Each row records the mathematical result, its public
+of the main lower-bound theorem in Qian Qin's **A global spectral gap for Metropolis-adjusted Langevin algorithm
+with a uniformly randomized step size**. Each row records the mathematical result, its public
 Lean entry point, the principal implementation modules, and the proof
 mechanism. Paper labels are cross-referenced in `THEOREM_MAP.md`; mathematical
 content, rather than provisional numbering, is used here.
 
-Status date: **2026-08-30**.
+Last recorded Lean validation: **2026-08-30**.
+
+Documentation/PDF synchronization: **2026-09-05**; no new Lean build.
 
 ## Result dependency graph
 
@@ -24,7 +26,7 @@ Gaussian normal profile -> OU interpolation -> Bobkov functional inequality
 smooth distance ramps -> finite Gaussian Bakry--Ledoux  |
                           |                             |
                           v                             |
-finite Euler Gaussian image -> weak-limit stability    |
+finite Euler Gaussian image -> weak-limit stability     |
                           |                             |
                           v                             |
 discrete target identification -> target Bakry--Ledoux-+
@@ -45,6 +47,12 @@ separated sets -> defective conductance -> component aggregation
 | Spectral gap and conductance | `SpectralGap.lean` | `Concrete/SpectralGap.lean`, `Conductance.lean` | Define the variational spectral gap and Dirichlet energy; prove indicator-energy, symmetry, layer-cake, and coarea identities. | Checked |
 
 ## Finite discrete-time MALA overlap
+
+The manuscript now proves its stationary linear-increment estimate by
+stationary time reversal, following Lyons--Zheng (1988). The finite
+discrete-time route below, and its assumptions, are unchanged. It proves
+the stationary-rejection and overlap conclusions without formalizing the
+continuous-time increment identities.
 
 | Mathematical content | Public entry | Implementation | Strategy and output | Status |
 |---|---|---|---|---|
