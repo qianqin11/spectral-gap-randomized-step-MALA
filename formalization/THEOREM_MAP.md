@@ -1,17 +1,24 @@
 # Paper-to-Lean theorem map
 
-This table maps the current August 2026 draft by Qian Qin and Guanyang Wang,
-**A Global Spectral Gap for MALA with a Uniformly Randomized Step Size**
-(`paper/main.pdf`), to Lean declarations. Labels such as `thm:main` are the
-LaTeX labels in `paper/main.tex`.
+This table maps Qian Qin's **A global spectral gap for Metropolis-adjusted Langevin algorithm
+with a uniformly randomized step size**
+(`paper/main.pdf`, synchronized on 2026-09-05) to Lean declarations.
+Labels such as `thm:main` are retained manuscript source identifiers, not
+paths to bundled LaTeX files; only the manuscript PDF is distributed.
 
-The paper's stationary-rejection appendix uses continuous Langevin
-diffusion, Davies perturbation, Girsanov, and martingale inequalities. The
-rows described as a “finite-discrete-time replacement” establish the same
-rejection and overlap conclusions using finite Gaussian likelihoods and an
-Euler/RWM coupling. They therefore map mathematical outputs rather than
-line-by-line proof text. See `PAPER_READER_GUIDE.md` for the reason and scope
-of this replacement.
+The paper's stationary-rejection appendix uses stationary time reversal
+for the linear-increment estimate, following the Lyons--Zheng
+forward--backward decomposition (1988, Section 1, equation (1.7)). Gaussian
+randomization and Jensen's inequality give integrated-increment bounds;
+Girsanov and martingale inequalities then give rejection control.
+
+The rows described as finite-discrete-time replacements concern the role
+of these ingredients in establishing stationary rejection and overlap.
+They do not assert that the finite-Euler estimates formalize the exact
+continuous-time increment inequalities. The implemented route uses finite
+Gaussian likelihoods, an Euler/RWM coupling, and weak-limit closure. See
+`PAPER_READER_GUIDE.md` for its scope; this manuscript revision changes no
+Lean proof or assumption.
 
 The internal development labels G3, G4, and G5 mean the local OU residual
 argument, functional Bobkov closure, and the ramp-to-enlargement passage,
@@ -19,8 +26,8 @@ respectively. They are not paper theorem numbers.
 
 | Paper result | Lean declaration(s) | Status |
 |---|---|---|
-| Appendix B, Lemma B.2 (`lem:davies-conjugation`) and its increment consequences | No line-by-line analogue; their role is replaced by `finiteEulerEnergy_le_frozenGradient_add_partialSums` and `integral_exp_finiteEulerEnergy_le_exp` | The paper's continuous argument is not a Lean dependency; the replacement is concrete on a finite Gaussian product space |
-| Appendix B path-likelihood comparison (`lem:path-likelihood`) | `finiteGaussianDRec_centered_rpow_root_le_paper_scale`; `fixedHorizonOffsetFullPathMomentBound_paperScale` | Concrete finite-product replacement, with full-path constant `1024 e^3` |
+| Appendix B, Lemmas B.2--B.3 (`lem:linear-increment`, `lem:integrated-increments`) | Their role in the stationary-rejection argument is replaced by `finiteEulerEnergy_le_frozenGradient_add_partialSums` and `integral_exp_finiteEulerEnergy_le_exp` | Alternative finite-Euler estimates; not a formalization of the stationary time-reversal identity or the exact continuous-time increment inequalities |
+| Appendix B, Lemma B.5 (`lem:path-likelihood`) | `finiteGaussianDRec_centered_rpow_root_le_paper_scale`; `fixedHorizonOffsetFullPathMomentBound_paperScale` | Concrete finite-product replacement, with full-path constant `1024 e^3` |
 | Endpoint conditional likelihood contraction | `finiteEulerLikelihoodTiltedEdgeLaw_eq_finiteFrozenLikelihoodEdgeLaw`; `finiteFrozenLikelihoodEdge_rnDeriv_centered_rpow_integrable_and_root_le`; `finiteEulerLikelihoodEdgeLaw_eq_finiteEulerEdgeMeasure` | Concrete and formalized |
 | Gaussian RWM proposal and detailed balance | `randomWalkProposal`; `rwmKernel`; `rwmKernel_isReversible`; `rwmKernel_invariant` | Concrete and formalized |
 | Euler/RWM endpoint coalescence | `iteratedIntegral_pair_difference_sq_delta_le`; `stationaryEulerRWMPairChain_energy_step`; `tendsto_stationaryEulerRWMPairChain_energy_fixedHorizon` | Concrete and formalized by finite pair-kernel iteration |
