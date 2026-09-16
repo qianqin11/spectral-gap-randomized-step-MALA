@@ -5,16 +5,14 @@ import UniformRandomMALA.DiscreteTime.StationaryRejection
 import UniformRandomMALA.Constants
 
 /-!
-# Explicit analytic interfaces
+# Legacy explicit analytic interfaces
 
-The still-unproved finite discrete-time probability, weak-convergence,
-Gaussian-isoperimetric, defective-conductance, and harmonic-aggregation parts
-of the paper are not hidden behind proof placeholders.  This file records
-them as named, typed propositions.
-Concrete target/MALA kernels, stationary edge measures, coarea, and the
-geometric ladder are developed separately under `Concrete/`; a future
-end-to-end theorem must connect those constructions to the remaining fields
-of these structures.
+This file preserves the typed analytic interfaces used during early modular
+development. The finite probability, weak-limit, Gaussian-isoperimetric,
+conductance, and aggregation inputs recorded here were subsequently proved by
+the concrete modules; they are not current proof obligations or axioms.
+The reader-facing end-to-end route is exported by
+`UniformRandomMALA.AllResults` and does not take these records as hypotheses.
 
 The algebraic main theorem in `MainTheorem.lean` is proved from the final
 safe and ladder certificates.  The interfaces below document exactly which
@@ -135,7 +133,8 @@ theorem globalSafeOverlap
   exact le_of_lt (lt_of_le_of_lt
     (a.safeTVRaw t ht hstep x y hxy) safe_overlap_numeric)
 
-/-- Both assertions of Proposition 3.2 in the current draft. -/
+/-- Both assertions in the retained `p >= 2` core of Proposition 3.2. The
+revised `p >= 1` endpoint is `Concrete.C1Potential.mala_overlap_bounds`. -/
 theorem proposition32
     (p : Parameters) (o : KernelObjects)
     (s : DiscreteTime.StationaryRejectionObjects)
@@ -408,9 +407,9 @@ def gapAssembly
         change p.c0 ≤ 1 / (2 * (ladderData hsmall).2.C)
         exact (ladderData hsmall).2.c0_le }
 
-/-- Proposition 3.2, packaged as its moment-indexed and globally safe
-assertions, follows from the current elementary stationary-rejection route
-and the final Appendix B.4 overlap bridge. -/
+/-- The retained `p >= 2` Proposition 3.2 core, packaged as its moment-indexed
+and globally safe assertions, follows from the elementary
+stationary-rejection route and the final overlap bridge. -/
 theorem elementary_proof_implies_proposition32
     (p : Parameters) (a : PaperAnalyticInterfaces p) :
     MomentIndexedLocalOverlap p a.kernelObjects ∧

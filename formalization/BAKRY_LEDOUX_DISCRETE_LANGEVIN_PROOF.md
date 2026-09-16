@@ -1,5 +1,10 @@
 # Archival design note: Bakry--Ledoux from Gaussian OU and finite Euler limits
 
+> **2026-09-12 first-order revision:** the public `C1Potential` route and its
+> use of this discrete Bakry--Ledoux construction are kernel-checked with
+> Lean/mathlib 4.33.0. Earlier Hessian endpoints remain compatibility special
+> cases.
+
 > **Reader note.** This file records the proof design while the
 > Gaussian/Bakry--Ledoux modules were being built. Its opening status and some
 > forward-looking sentences are historical. The construction is now complete:
@@ -16,6 +21,12 @@ stage labels G1--G5 below are local labels for normal-profile calculus,
 Mehler calculus, the OU residual, functional closure, and enlargement.
 
 ## 1. Statement and conventions
+
+The historical derivation recorded in Sections 1--6 began from the smoother
+special case below. The completed Lean route described in Section 7 instead
+starts from `FirstOrderPotential`: the lower Taylor inequality and global
+Lipschitz bound on the gradient are its operative assumptions, and no Hessian
+is used.
 
 Let
 
@@ -246,14 +257,14 @@ where `(Z_1,...,Z_N)` is a standard Gaussian vector in `R^(Nd)`.
 
 ### E1. Strong monotonicity and one-step contraction
 
-The Hessian lower bound, or equivalently the two lower Taylor inequalities,
-gives
+The two lower Taylor inequalities in the checked first-order interface give
 
 ```text
 <grad U(x)-grad U(y), x-y> >= m |x-y|^2.                 (E1)
 ```
 
-The upper Hessian bound gives `|grad U(x)-grad U(y)|<=L|x-y|`.  Hence, for
+Gradient Lipschitzness, assumed directly by the checked first-order interface,
+gives `|grad U(x)-grad U(y)|<=L|x-y|`. Hence, for
 `delta>=0`,
 
 ```text
@@ -408,13 +419,16 @@ with `c_N=sqrt(a_N)`: because `C_(N,T)<=c_N`, using the smaller source radius
 `r/c_N` remains valid.  Then W1 applies and yields the sharp constant
 `c=1/sqrt(m)`.
 
-## 5. Target Langevin limit module
+## 5. Historical target Langevin limit route (not used by Lean)
 
-This is the point at which a genuine stochastic theorem is needed.
+At this historical checkpoint, the proposed route required a genuine
+stochastic theorem. The completed formalization bypasses all of L1--L4 using
+the direct finite-Euler/RWM target-identification theorem summarized in
+Section 7.
 
 ### L1. Explicit theorem to be formalized
 
-Under the stated `C^2`, `m`-strong convexity and `L`-smoothness assumptions:
+Under the smooth assumptions used in this historical route:
 
 1. For every `x`, the integral equation
 
@@ -540,12 +554,11 @@ for every Borel `A` and `r>0`.  The constant is independent of `T`.
 Now let `T->infinity`.  By L4, `P_T(x,.)` converges weakly to `pi`.  Applying
 W1 once more to (A1) proves (BL).
 
-This proves the desired Bakry--Ledoux enlargement theorem.  The proof does
-not use a target `Gamma_2` interpolation, Ethier--Kurtz convergence, or the
-Lovasz--Simonovits localization lemma.  It does use the concrete Langevin
-SDE theorem L1--L3.  Calling the entire proof “purely discrete” would
-therefore be inaccurate until the stationary generator-uniqueness step has
-itself been formalized.
+This would prove the desired Bakry--Ledoux enlargement theorem by the
+historical SDE route. It is not the route implemented in Lean. The checked
+proof replaces this section and its SDE assumptions with a direct diagonal
+finite-Euler/RWM weak-limit identification, so the current dependency chain
+is genuinely discrete.
 
 ## 7. Lean decomposition and current status
 
@@ -585,10 +598,11 @@ are in `GaussianRampCanonicalInterpolation.lean`.
 
 ## 8. References and provenance
 
-No argument above is claimed as new.  The normal-profile semigroup method is
-the Bakry--Ledoux method specialized to the explicit Gaussian OU semigroup;
-the target transfer is the standard contractive-iterated-random-functions
-plus Langevin approximation argument.
+No argument above is claimed as new. The normal-profile semigroup method is
+the Bakry--Ledoux method specialized to the explicit Gaussian OU semigroup.
+Sections 5--6 preserve the abandoned Langevin-approximation design for
+provenance; the checked target transfer instead uses the direct
+finite-Euler/RWM weak-limit identification summarized in Section 7.
 
 * D. Bakry and M. Ledoux, *Levy--Gromov's isoperimetric inequality for an
   infinite dimensional diffusion generator*, Invent. Math. 123 (1996),
@@ -601,7 +615,8 @@ plus Langevin approximation argument.
   <https://doi.org/10.1007/978-3-319-00227-9>
 * P. E. Kloeden and E. Platen, *Numerical Solution of Stochastic Differential
   Equations*, Springer, 1992. The globally-Lipschitz Euler strong-convergence
-  theorem used in L2 is standard material in this reference.
+  theorem proposed for historical step L2 is standard material in this
+  reference; it is not a dependency of the checked Lean proof.
   <https://doi.org/10.1007/978-3-662-12616-5>
 * S. Ohta, *A semigroup approach to Finsler geometry: Bakry--Ledoux's
   isoperimetric inequality*. This gives a clear modern presentation of the

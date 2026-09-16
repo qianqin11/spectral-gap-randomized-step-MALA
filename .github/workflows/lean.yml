@@ -1,0 +1,44 @@
+name: Lean first-order verification
+
+on:
+  push:
+    paths:
+      - 'formalization/**'
+      - '.github/workflows/lean.yml'
+  pull_request:
+    paths:
+      - 'formalization/**'
+      - '.github/workflows/lean.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    defaults:
+      run:
+        working-directory: formalization
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install elan
+        run: |
+          curl --fail --location --retry 3 \
+            https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+            -o "$RUNNER_TEMP/elan-init.sh"
+          sh "$RUNNER_TEMP/elan-init.sh" -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Fetch the pinned mathlib cache
+        run: lake exe cache get
+      - name: Build sources and audit axioms
+        run: bash scripts/check.sh
+      - name: Upload verification logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lean-first-order-verification-logs
+          path: formalization/validation/local/
+          if-no-files-found: warn

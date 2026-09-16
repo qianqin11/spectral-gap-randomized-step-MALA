@@ -1,9 +1,10 @@
 /-
 # Bakry--Ledoux enlargement
 
-Public entry point for the isoperimetric part of *A Global Spectral Gap for
-MALA with a Uniformly Randomized Step Size*.  If `Phi` is the standard normal
-CDF, the predicate `BakryLedouxEnlargement pi m Phi PhiInv` states
+Public entry point for the isoperimetric part of *A global spectral gap for
+Metropolis-adjusted Langevin algorithm with a uniformly randomized step
+size*.  If `Phi` is the standard normal CDF, the predicate
+`BakryLedouxEnlargement pi m Phi PhiInv` states
 
 `Phi (PhiInv (pi A) + sqrt m * r) <= pi (Metric.thickening r A)`
 

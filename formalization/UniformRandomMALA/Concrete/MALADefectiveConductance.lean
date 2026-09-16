@@ -4,10 +4,11 @@ import UniformRandomMALA.Concrete.StandardGaussianShift
 /-!
 # Concrete defective conductance for the dyadic MALA components
 
-This is the direct adapter from the unconditional Proposition 3.2 theorem to
-the generic Appendix D.1 argument.  Its globally safe clause now depends
-only on the separated-set theorem (and hence, once the Gaussian shift is
-closed, on Bakry--Ledoux).
+This is the direct adapter from the certificate-free `p >= 2` overlap core
+(the range used by the multiscale proof of Proposition 3.4) to the generic
+Appendix D.1 argument. Its globally safe clause depends only on the
+separated-set theorem and hence, once the Gaussian shift is closed, on
+Bakry--Ledoux.
 -/
 
 namespace UniformRandomMALA

@@ -1,0 +1,31 @@
+{
+  "revision_date": "2026-09-15",
+  "completed_at": "2026-09-15T23:33:08-05:00",
+  "status": "KERNEL_VERIFIED",
+  "lean_version": "4.33.0",
+  "mathlib_version": "4.33.0",
+  "lean_files": 155,
+  "declarations": 2069,
+  "by_proof_blocks": 5808,
+  "kernel_build": "PASS; 3439 jobs",
+  "public_import": "PASS; UniformRandomMALA/AllResults.lean",
+  "axiom_audit": "PASS; 266 declarations; propext, Classical.choice, Quot.sound only",
+  "changed_lean_files": [
+    "UniformRandomMALA/Concrete/C1MainTheorem.lean",
+    "UniformRandomMALA/Concrete/HessianMainTheorem.lean",
+    "UniformRandomMALA/Concrete/LazyKernel.lean"
+  ],
+  "public_A0_range": "A0 >= 1",
+  "internal_A0_witness": "unchanged; A0 >= 2",
+  "paper_inventory": [
+    "paper/main.pdf"
+  ],
+  "paper_pdf_sha256": "eb3ec374502cbc7b01a2552164f8d64693f64fef333f9948173f575d09a6c4f9",
+  "paper_pdf_change": "Author-supplied revised PDF retained without modification.",
+  "manuscript_audit": "PASS; SHA-256, basic PDF markers, PDF-only inventory",
+  "manuscript_audit_regression_tests": "PASS; 7 tests",
+  "manuscript_source_audit": "Not applicable: source files are not distributed.",
+  "historical_verification_snapshot": "validation/historical/2026-09-12/",
+  "github_changes": "None; repository update instructions supplied.",
+  "remaining_scope_qualification": "The independent nonconvex C1 extension in Appendix B is not formalized."
+}

@@ -1,3 +1,7 @@
+import UniformRandomMALA.Concrete.C1ToFirstOrder
+import UniformRandomMALA.DiscreteTime.MomentInterpolation
+import UniformRandomMALA.Concrete.RejectionMomentsOne
+import UniformRandomMALA.Concrete.C1MainTheorem
 import UniformRandomMALA.EndpointCorollaries
 import UniformRandomMALA.DefectiveArithmetic
 import UniformRandomMALA.Concrete.HessianMainTheorem
@@ -417,3 +421,20 @@ end UniformRandomMALA
 #print axioms UniformRandomMALA.Concrete.exists_universal_fixedStepWorstPotentialGap_le_twoBranchEnvelope
 #print axioms UniformRandomMALA.Concrete.exists_universal_fixedStepMinimaxGap_explicit_upper
 #print axioms UniformRandomMALA.Concrete.exists_universal_fixedStepMinimaxGap_paper_upper
+
+-- Revised C¹ entry points and the p >= 1 bridge. These must be kernel-checked
+-- together with the historical core before reporting a successful new audit.
+#print axioms UniformRandomMALA.Concrete.C1Potential.upperTaylor
+#print axioms UniformRandomMALA.Concrete.C1Potential.toFirstOrderPotential
+#print axioms UniformRandomMALA.DiscreteTime.integral_rpow_le_of_second_moment
+#print axioms UniformRandomMALA.Concrete.FirstOrderPotential.stationaryMALARejectionMomentBoundOne_of_two
+#print axioms UniformRandomMALA.Concrete.C1Potential.target_bakryLedoux
+#print axioms UniformRandomMALA.Concrete.C1Potential.separatedSets
+#print axioms UniformRandomMALA.Concrete.C1Potential.stationary_rejection_moments
+#print axioms UniformRandomMALA.Concrete.C1Potential.mala_overlap_bounds
+#print axioms UniformRandomMALA.Concrete.C1Potential.allParameterMALAFlowBounds
+#print axioms UniformRandomMALA.Concrete.C1Potential.universal_masterRHS_rayleighSpectralGap_lower
+#print axioms UniformRandomMALA.Concrete.C1Potential.universal_half_masterRHS_lazy_rayleighSpectralGap_lower
+#print axioms UniformRandomMALA.Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
+#print axioms UniformRandomMALA.Concrete.C1Potential.sqrtDimensionCorollary_rayleighSpectralGap_lower
+#print axioms UniformRandomMALA.Concrete.C1Potential.sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower

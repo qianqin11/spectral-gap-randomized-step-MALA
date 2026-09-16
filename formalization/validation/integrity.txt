@@ -1,0 +1,16 @@
+INTEGRITY AND SCOPE AUDIT — 2026-09-15
+
+- paper/ contains only the author-supplied revised main.pdf (47 pages).
+- PDF SHA-256: eb3ec374502cbc7b01a2552164f8d64693f64fef333f9948173f575d09a6c4f9
+- PDF identity, inventory, and seven audit regression tests passed.
+- No current TeX build, source-label/reference/citation audit, or separate
+  figure-source verification is claimed.
+- All 155 Lean source files and the public import graph passed source audits.
+- Mathlib 4.33.0 is the sole direct external Lean dependency.
+- No placeholder, project axiom, unsafe declaration, or native proof shortcut.
+- Full source kernel build, public import, and 266-declaration axiom audit passed.
+- The public existential A₀ range is ≥ 1; the internal witness remains ≥ 2.
+- SHA256SUMS.txt covers the distributed formalization/ files except itself,
+  excluding .lake/, tmp/, validation/local/, Git metadata, and compiled artifacts.
+
+The independent nonconvex Appendix B extension remains outside the scope.

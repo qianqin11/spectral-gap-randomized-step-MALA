@@ -188,8 +188,8 @@ namespace Concrete.HessianBoundedPotential
 
 variable {d : ℕ}
 
-/-- Corollary 2.2, first display, for randomized MALA under the manuscript's
-`C²` Hessian assumptions. -/
+/-- Legacy smooth specialization of Corollary 2.2's first display. The revised
+paper-facing theorem is namespaced under `C1Potential`. -/
 theorem sqrtDimensionCorollary_rayleighSpectralGap_lower
     (V : HessianBoundedPotential d) (c : ℝ) (hc : 0 < c) :
     let W := V.toFirstOrderPotential
@@ -207,8 +207,9 @@ theorem sqrtDimensionCorollary_rayleighSpectralGap_lower
   have hmaster := V.universal_masterRHS_rayleighSpectralGap_lower H hH
   exact p.sqrtDimensionCorollaryRHS_le_gap c hc rfl hmaster
 
-/-- Corollary 2.2, simplified second display, for randomized MALA under the
-manuscript's `C²` Hessian assumptions and without assuming `pStar ≤ d`. -/
+/-- Legacy smooth specialization of Corollary 2.2's simplified second display,
+without assuming `pStar ≤ d`. The revised paper-facing theorem is namespaced
+under `C1Potential`. -/
 theorem sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower
     (V : HessianBoundedPotential d) (c : ℝ) (hc : 0 < c) :
     let W := V.toFirstOrderPotential

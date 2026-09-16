@@ -1,227 +1,231 @@
-# Completion report
+# Completion report — first-order revision audit
 
-Formalization-completion record: **2026-08-30**
+Date: **2026-09-15**  
+Toolchain: **Lean 4.33.0 / mathlib 4.33.0**  
+Result: **full build, public-import check, and axiom gate passed**
 
-Documentation/PDF synchronization: **2026-09-05**; no new Lean build.
+## Executive result
 
-This report covers the Lean 4 package accompanying Qian Qin's
-*A global spectral gap for Metropolis-adjusted Langevin algorithm
-with a uniformly randomized step size*. The current
-canonical manuscript is the author-supplied `paper/main.pdf`, synchronized
-on 2026-09-05. The `paper/` directory contains only that PDF.
+The package is end-to-end for the revised form of Theorem 2.1. Its public
+input is a continuously differentiable potential satisfying the displayed
+first-order strong-convexity inequality and global Lipschitz continuity of the
+actual Riesz gradient. The proof derives the upper Taylor inequality and then
+uses the established certificate-free, discrete analytic core. Neither the
+main theorem nor its lazy and square-root-dimension corollaries assume a
+Hessian, an independently supplied drift, or a paper-specific analytic axiom.
 
-The outcomes and build/axiom checks below are retained historical records of
-the 2026-08-30 formalization, not fresh verification results. The
-2026-09-05 revision only synchronizes documentation with the time-reversal
-proof and replaces the paper materials; it leaves all Lean sources and build
-inputs unchanged. The new checks are in `DOCUMENTATION_UPDATE_2026-09-05.md`.
+The original first-order revision candidate did not initially compile. All discovered
+source errors and the broken public import were corrected without changing
+the mathematical statements or adding proof bypasses. A final fail-closed
+PowerShell run built the complete package and checked actual axiom output.
 
-## Outcome
+## Paper-to-Lean endpoints
 
-All five requested formalization milestones are complete.  The public results
-are kernel-checked with Lean 4.33.0 and mathlib 4.33.0.  The project contains
-no `sorry`, `admit`, or project-specific axiom declaration.
+All names below begin with `UniformRandomMALA.Concrete.` unless a different
+prefix is shown.
 
-The recommended reviewer import is:
-
-```lean
-import UniformRandomMALA.AllResults
-```
-
-## Paper results and exact Lean declarations
-
-All names below are in the namespace `UniformRandomMALA`.
-
-| Manuscript result | Principal Lean declaration | File |
+| Revised paper content | Exact Lean declaration | Status |
 |---|---|---|
-| Actual-Hessian calculus bridge | `Concrete.HessianBoundedPotential.toFirstOrderPotential` | `UniformRandomMALA/Concrete/HessianToFirstOrder.lean` |
-| Lower and upper line-Taylor inequalities | `Concrete.HessianBoundedPotential.lowerTaylor`, `Concrete.HessianBoundedPotential.upperTaylor` | `UniformRandomMALA/Concrete/HessianToFirstOrder.lean` |
-| Lipschitz Riesz gradient from the Hessian bounds | `Concrete.HessianBoundedPotential.gradient_lipschitz` | `UniformRandomMALA/Concrete/HessianToFirstOrder.lean` |
-| Poincaré/Rayleigh equivalence at the manuscript's `L²` scope | `Concrete.l2PoincareLower_iff_le_rayleighSpectralGap`, `Concrete.l2SpectralGap_eq_rayleighSpectralGap` | `UniformRandomMALA/Concrete/RayleighSpectralGap.lean` |
-| Theorem 2.1, exact non-lazy paper form | `Concrete.exists_universal_nonlazy_paperMasterRHS_lower` | `UniformRandomMALA/Concrete/HessianMainTheorem.lean` |
-| Concrete half-lazy MALA kernel | `Concrete.FirstOrderPotential.lazyUniformMALA` | `UniformRandomMALA/Concrete/LazyKernel.lean` |
-| Exact half-energy and half-gap identities | `Concrete.Dirichlet.energy_halfLazyKernel`, `Concrete.rayleighSpectralGap_halfLazyKernel` | `UniformRandomMALA/Concrete/LazyKernel.lean` |
-| Theorem 2.1, exact lazy paper form | `Concrete.exists_universal_lazy_paperMasterRHS_lower` | `UniformRandomMALA/Concrete/LazyKernel.lean` |
-| Corollary 2.2, first displayed inequality | `Concrete.HessianBoundedPotential.sqrtDimensionCorollary_rayleighSpectralGap_lower` | `UniformRandomMALA/Concrete/SqrtDimensionCorollary.lean` |
-| Corollary 2.2, simplified displayed inequality | `Concrete.HessianBoundedPotential.sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower` | `UniformRandomMALA/Concrete/SqrtDimensionCorollary.lean` |
-| Assumption-free scalar simplification used in Corollary 2.2 | `Concrete.Parameters.min_sqrtDimensionDenominator_le_two_pStar` | `UniformRandomMALA/Concrete/SqrtDimensionCorollary.lean` |
-| Lemma 3.5, fractional finite-component aggregation | `Concrete.fractionalAggregation_poincareLower`, `Concrete.fractionalAggregation_le_spectralGap` | `UniformRandomMALA/Concrete/FractionalAggregation.lean` |
-| Weighted Cauchy--Schwarz input | `Concrete.fractional_weighted_sqrt_sum_le` | `UniformRandomMALA/Concrete/FractionalAggregation.lean` |
-| Hard-assignment aggregation corollary | `Concrete.hardAssignmentAggregation_poincareLower`, `Concrete.hardAssignmentAggregation_le_spectralGap` | `UniformRandomMALA/Concrete/FractionalAggregation.lean` |
-| Proposition 3.4, local arbitrary-parameter clause | `Concrete.FirstOrderPotential.local_dyadicMALA_boundaryFlow_allParameters` | `UniformRandomMALA/Concrete/AllParameterMALAFlow.lean` |
-| Proposition 3.4, safe small-step clause | `Concrete.FirstOrderPotential.safe_dyadicMALA_boundaryFlow_allParameters` | `UniformRandomMALA/Concrete/AllParameterMALAFlow.lean` |
-| Proposition 3.4, two-clause package | `Concrete.FirstOrderPotential.allParameterMALAFlowBounds` | `UniformRandomMALA/Concrete/AllParameterMALAFlow.lean` |
-| Generic Rayleigh-test and cut upper bounds | `Concrete.rayleighSpectralGap_le_energy_div_evariance`, `Concrete.rayleighSpectralGap_le_boundaryFlow_div_cutVariance` | `UniformRandomMALA/Concrete/SpectralGapUpperBounds.lean` |
-| Explicit `C∞` hard potential and actual Hessian bounds | `Concrete.contDiff_infty_fixedStepHardPotential`, `Concrete.fixedStepHardPotential_hessian_lower`, `Concrete.fixedStepHardPotential_hessian_upper` | `UniformRandomMALA/Concrete/FixedStepHardPotential.lean` |
-| Fixed-step local obstruction | `Concrete.fixedStepHardMALA_rayleighSpectralGap_le_local` | `UniformRandomMALA/Concrete/HardPotentialLocalObstruction.lean` |
-| Exact hard-potential log-ratio estimate | `Concrete.hard_malaLogRatio_zero_le_shape_sum` | `UniformRandomMALA/Concrete/HardPotentialLogRatio.lean` |
-| Gaussian trigonometric identities | `Concrete.integral_cos_gaussianReal_zero_two`, `Concrete.integral_mul_sin_gaussianReal_zero_two` | `UniformRandomMALA/Concrete/GaussianTrigonometricConcentration.lean` |
-| Negative-threshold finite-product Chernoff estimate | `Concrete.exists_universal_contraction_factor_for_pi_scaledGaussian_tail` | `UniformRandomMALA/Concrete/HardPotentialShiftedConcentration.lean` |
-| Continuity of the pointwise MALA acceptance probability | `Concrete.FirstOrderPotential.continuous_malaAcceptanceProfile` | `UniformRandomMALA/Concrete/StickyRegionCut.lean` |
-| Positive target-mass sticky-ball cut bound | `Concrete.FirstOrderPotential.exists_target_ball_rayleighSpectralGap_le_two_mul` | `UniformRandomMALA/Concrete/StickyRegionCut.lean` |
-| Fixed-step sticky obstruction | `Concrete.exists_universal_fixedStepHard_sticky_rayleighSpectralGap_upper` | `UniformRandomMALA/Concrete/HardPotentialStickyObstruction.lean` |
-| Generic two-branch hard-potential obstruction | `Concrete.exists_universal_fixedStepHardPotential_obstruction_allDimensions` | `UniformRandomMALA/Concrete/FixedStepHardPotentialObstruction.lean` |
-| Scalar fixed-step envelope optimization | `Concrete.iSup_fixedStepTwoBranchEnvelope_le_log_max_exp` | `UniformRandomMALA/Concrete/FixedStepObstructionOptimization.lean` |
-| Exact `C∞` potential class, fixed-step infimum, and minimax supremum | `Concrete.smoothHessianPotentialGapValues`, `Concrete.fixedStepWorstPotentialGap`, `Concrete.fixedStepMinimaxGap` | `UniformRandomMALA/Concrete/FixedStepMinimax.lean` |
-| Proposition 2.3, explicit pre-absorption bound | `Concrete.exists_universal_fixedStepMinimaxGap_explicit_upper` | `UniformRandomMALA/Concrete/FixedStepMinimax.lean` |
-| Proposition 2.3, paper form with universal `c` and `C=C(κ₀)` | `Concrete.exists_universal_fixedStepMinimaxGap_paper_upper` | `UniformRandomMALA/Concrete/FixedStepMinimax.lean` |
+| Standing `C¹` first-order assumptions | `C1Potential` | Checked |
+| Derived upper Taylor/descent inequality | `C1Potential.upperTaylor` | Checked |
+| Actual-gradient internal adapter | `C1Potential.toFirstOrderPotential` | Checked |
+| `L²` Poincaré/Rayleigh equivalence | `l2PoincareLower_iff_le_rayleighSpectralGap`; `l2SpectralGap_eq_rayleighSpectralGap` | Checked |
+| Theorem 2.1, non-lazy | `C1Potential.universal_masterRHS_rayleighSpectralGap_lower` | Checked |
+| Theorem 2.1, concrete half-lazy | `C1Potential.universal_half_masterRHS_lazy_rayleighSpectralGap_lower` | Checked |
+| Theorem 2.1, both clauses and shared constants | `C1Potential.exists_universal_paperMasterRHS_bounds` | Checked |
+| Corollary 2.2, first display | `C1Potential.sqrtDimensionCorollary_rayleighSpectralGap_lower` | Checked |
+| Corollary 2.2, simplified display | `C1Potential.sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower` | Checked |
+| Lemma 3.1, mixture-energy comparison | `Dirichlet.sum_energy_parameterMixture_restrict_le`; `FirstOrderPotential.energy_restricted_uniformStep_eq_weight_dyadic` | Checked |
+| Proposition 3.2 (`p ≥ 1`) | `C1Potential.mala_overlap_bounds` | Checked |
+| Proposition 3.3 | `C1Potential.separatedSets` | Checked |
+| Proposition 3.4, full range | `C1Potential.allParameterMALAFlowBounds` | Checked |
+| Proposition B.1 under the standing strong-convexity setup | `C1Potential.stationary_rejection_moments` | Checked |
+| Lemma 3.5, fractional form | `fractionalAggregation_poincareLower`; `fractionalAggregation_le_spectralGap` | Checked |
+| Theorem 3.6, hard-assignment aggregation | `hardAssignmentAggregation_poincareLower`; `hardAssignmentAggregation_le_spectralGap` | Checked |
+| Proposition A.1, smooth hard-witness obstruction | `exists_universal_fixedStepHardPotential_obstruction_allDimensions` plus the smoothness and Hessian-bound declarations | Checked |
+| Proposition 2.3, fixed-step minimax | `exists_universal_fixedStepMinimaxGap_paper_upper` | Checked |
 
-The unconditional target Bakry--Ledoux input remains available as
-`DiscreteTime.target_bakryLedoux`.  Its proof uses finite Gaussian Euler
-images and weak-limit stability.  It does not assume an isoperimetric
-certificate.
+`THEOREM_MAP.md` gives the finer-grained component map.
 
-## Reusable additions
+## What the first-order bridge proves
 
-- A coordinate-free finite-dimensional bridge from an actual `ContDiff ℝ 2`
-  Hessian bound to strong-convexity Taylor inequalities and an
-  `L`-Lipschitz Riesz gradient.
-- An extended-valued `L²` Rayleigh spectral gap and exact equivalence with the
-  corresponding Poincaré lower-bound supremum, including zero variance,
-  infinite energy, and empty-test-family cases.
-- Fair lazification for arbitrary Markov kernels, preserving reversibility
-  and exactly halving energy, Rayleigh quotients, and the Rayleigh gap.
-- Fractional finite-component aggregation for arbitrary finite reversible
-  kernel families with the manuscript's `L²` energy-domination premise.
-- Spectral-gap upper bounds from arbitrary admissible tests and measurable
-  indicator cuts, with exact indicator variance/flow identities.
-- A dominated-convergence continuity theorem for proposal-averaged MALA
-  acceptance and a general positive-mass sticky-ball cut construction.
-- Exact Gaussian trigonometric moments and direct fixed-parameter MGF/Chernoff
-  bounds for finite independent products.
-- Complete-lattice definitions and scalar optimization tools for
-  supremum--infimum fixed-step obstruction statements.
+`C1Potential` stores `ContDiff ℝ 1 U`, the lower first-order strong-convexity
+inequality expressed with mathlib's `∇ U`, and `LipschitzWith` for that same
+gradient. The proof of `upperTaylor` restricts `U` to an affine line, computes
+the derivative of the residual, applies Cauchy--Schwarz and the Lipschitz
+bound, and obtains monotonicity. In `toFirstOrderPotential`, the field
+`gradU` is definitionally `∇ U`.
 
-## New Lean modules
+This avoids the circularity that would arise from recording an arbitrary
+vector field and calling it a gradient. The previous
+`HessianBoundedPotential.toFirstOrderPotential` theorem remains checked as an
+optional smooth special case; it is not used as a premise by the revised
+paper-facing endpoint.
 
-The following content-named modules were added relative to the attached
-checkpoint:
+## Other reusable results retained or added
 
-```text
-UniformRandomMALA/Concrete/HessianToFirstOrder.lean
-UniformRandomMALA/Concrete/RayleighSpectralGap.lean
-UniformRandomMALA/Concrete/HessianMainTheorem.lean
-UniformRandomMALA/Concrete/LazyKernel.lean
-UniformRandomMALA/Concrete/SqrtDimensionCorollary.lean
-UniformRandomMALA/Concrete/FractionalAggregation.lean
-UniformRandomMALA/Concrete/AllParameterMALAFlow.lean
-UniformRandomMALA/Concrete/SpectralGapUpperBounds.lean
-UniformRandomMALA/Concrete/FixedStepHardPotential.lean
-UniformRandomMALA/Concrete/HardPotentialLogRatio.lean
-UniformRandomMALA/Concrete/GaussianTrigonometricConcentration.lean
-UniformRandomMALA/Concrete/HardPotentialShiftedConcentration.lean
-UniformRandomMALA/Concrete/StickyRegionCut.lean
-UniformRandomMALA/Concrete/HardPotentialLocalObstruction.lean
-UniformRandomMALA/Concrete/HardPotentialStickyObstruction.lean
-UniformRandomMALA/Concrete/FixedStepHardPotentialObstruction.lean
-UniformRandomMALA/Concrete/FixedStepObstructionOptimization.lean
-UniformRandomMALA/Concrete/FixedStepMinimax.lean
-```
+- exact equivalence between the `L²` Poincaré and Rayleigh-infimum spectral
+  gaps, including zero variance and infinite-energy cases;
+- exact Markov, reversibility, energy, and Rayleigh-gap identities for the
+  half-lazy kernel;
+- a real-exponent moment inequality for `1 ≤ p ≤ 2`, assuming
+  integrability of the `p`-th and second powers as stated in the API; the
+  rejection application proves those hypotheses from boundedness;
+- fractional finite-component aggregation with weighted Cauchy--Schwarz,
+  bounded `L²` truncations, extended values, and hard assignment as a
+  corollary;
+- Gaussian OU/Bobkov interpolation, smooth-ramp approximation, finite-Euler
+  transport, and weak-limit stability for target enlargement;
+- generic Rayleigh test-function and indicator-cut upper bounds;
+- the smooth hard potential, Gaussian trigonometric identities and product
+  concentration used in the sticky-region obstruction.
 
-Public import and audit surfaces changed in
-`UniformRandomMALA.lean`, `UniformRandomMALA/AllResults.lean`, and
-`UniformRandomMALA/DependencyAudit.lean`.  Reader documentation changed in
-`README.md`, `FORMALIZATION_STATUS.md`, `REUSABLE_RESULTS.md`,
-`PAPER_READER_GUIDE.md`, `THEOREM_MAP.md`, `PROOF_STRATEGY_LEDGER.md`,
-`TRUST_BOUNDARY.md`, `BUILD_STATUS.md`, and `WORKLOG.md`.  The Lean
-verification section of `paper/main.tex` was synchronized with the checked
-results.  The bibliography remains the canonical attached bibliography.
+See `REUSABLE_RESULTS.md` for theorem names and imports.
 
-At the 2026-08-30 checkpoint, the unique Davies companion note was retained
-under `paper/legacy/` as background. In the 2026-09-05 distribution, that
-legacy directory and all manuscript source/bibliography files have been
-removed: `paper/` now contains only the author-supplied PDF. The historical
-source-synchronization and compilation statements in this report do not
-describe files included in the current distribution.
+## Candidate defects corrected
 
-## Verification recorded on 2026-08-30
+### Lean source
 
-Pinned tools:
+- `Concrete/C1ToFirstOrder.lean`: made the nonnegative-real Lipschitz constant
+  coercion explicit and gave the C1 adapter's private Euclidean instances
+  distinct names, preventing a collision when the legacy Hessian adapter is
+  imported in the same environment.
+- `DiscreteTime/MomentInterpolation.lean`: removed unreachable `ring` tactics
+  rejected by the pinned elaborator.
+- `Concrete/RejectionMomentsOne.lean`: explicitly included the section
+  potential where needed, replaced several failed automation calls by direct
+  nonnegativity proofs, and removed an unused binder warning.
+- `Concrete/C1MainTheorem.lean`: added a direct C1 wrapper for the full
+  Proposition 3.4 conclusion.
+- `AllResults.lean`: moved the revision import out of the module comment. The
+  original candidate's apparent imports were inert, so its advertised public
+  facade did not expose the new theorem.
+- `DependencyAudit.lean`: added the C1 Proposition 3.4 endpoint to the actual
+  axiom audit.
+- `HessianMainTheorem.lean`, `LazyKernel.lean`, and
+  `SqrtDimensionCorollary.lean`: relabeled Hessian endpoints as legacy smooth
+  special cases so readers do not mistake them for the revised assumptions.
 
-```text
-Lean 4.33.0, commit d8b18978322de05a8f3dba51ef03cf5461676c17
-Lake 5.0.0
-mathlib v4.33.0
-```
+### Audit infrastructure
 
-The complete project audit was run from the package root with the bundled
-Python runtime on `PATH`:
+- `scripts/static_audit.py`: strips comments and strings before checking root
+  imports, so commented imports cannot satisfy the coverage gate.
+- `scripts/first_order_audit.py`: verifies reachability of every new public
+  module from `AllResults`.
+- `scripts/check.ps1`: detects either `python` or the Windows `py -3` launcher.
+- Current reader documentation and curated validation records were rewritten
+  to describe the checked first-order release rather than the pre-build
+  candidate.
+
+## Files changed by this audit
+
+Lean and audit source:
+
+- `UniformRandomMALA/AllResults.lean`
+- `UniformRandomMALA/AnalyticInterfaces.lean`
+- `UniformRandomMALA/MALAOverlap.lean`
+- `UniformRandomMALA/SpectralGap.lean`
+- `UniformRandomMALA/Concrete/C1ToFirstOrder.lean`
+- `UniformRandomMALA/Concrete/C1MainTheorem.lean`
+- `UniformRandomMALA/Concrete/GlobalFromBakryLedoux.lean`
+- `UniformRandomMALA/Concrete/HessianMainTheorem.lean`
+- `UniformRandomMALA/Concrete/LazyKernel.lean`
+- `UniformRandomMALA/Concrete/MALADefectiveConductance.lean`
+- `UniformRandomMALA/Concrete/MALAOverlapBounds.lean`
+- `UniformRandomMALA/Concrete/RejectionMomentsOne.lean`
+- `UniformRandomMALA/Concrete/SqrtDimensionCorollary.lean`
+- `UniformRandomMALA/DependencyAudit.lean`
+- `UniformRandomMALA/DiscreteTime/MomentInterpolation.lean`
+- `UniformRandomMALA/DiscreteTime/StationaryRejection.lean`
+- `scripts/check.ps1`
+- `scripts/check_axioms.py`
+- `scripts/first_order_audit.py`
+- `scripts/manuscript_audit.py`
+- `scripts/static_audit.py`
+
+Documentation/validation:
+
+- repository-level `../README.md`, `../simulation/README.md`, and
+  `../simulation/Makefile`
+- `README.md`, `BUILD_STATUS.md`, `CHECK_STATUS.txt`, `CHECK_OUTPUT.txt`
+- `BAKRY_LEDOUX_DISCRETE_LANGEVIN_PROOF.md` and
+  `LEAN_FRIENDLY_PROOF_LEDGER.md`
+- `COMPLETION_REPORT.md`, `FIRST_ORDER_REVISION.md`
+- `FORMALIZATION_REPORT.md`, `FORMALIZATION_STATUS.md`
+- `PACKAGE_MANIFEST.md`, `PAPER_READER_GUIDE.md`
+- `PROOF_STRATEGY_LEDGER.md`, `REUSABLE_RESULTS.md`, `THEOREM_MAP.md`
+- `TRUST_BOUNDARY.md`, `WORKLOG.md`
+- `paper/`: the revised `main.pdf` only
+- current files under `validation/` and the regenerated checksum manifest
+
+## Reproducible validation
+
+From `formalization/` on Windows:
 
 ```powershell
-$env:ELAN_HOME='C:\Users\qianq\.elan'
-powershell -ExecutionPolicy Bypass -File scripts\check.ps1
+lake exe cache get
+powershell -ExecutionPolicy Bypass -File .\scripts\check.ps1
 ```
 
-Result:
+The final run produced:
 
 ```text
+Lake version 5.0.0-src+d8b1897 (Lean version 4.33.0)
 STATIC AUDIT PASSED
-NUMERIC SANITY PASSED (2,000 deterministic trials)
-Build completed successfully (3435 jobs).
-UniformRandomMALA/AllResults.lean elaborated successfully.
-UniformRandomMALA/DependencyAudit.lean elaborated successfully.
+  155 Lean files; 2069 declarations; 5808 `by` blocks
+FIRST-ORDER SOURCE AUDIT PASSED
+MANUSCRIPT PDF AUDIT PASSED
+PDF AUDIT REGRESSION TESTS: 7 passed
+NUMERIC SANITY PASSED
+Build completed successfully (3439 jobs).
+AXIOM AUDIT PASSED: 266 declarations; only
+  ['Classical.choice', 'Quot.sound', 'propext']
+FULL SOURCE BUILD AND AXIOM AUDIT PASSED
 ```
 
-The static audit counted 151 Lean files and 2,036 declarations and found no
-placeholder or project axiom.
+The static auditor's `2069 declarations` line is a source-regex count of
+top-level `def`, `lemma`, `theorem`, and `structure` declarations. It is not a
+count of every declaration in the elaborated Lean environment.
 
-## Axiom audit
+The command `lake env lean UniformRandomMALA/AllResults.lean` was also run by
+the wrapper and succeeded. `validation/local/axioms.log` contains the full
+machine-generated output in the working build; local logs and `.lake/` are
+excluded from the release ZIP because they are large and reproducible.
 
-`UniformRandomMALA/DependencyAudit.lean` contains `#print axioms` commands for
-the principal endpoints, including all five milestones and the final
-fixed-step minimax result.  Every new principal endpoint reports exactly the
-ordinary Lean/mathlib logical dependencies:
+Principal C1 endpoints each printed exactly:
 
 ```text
 [propext, Classical.choice, Quot.sound]
 ```
 
-In particular this was checked for:
+This includes `upperTaylor`, `toFirstOrderPotential`, target enlargement,
+rejection/overlap, full-parameter flow, both main clauses, shared-constant
+packaging, and both Corollary 2.2 endpoints.
 
-```text
-Concrete.exists_universal_nonlazy_paperMasterRHS_lower
-Concrete.exists_universal_lazy_paperMasterRHS_lower
-Concrete.HessianBoundedPotential.sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower
-Concrete.fractionalAggregation_poincareLower
-Concrete.FirstOrderPotential.allParameterMALAFlowBounds
-Concrete.exists_universal_fixedStepHardPotential_obstruction_allDimensions
-Concrete.exists_universal_fixedStepMinimaxGap_explicit_upper
-Concrete.exists_universal_fixedStepMinimaxGap_paper_upper
-```
+## Manuscript/package synchronization
 
-No new axiom is introduced by any of them.
+`paper/` contains only the revised 47-page `main.pdf`, with SHA-256
+`eb3ec374502cbc7b01a2552164f8d64693f64fef333f9948173f575d09a6c4f9`.
+Its Section 2 first-order assumptions match `C1Potential`. The public
+existential statements now expose `A₀ ≥ 1`, matching Theorem 2.1, while
+retaining the internal witness `concreteA0 ≥ 2`.
 
-## Historical manuscript audit (2026-08-30)
+The PDF audit checks the recorded checksum, basic PDF header/end marker,
+and the single-file inventory. It is not a source or mathematical-content
+audit. TeX, bibliography, and separate figure files are not bundled, so no
+current LaTeX build or source-reference/citation audit is claimed.
+The previous manuscript build and source-audit logs are retained under
+`validation/historical/2026-09-12/` for provenance.
 
-This section concerns the earlier manuscript, not the 46-page PDF supplied
-for the 2026-09-05 update. The new PDF was copied without alteration and was
-not recompiled; no LaTeX-source or bibliography audit is claimed for it.
+## Remaining omissions
 
-The earlier manuscript and bibliography were compiled with:
+One mathematical-scope item remains: Appendix B's independent extension of
+the rejection lemmas to possibly nonconvex `C¹` potentials with Lipschitz
+gradient and integrable `exp(-U)` is not formalized. The Lean rejection theorem
+retains the paper's standing strong-convexity input and supplies everything
+needed by Theorem 2.1. Classify this as **additional mathematical/library
+formalization work**, not an end-to-end gap in the checked main theorem.
 
-```text
-latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
-```
-
-Result: success, including BibTeX; `paper/main.pdf` has 43 pages.  The final
-LaTeX log had no undefined citation, undefined reference, or multiply-defined
-label warning.  A separate source audit found 96 active labels, no duplicate
-active label, no undefined `\ref`/`\eqref`/`\cref`, and no unreferenced
-equation label.
-
-## Remaining omissions and blockers
-
-There is no remaining omission among the requested Milestones 1--5 and no
-mathematical, library, or engineering blocker to the stated completion
-criteria.
-
-The package deliberately does **not** claim a line-by-line formalization of
-the manuscript's continuous-time SDE derivation in Appendix B.  It proves the
-same stationary-rejection and overlap conclusions by the already documented
-finite discrete-time Gaussian/Euler/RWM argument.  This is a proof-route
-difference, not an unproved hypothesis of any endpoint above.
-
-The package also keeps its older all-measurable-function spectral-gap API for
-compatibility.  The exact equality proved for the manuscript is between the
-new `L²` Poincaré gap and `rayleighSpectralGap`; no unnecessary abstract
-equality with the older, stronger-scope definition is asserted.
+No kernel, dependency, public-import, packaging, or engineering blocker
+remains for checking the delivered source. The manuscript's continuous-time
+SDE derivation is not claimed; the checked proof uses the discrete alternative.

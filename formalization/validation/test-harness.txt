@@ -1,0 +1,13 @@
+CURRENT VALIDATION HARNESS — PASS (2026-09-15)
+
+Actual full PowerShell gate: PASS (exit 0).
+Actual full Lean source build: PASS (3439 jobs).
+Actual AllResults elaboration: PASS.
+Actual axiom allow-list audit: PASS (266 declarations; standard axioms only).
+PDF audit regression tests: PASS (7 tests).
+Python script syntax: PASS.
+PowerShell check.ps1 and all three REPOSITORY_UPDATE.md command blocks: syntax PASS.
+Numerical sanity: PASS (2000 deterministic trials).
+
+No current TeX build or manuscript-source reference/citation audit is claimed.
+Historical harness results are under validation/historical/2026-09-12/.

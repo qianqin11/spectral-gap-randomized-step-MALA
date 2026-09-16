@@ -1,5 +1,10 @@
 # Archival development ledger for MALA local overlap
 
+> **2026-09-12 first-order revision:** the public `C1Potential` route and the
+> `p >= 1` rejection/overlap extension are kernel-checked with Lean/mathlib
+> 4.33.0. This ledger remains an archival record of intermediate development;
+> current entry points are listed in `THEOREM_MAP.md`.
+
 Last updated during development: 2026-08-28
 
 > **Reader note.** This is a chronological engineering record, not the
@@ -1053,8 +1058,8 @@ Doob/BDG, or a diffusion approximation.  This confirms that the elementary
 route is amenable to Lean formalization, rather than merely suggesting that
 it might be.
 
-There is no remaining mathematical obligation for Proposition 3.2.  Future
-work is engineering and maintenance only:
+At this historical checkpoint there was no remaining mathematical obligation
+for Proposition 3.2. The then-future engineering tasks were:
 
 1. expose the final module through the preferred project import surface and
    keep the full dependency build green;
@@ -1067,12 +1072,12 @@ work is engineering and maintenance only:
 
 ## 12. Paper-wide component aggregation - routine infrastructure implemented
 
-Status: **source-complete, compiler recheck pending**.  The declarations in
-this section contain no `sorry` or `admit`, but they were added in a runtime
-where the Lean executable cannot resolve its own application path.  They must
-not be relabelled **checked** until `lake build` succeeds in an unrestricted
-Lean process.  The earlier Proposition 3.2 modules retain their previous
-checked status.
+Historical status at this checkpoint: **source-complete, compiler recheck
+pending**. The declarations in this section contained no `sorry` or `admit`,
+but had been added in a runtime where the Lean executable could not resolve
+its own application path. This pending status was subsequently discharged:
+the 2026-09-12 full build and axiom gate passed, as recorded in
+`BUILD_STATUS.md`.
 
 ### Concrete interface replacement
 

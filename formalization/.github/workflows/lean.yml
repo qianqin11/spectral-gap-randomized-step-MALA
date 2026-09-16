@@ -1,15 +1,52 @@
-name: Lean
+name: Lean first-order verification
 
 on:
   push:
+    paths:
+      - '**.lean'
+      - 'lean-toolchain'
+      - 'lakefile.toml'
+      - 'lake-manifest.json'
+      - 'scripts/**'
+      - '.github/workflows/lean.yml'
   pull_request:
+    paths:
+      - '**.lean'
+      - 'lean-toolchain'
+      - 'lakefile.toml'
+      - 'lake-manifest.json'
+      - 'scripts/**'
+      - '.github/workflows/lean.yml'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  build:
+  verify:
     runs-on: ubuntu-latest
+    timeout-minutes: 180
+    defaults:
+      run:
+        working-directory: .
+        shell: bash
     steps:
       - uses: actions/checkout@v4
-      - uses: leanprover/lean-action@v1
+      - name: Install elan
+        run: |
+          curl --fail --location --retry 3 \
+            https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh \
+            -o "$RUNNER_TEMP/elan-init.sh"
+          sh "$RUNNER_TEMP/elan-init.sh" -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Fetch the pinned mathlib cache
+        run: lake exe cache get
+      - name: Build sources and audit axioms
+        run: bash scripts/check.sh
+      - name: Upload verification logs
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-          build: true
+          name: lean-first-order-verification-logs
+          path: validation/local/
+          if-no-files-found: warn

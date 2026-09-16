@@ -100,7 +100,9 @@ def SymmetricMovingReferenceLimit
       o.limitingLikelihoodLp h moment ≤
         C * p.L * h * Real.sqrt (moment * (p.d + moment))
 
-/-- The stationary rejection estimate, Proposition B.1 in the current draft. -/
+/-- The `p >= 2` stationary-rejection core used in the construction. The
+revised paper range `p >= 1` is exported by
+`Concrete.C1Potential.stationary_rejection_moments`. -/
 def StationaryRejectionBound
     (p : Parameters) (o : StationaryRejectionObjects) : Prop :=
   ∃ c C : ℝ, 0 < c ∧ 0 < C ∧

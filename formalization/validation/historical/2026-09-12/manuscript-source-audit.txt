@@ -1,0 +1,8 @@
+MANUSCRIPT SOURCE AUDIT PASSED
+Labels: 106 unique; no duplicates
+References: 240 uses over 103 labels; all resolved
+Citations: 94 commands / 120 key uses over 48 keys; all resolved
+Bibliography: 58 unique entries
+Equation labels: 72; all referenced
+Figures: 3 includes; all present
+Current Lean verification statement: present

@@ -1,9 +1,15 @@
 # Formalization worklog
 
-Canonical manuscript: `paper/main.pdf`, copied without alteration from the
-author-supplied `main.pdf` on 2026-09-05. The paper directory is PDF-only.
-Entries dated 2026-08-30 below describe earlier checkpoints, including
-manuscript source and legacy materials no longer in this distribution.
+> **2026-09-15 current verification:** the public `C1Potential` route and the
+> `p >= 1` rejection/overlap extension are kernel-checked with Lean/mathlib
+> 4.33.0. The full 3,439-job build and 266-declaration axiom gate passed.
+> Earlier Hessian endpoints remain compatibility special cases.
+
+Current manuscript inventory: `paper/main.pdf` only. TeX, bibliography,
+and separate figure files are not bundled. The public existential statements
+use `A₀ ≥ 1`, with the established `A₀ ≥ 2` witness. Historical entries below
+retain the inventories and checks from their original dates; they do not
+assert that old manuscript source files are present in the current package.
 
 Pinned toolchain: Lean `v4.33.0`, mathlib `v4.33.0`.
 
@@ -337,3 +343,145 @@ PDF-only synchronization below.
   `DOCUMENTATION_UPDATE_2026-09-05.md` for the checks and their scope.
 - No new Lean kernel build was run: Lean/Lake is not installed in the update
   environment. No live repository contents were fetched or modified.
+
+## 2026-09-12 — first-order manuscript and interface revision
+
+Prepared a candidate replacing the standing C2/Hessian formulation by C1 plus
+strong convexity and Lipschitz actual gradient. The revised manuscript added a
+broader nonconvex Appendix B scope; the Lean claim explicitly excluded that
+independent generalization. Added the C1 adapter and matching
+main/corollary/rejection/overlap scripts; extended p >= 1 by interpolation.
+Added a repository-root CI workflow and strict post-build axiom gate. At this
+candidate-preparation checkpoint only the static and numerical checks had run;
+the next entry records the later kernel audit.
+
+## 2026-09-12 — kernel audit and corrected release
+
+Complete:
+
+- restored and used pinned Lean/mathlib 4.33.0;
+- repaired elaboration failures in `C1ToFirstOrder.lean`,
+  `MomentInterpolation.lean`, and `RejectionMomentsOne.lean`;
+- renamed colliding private Euclidean instances in the C1 adapter;
+- repaired `AllResults.lean`, whose intended revision imports were inside a
+  block comment and therefore inert;
+- strengthened the static and first-order audits to strip comments and verify
+  public reachability;
+- added `C1Potential.allParameterMALAFlowBounds`, a direct first-order wrapper
+  for the full Proposition 3.4 conclusion;
+- updated the actual axiom audit and reader documentation;
+- relabeled Hessian theorem comments as optional smooth compatibility results.
+
+Verification commands:
+
+```text
+lake build
+lake env lean UniformRandomMALA/AllResults.lean
+lake env lean UniformRandomMALA/DependencyAudit.lean
+python scripts/check_axioms.py validation/local/axioms.log
+powershell -ExecutionPolicy Bypass -File scripts/check.ps1
+```
+
+Results:
+
+```text
+155 Lean files; 2069 declarations; no proof placeholders
+FIRST-ORDER SOURCE AUDIT PASSED
+NUMERIC SANITY PASSED (2000 trials)
+Build completed successfully (3439 jobs).
+AXIOM AUDIT PASSED: 266 declarations; only
+  [propext, Classical.choice, Quot.sound]
+FULL SOURCE BUILD AND AXIOM AUDIT PASSED
+```
+
+Remaining mathematical scope: Appendix B's optional extension of the
+rejection lemmas to general nonconvex C1 potentials is not formalized. The
+checked strongly convex discrete route is end-to-end for Theorem 2.1.
+
+Release handoff at that checkpoint: checksum regeneration and clean-archive
+validation remained release-engineering work. The final reconciliation entry
+below supersedes this former "next task" marker; it is not an outstanding Lean
+proof task.
+
+## 2026-09-12 — final API and reader-documentation reconciliation
+
+Complete:
+
+- checked every theorem name used in the reader documentation against the
+  public `UniformRandomMALA.AllResults` import;
+- clarified that the 2,069 figure is the static source regex's count of
+  top-level `def`/`lemma`/`theorem`/`structure` declarations, not a census of
+  Lean's elaborated environment;
+- recorded the explicit `SFinite` reference-measure hypotheses on generic
+  lazy-kernel reversibility, energy, quotient, and gap scaling;
+- distinguished the fractional aggregation theorem's direct
+  all-measurable `spectralGap` conclusion from its transfer to the paper's
+  `L²` Rayleigh gap;
+- documented the literal quantifier order of the generic Gaussian
+  contraction theorem, the finite-Euler module import, and the namespace
+  setup needed for standalone examples;
+- clarified that the real-exponent moment inequality takes integrability as
+  an API hypothesis and that the rejection application proves it from
+  boundedness; and
+- recorded the manuscript status then available at that checkpoint. The
+  subsequent source-recovery and rebuild entry below supersedes that interim
+  PDF-only inventory.
+
+No Lean declaration or proof was changed in this documentation pass. The
+kernel, import, and axiom results recorded immediately above remain the final
+mathematical verification state; checksum and ZIP validation are packaging
+gates rather than missing formalization work.
+
+## 2026-09-12 — canonical manuscript source and final release reconciliation
+
+Complete:
+
+- recovered the editable revised manuscript source, bibliography, and all
+  three included figure PDFs and installed them as the canonical `paper/`
+  source set;
+- changed only the obsolete Lean-status paragraph, the typo `temrs`, an
+  unnumbered ESJD display that had produced a duplicate PDF destination, and
+  one unused equation label;
+- rebuilt `paper/main.pdf` from `paper/main.tex` with
+  `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex` (47 pages);
+- audited 106 unique labels, 240 reference uses over 103 labels, 94 active
+  citation commands containing 120 bibliography-key uses over 48 keys, 72
+  referenced equation labels, and three present figure inputs; no item was
+  unresolved or duplicated;
+- checked all 225 PDF named destinations and all 543 PDF actions; every target
+  resolves, and the rebuilt PDF has no undefined reference/citation, duplicate
+  destination, or overfull-box warning;
+- visually inspected the edited status page and its neighboring pages at high
+  resolution and confirmed that the text remains searchable;
+- reran the complete PowerShell checker after the Lean-comment and audit-script
+  reconciliation: the 3,439-job build, public import, and 266-declaration axiom
+  gate all passed; and
+- staged a clean distribution, regenerated `validation/SHA256SUMS.txt`,
+  re-extracted the ZIP, verified exact file-set equality and every SHA-256
+  checksum, reran all four source/numerical audits in the extraction, and
+  confirmed that no build cache, Git data, local axiom log, Python bytecode, or
+  compiled Lean artifact is present.
+
+The delivered package is therefore synchronized at all three reader-visible
+layers: the revised paper statement, the public Lean declarations, and the
+validation/documentation record. The only explicitly unformalized extension
+is Appendix B's broader nonconvex `C¹` rejection result; it is independent of
+the end-to-end strongly convex proof of Theorem 2.1.
+
+## 2026-09-15 — revised A₀ range and PDF-only manuscript
+
+- Changed the three public existential main-theorem statements to `A₀ ≥ 1`.
+  The concrete witness and all internal `A₀ ≥ 2` assumptions remain intact.
+- Recorded the revised PDF SHA-256 `eb3ec374502cbc7b01a2552164f8d64693f64fef333f9948173f575d09a6c4f9`. The `paper/` directory
+  contains only `main.pdf`; corrected the active inventory documentation.
+- Replaced the mandatory TeX-source gate by an explicit PDF identity and
+  inventory audit, with seven passing failure-case regression tests.
+  Archived the old TeX build and source-audit evidence under
+  `validation/historical/2026-09-12/`.
+- Reran the full PowerShell gate: static and first-order audits, PDF audit,
+  2,000 numerical trials, all 3,439 build jobs, direct `AllResults` elaboration,
+  and actual axiom checks for 266 declarations passed. Only `propext`,
+  `Classical.choice`, and `Quot.sound` were reported.
+- Added `REPOSITORY_UPDATE.md`; no GitHub commit, push, or PR was performed.
+- Regenerated the checksum manifest for the distributed `formalization/`
+  files, excluding build caches, scratch files, and local logs.

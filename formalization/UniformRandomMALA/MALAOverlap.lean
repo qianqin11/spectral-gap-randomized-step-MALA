@@ -1,14 +1,18 @@
 /-
-# Local overlap bounds for MALA kernels
+# Sharper `p >= 2` overlap core for MALA kernels
 
-Public entry point for the unconditional discrete-time local-overlap theorem
-for dyadic MALA kernels. This is the result labeled `prop:overlap` in *A
-Global Spectral Gap for MALA with a Uniformly Randomized Step Size*: outside
-an explicitly controlled exceptional set, nearby starting points have
-overlapping dyadic-MALA transition laws; a more conservative scale gives the
-same conclusion globally. The content-named declaration
+This module exposes the certificate-free `p >= 2` discrete-time local-overlap
+core for dyadic MALA kernels. Outside an explicitly controlled exceptional
+set, nearby starting points have overlapping transition laws; a more
+conservative scale gives the same conclusion globally. The content-named
+declaration
 `UniformRandomMALA.Concrete.FirstOrderPotential.mala_overlap_bounds` packages
-both the high-probability local estimate and the global small-step estimate.
+both estimates in this sharper range.
+
+The revised paper's Proposition 3.2 allows every `p >= 1`. Its reader-facing
+endpoint is `UniformRandomMALA.Concrete.C1Potential.mala_overlap_bounds` in
+`Concrete/C1MainTheorem.lean`; it obtains the extra range by second-moment
+interpolation and uses correspondingly rescaled constants.
 
 The proof uses explicit constants `1 / (16 * exp 1)` and
 `6144 * (exp 1)^3`.

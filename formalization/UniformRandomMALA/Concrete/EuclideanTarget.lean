@@ -14,10 +14,11 @@ Concrete kernels instead require a natural dimension and an actual Euclidean
 state space.  This file introduces the latter and proves the adapter to the
 existing `Parameters` record.
 
-`FirstOrderPotential` records consequences of the paper's Hessian bounds that
-are used by most of the proof.  The current public theorem takes this record
-directly; the standard analytic construction of the record from the paper's
-stated `C²` Hessian assumptions is not included in this package.
+`FirstOrderPotential` is the internal first-order strong-convexity/smoothness
+interface. `Concrete/C1ToFirstOrder.lean` constructs it from the revised
+manuscript assumptions using the actual gradient and proving the descent
+lemma. `Concrete/HessianToFirstOrder.lean` retains the earlier `C²` adapter
+as a compatible special case.
 -/
 
 namespace UniformRandomMALA

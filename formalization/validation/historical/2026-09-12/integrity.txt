@@ -1,0 +1,21 @@
+INTEGRITY AND SCOPE AUDIT PASSED — 2026-09-12
+
+- `paper/main.tex`, the bibliography, and all three figure PDFs are bundled;
+  they rebuild the synchronized 47-page `paper/main.pdf`.
+- The manuscript source has no duplicate/unresolved labels, references, or
+  citations, and every equation label is referenced.
+- All 155 Lean source modules are present and the aggregate root imports every
+  non-Prelude library module.
+- Mathlib 4.33.0 is the sole direct external Lean dependency.
+- The four first-order revision modules are reachable from `AllResults.lean`.
+- No `sorry`, `admit`, project axiom, native proof shortcut, unsafe declaration,
+  unresolved local import, or local import cycle was detected.
+- Full kernel build, public import, and 266-declaration axiom gate passed.
+- The release process excludes `.lake`, dependency/build caches, Git data,
+  Python bytecode, and `validation/local`.
+- `validation/SHA256SUMS.txt` is regenerated from the clean staged release and
+  verified after re-extraction.
+
+The old Hessian adapter remains a smooth compatibility result. The revised
+main theorem uses `C1Potential`. The broader nonconvex Appendix B extension is
+not claimed as a Lean theorem.

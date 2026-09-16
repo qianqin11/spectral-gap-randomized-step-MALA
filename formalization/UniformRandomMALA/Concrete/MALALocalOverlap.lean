@@ -4,11 +4,13 @@ import UniformRandomMALA.Concrete.MALASetwiseTV
 /-!
 # Conditional local overlap for dyadically randomized MALA
 
-This file contains the elementary assembly step in the local part of
-Proposition 3.2.  The only analytic input is a uniform fixed-step moment
-bound for the rejection probability.  Jensen--Markov supplies a good set on
-which the *averaged* rejection is at most `1/3`; the remaining argument is the
-accept/reject triangle inequality and the `1/32` Gaussian proposal bound.
+This file contains the elementary assembly step in the retained `p ≥ 2`
+core of Proposition 3.2.  The only analytic input is a uniform fixed-step
+moment bound for the rejection probability.  Jensen--Markov supplies a good
+set on which the *averaged* rejection is at most `1/3`; the remaining
+argument is the accept/reject triangle inequality and the `1/32` Gaussian
+proposal bound.  The revised `p ≥ 1` wrapper is
+`Concrete.C1Potential.mala_overlap_bounds`.
 -/
 
 namespace UniformRandomMALA

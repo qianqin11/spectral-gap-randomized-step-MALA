@@ -1,11 +1,14 @@
 import UniformRandomMALA.Certificates
 
 /-!
-# Main theorem
+# Certificate-assembly compatibility layer
 
-This file contains the formal min/max assembly at the end of the paper.
-There are no placeholders: once the safe and ladder certificates are
-provided, the global endpoint bound follows by a complete Lean proof.
+This file retains the original abstract min/max assembly: once safe and
+ladder certificates are supplied, the global endpoint bound follows.  It is
+useful as a modular compatibility API, but it is not the revised paper-facing
+endpoint.  The certificate-free concrete theorem under the manuscript's
+first-order assumptions is in
+`UniformRandomMALA.Concrete.C1MainTheorem`.
 -/
 
 namespace UniformRandomMALA
@@ -54,7 +57,7 @@ theorem global_gap_for_every_endpoint_expanded
     Parameters.rejectionShape, Parameters.safeShape] using
     global_gap_for_every_endpoint p c
 
-/-- The main theorem extracted directly from all named analytic interfaces. -/
+/-- The abstract assembly theorem extracted from all named analytic interfaces. -/
 theorem global_gap_from_analytic_interfaces
     (p : Parameters) (a : PaperAnalyticInterfaces p) :
     p.masterRHS ≤

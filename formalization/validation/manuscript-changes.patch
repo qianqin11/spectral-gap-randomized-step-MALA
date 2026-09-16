@@ -1,0 +1,313 @@
+--- uploaded/main(3).tex
++++ revised/main.tex
+@@ -7,6 +7,7 @@
+ \usepackage{amsmath,amssymb,amsthm,mathtools}
+ \usepackage{aliascnt}
+ \usepackage{booktabs,tabularx,array}
++\usepackage{graphicx}
+ \usepackage{enumitem}
+ \usepackage[authoryear]{natbib}
+ \usepackage{xcolor}
+@@ -77,7 +78,8 @@
+ 
+ \begin{abstract}
+ Let \(\pi(\df x)\propto e^{-U(x)}\,\df x\) on \(\R^d\), where
+-\(0<m\leq L<\infty\), \(mI_d\preceq\nabla^2U(x)\preceq LI_d\), and \(\kappa=L/m\).
++\(U\) is continuously differentiable and \(m\)-strongly convex with a globally
++\(L\)-Lipschitz gradient, \(0<m\leq L<\infty\), and \(\kappa=L/m\).
+ It is known that, under warm-start assumptions, fixed-step Metropolis-adjusted Langevin algorithm (MALA) with properly tuned step size has mixing time of order $\kappa \sqrt{d}$ up to logarithmic factors.
+ By contrast, when the condition number is bounded away from one, no single fixed step size yields a matching spectral-gap lower bound of order $(\kappa \sqrt{d})^{-1}$ uniformly over this target class.
+ We show that MALA with a uniformly randomized step size admits a spectral-gap lower bound of this size.
+@@ -165,7 +167,7 @@
+ step.  It uses one proposal and has essentially the same computational cost
+ as fixed-step MALA.  
+ By linearity of detailed balance, it is exactly \(\pi\)-reversible.
+-In \cref{thm:main}, we show that if $U$ is twice continuously differentiable and $H$ is of order
++In \cref{thm:main}, we show that if $U$ is continuously differentiable, $m$-strongly convex, and has an $L$-Lipschitz gradient, and $H$ is of order
+ $(L\sqrt{d})^{-1}$, then $\Gap(\overline P_H)$ has a lower bound of order
+ $(\kappa\sqrt{d})^{-1}$, up to logarithmic factors, matching the minimax
+ mixing-time bound for fixed-step MALA.
+@@ -224,9 +226,11 @@
+ We give a direct proof and a more transparent formulation (\cref{thm:aggregation}) suitable for the present setting.
+ 
+ 
+-An accompanying Lean~4 development formally verifies the main theorem and
+-the other principal theorem-level conclusions from their stated assumptions.  This
+-includes the \cref{thm:main}, \cref{prop:minimax-fixed-step-ceiling}, \cref{lem:fractional}, and \cref{thm:aggregation}.  The scope of the verification is described in \cref{sec:lean-verification}.
++An accompanying Lean~4 development provides proof scripts for the main
++theorem and other principal theorem-level conclusions, including
++\cref{thm:main,prop:minimax-fixed-step-ceiling,lem:fractional,thm:aggregation}.
++The scope of these scripts and the verification status of the revised
++first-order interface are described in \cref{sec:lean-verification}.
+ 
+ %\subsection*{Contributions}
+ %
+@@ -317,18 +321,32 @@
+ 
+ \subsection*{Generative AI disclosure}
+ 
+-This project began when the author asked ChatGPT (OpenAI) whether MALA admits a useful global spectral-gap bound at the $d^{-1/2}$ step-size scale. ChatGPT suggested studying a uniformly randomized-step version of MALA—an algorithmic variant that had previously appeared in the literature—and developed the principal proof strategy and initial versions of the major mathematical arguments in this article. It also assisted in drafting and revising the manuscript and generated all code used for the numerical experiments and the Lean 4 formal verification. The human author checked the relevant literature, scrutinized and revised the AI-generated arguments, verified the mathematical claims and computations, inspected the simulation methodology and results, and confirmed that the Lean development was kernel-checked without proof placeholders or problem-specific axioms. The human author takes full responsibility for the content and correctness of the article.
++This project began when the author asked ChatGPT (OpenAI) whether MALA admits a useful global spectral-gap bound at the $d^{-1/2}$ step-size scale. ChatGPT suggested studying a uniformly randomized-step version of MALA—an algorithmic variant that had previously appeared in the literature—and developed the principal proof strategy and initial versions of the major mathematical arguments in this article. It also assisted in drafting and revising the manuscript and generated all code used for the numerical experiments and the Lean 4 formal verification. The human author checked the relevant literature, scrutinized and revised the AI-generated arguments, verified the mathematical claims and computations, inspected the simulation methodology and results, and confirmed that the earlier Hessian-based Lean development was kernel-checked without proof placeholders or problem-specific axioms. The status of the revised first-order interface is described in \cref{sec:lean-verification}. The human author takes full responsibility for the content and correctness of the article.
+ 
+ 
+ \section{Setup and Main Result}
+ 
+-Assume throughout that $d$ is a positive integer and that \(U:\R^d\to\R\) is twice
+-continuously differentiable with
+-\begin{equation*}
+-mI_d\preceq\nabla^2U(x)\preceq LI_d,
+-\qquad x\in\R^d,
+-\end{equation*}
+-where $0 < m \leq L < \infty$.
++Assume throughout, except where explicitly stated otherwise, that \(d\) is a
++positive integer and that \(U:\R^d\to\R\) is continuously differentiable,
++\(m\)-strongly convex, and has a globally \(L\)-Lipschitz gradient, where
++\(0<m\leq L<\infty\). Explicitly, for every \(x,y\in\R^d\),
++\begin{equation}\label{eq:first-order-assumptions}
++\begin{aligned}
++ U(y)&\geq U(x)+\ip{\nabla U(x)}{y-x}+\frac m2\norm{y-x}^2,\\
++ \norm{\nabla U(y)-\nabla U(x)}&\leq L\norm{y-x}.
++\end{aligned}
++\end{equation}
++We also use the standard consequence
++\begin{equation}\label{eq:first-order-upper-taylor}
++ U(y)\leq U(x)+\ip{\nabla U(x)}{y-x}+\frac L2\norm{y-x}^2.
++\end{equation}
++Indeed, integrate
++\(\ip{\nabla U(x+s(y-x))-\nabla U(x)}{y-x}\) over \(s\in[0,1]\)
++and apply the gradient-Lipschitz bound; see also
++\citet[Theorem~2.1.5]{Nesterov2004}.
++No second derivative of \(U\) is assumed. The Hessian inequalities
++\(mI_d\preceq\nabla^2U\preceq LI_d\) are a sufficient special case
++when \(U\in C^2\). Strong convexity implies that \(e^{-U}\) is integrable.
+ Let \(\kappa:=L/m\geq1\), and define the target distribution
+ \[
+ \pi(\df x)=\frac{e^{-U(x)}}{\int_{\R^d}e^{-U(u)}\,\df u}\,\df x.
+@@ -495,12 +513,12 @@
+ Let $\mu$ be a probability distribution on $\mathbb{R}^d$ such that $\df\mu/\df\pi\in L^2(\pi)$.
+ For a Markov kernel~$P$ and $\epsilon > 0$, define the mixing time 
+ \[
+-n_{\scriptsize\mathrm{mix}}\left(P, \mu, \epsilon \right) = \inf\left\{ n: \, \norm{\mu P^n - \pi }_{\mathrm{TV}} \leq \epsilon \right\}.
++n_{\mathrm{mix}}\left(P, \mu, \epsilon \right) = \inf\left\{ n: \, \norm{\mu P^n - \pi }_{\mathrm{TV}} \leq \epsilon \right\}.
+ \]
+ Then, by \eqref{eq:TVbound} and \cref{cor:sqrt-d-endpoint}, if $H = c/(L\sqrt{d})$ for some $c > 0$,
+ \[
+ \begin{aligned}
+-	n_{\scriptsize\mathrm{mix}}\left(\frac{I + \bar{P}_H}{2}, \mu, \epsilon \right) &\leq \frac{\log \| \df \mu/\df \pi - 1 \|_{L^2(\pi)} - \log (2\epsilon)}{-\log [1 - \Gap(\bar{P}_H)/2]} \\
++	n_{\mathrm{mix}}\left(\frac{I + \bar{P}_H}{2}, \mu, \epsilon \right) &\leq \frac{\log \| \df \mu/\df \pi - 1 \|_{L^2(\pi)} - \log (2\epsilon)}{-\log [1 - \Gap(\bar{P}_H)/2]} \\
+ 	&\leq \frac{\log \| \df \mu/\df \pi - 1 \|_{L^2(\pi)} - \log (2\epsilon)}{\Gap(\bar{P}_H) / 2} \\
+ 	&\leq C \left[ \log \left\| \frac{\df \mu}{\df \pi} - 1 \right\|_{L^2(\pi)} - \log(2\epsilon) \right] \kappa \sqrt{d} \max \left\{ \frac{1}{c}, c[1 + \log (d+1) + \log \kappa] \right\},
+ \end{aligned}
+@@ -615,6 +633,10 @@
+ %\((\kappa\sqrt{d})^{-1}\) scale in the same framework.
+ %\end{remark}
+ 
++The smooth subclass in \cref{prop:minimax-fixed-step-ceiling} is intentional:
++an upper bound on the infimum over this subclass also bounds the infimum
++over the larger class in \eqref{eq:first-order-assumptions}.
++
+ \section{Ingredients of the Proof} \label{sec:ingredients}
+ 
+ We now describe the main ingredients of the proof of Theorem~\ref{thm:main}.
+@@ -703,19 +725,33 @@
+ %assertion is pointwise and controls sets that are too small for any
+ %exceptional region to be discarded.
+ 
+-\subsection{Isoperimetric inequality}
+-
+-It is well known that a strongly log-concave distribution satisfies a Gaussian isoperimetric inequality.
+-Corollary~2.2 and equations (2.10)--(2.12) of
+-\citet[pp.~267--268]{BakryLedoux1996} imply
++\subsection{Isoperimetric inequality}\label{ssec:isoperimetry}
++
++A strongly log-concave distribution satisfies the Gaussian enlargement
++inequality below; see \citet[Corollary~2.2 and equations~(2.10)--(2.12)]{BakryLedoux1996}.
++It remains valid under the first-order assumptions
++\eqref{eq:first-order-assumptions}. To see this without assuming second
++differentiability, note that \(U(x)-m\norm{x}^2/2\) is convex.
++Caffarelli's contraction theorem \citep{Caffarelli2000}, in the nonsmooth
++formulation of \citet[Theorem~1.1 and the conclusion of Section~3]{KimMilman2012},
++therefore gives a \(1\)-Lipschitz map \(T\) sending
++\(N_d(0,m^{-1}I_d)\) to \(\pi\).
++For each Borel set \(A\) and \(r>0\), the inclusion
++\((T^{-1}(A))^r\subseteq T^{-1}(A^r)\) transfers the Gaussian
++isoperimetric inequality to \(\pi\); see also
++\citet[Section~4]{KimMilman2012}. Consequently,
+ \begin{equation}\label{eq:bakry-ledoux-enlargement}
+ \pi(A^r)
+ \geq
+ \Phi\bigl(\Phi^{-1}(\pi(A))+\sqrt{m}\,r\bigr),
+ \end{equation}
+ where, for \(r>0\),
+-\(A^r=\{x:\operatorname{dist}(x,A)<r\}\), and \(\Phi\) is the standard Gaussian distribution function.  The following three-set form of the isoperimetric inequality
+-is proved in \cref{app:gaussian}.
++\(A^r=\{x:\operatorname{dist}(x,A)<r\}\), and \(\Phi\) is the standard
++Gaussian distribution function. The cases \(\pi(A)=0,1\) are understood by
++continuity. The same bound holds for sets measurable in the completion of
++\(\pi\), by choosing a Borel subset of the same measure.
++The following three-set form of the isoperimetric inequality is proved
++in \cref{app:gaussian}.
+ 
+ \begin{proposition}\label{prop:separated}
+ Let \(A,B,C\) be a measurable partition of \(\R^d\), let \(r\geq0\), and suppose
+@@ -1335,56 +1371,57 @@
+ 
+ \section{Lean verification}\label{sec:lean-verification}
+ 
+-An accompanying Lean~4 development formalizes the principal results of this
+-article.  It proves both the non-lazy and half-lazy conclusions of
+-\cref{thm:main}, with the same universal constants in the two conclusions,
+-as well as both spectral-gap bounds in
+-\cref{cor:sqrt-d-endpoint}.  On the fixed-step side, it verifies the explicit
+-hard-target bound in \cref{prop:generic-fixed-step-obstruction} and the
+-resulting minimax upper bound in
+-\cref{prop:minimax-fixed-step-ceiling}.  Thus, the formalization covers both
+-the positive result for randomized-step MALA and the contrasting obstruction
+-for fixed-step MALA.
+-
+-The main ingredients of the randomized-step argument are also formalized.
+-These include the comparison between the Dirichlet form of the uniform
+-mixture and those of its disjoint dyadic components in \cref{lem:Kt}; the
+-close coupling bound in \cref{prop:overlap}; the Gaussian
+-isoperimetric separation bound in \cref{prop:separated}; and both one-step
+-flow estimates in \cref{prop:flow}.  The formalization further verifies the
+-Cheeger-type aggregation lemma \cref{lem:fractional} and its hard-assignment
+-specialization \cref{thm:aggregation}.  In particular, these two results are
+-proved with the \(L^2\) energy-domination assumption stated in the
+-manuscript.  The auxiliary Gaussian-shift, defective-flow, exceptional-set,
+-and multiscale summation estimates in
+-\cref{lem:gaussian-shift,lem:defective,lem:exceptional-budget,lem:ladder-sum}
+-are formalized as well.
+-
+-The stationary rejection estimate in
+-\cref{prop:stationary-rejection}, and hence the overlap result in
+-\cref{prop:overlap}, are obtained in Lean by an alternative discrete-time
+-proof.  Rather than transcribing the continuous-time argument through
++The accompanying Lean~4 development provides proof scripts for the
++principal results of this article. Its first-order input consists of a
++continuously differentiable potential, the strong-convexity inequality in
++\eqref{eq:first-order-assumptions}, and a Lipschitz bound on the actual
++gradient of that potential. The upper Taylor estimate
++\eqref{eq:first-order-upper-taylor} is derived within the development,
++rather than supplied as an additional hypothesis. No second derivative of
++$U$ is assumed by this interface.
++
++The supplied scripts connect this input to both the non-lazy and half-lazy
++conclusions of \cref{thm:main}, with the same universal constants in the two
++conclusions, and to both bounds in \cref{cor:sqrt-d-endpoint}. The
++smooth hard-target construction and the fixed-step minimax statement in
++\cref{prop:generic-fixed-step-obstruction,prop:minimax-fixed-step-ceiling}
++are retained. The randomized-step proof uses the mixture comparison in
++\cref{lem:Kt}, the overlap and separation bounds in
++\cref{prop:overlap,prop:separated}, both flow bounds in \cref{prop:flow},
++and the aggregation results in \cref{lem:fractional,thm:aggregation},
++with the stated $L^2$ energy-domination assumption.
++
++The stationary-rejection and overlap conclusions are obtained through an
++alternative discrete-time proof, using finite-dimensional Gaussian
++likelihood estimates, an Euler/random-walk-Metropolis comparison, and
++weak-limit stability. The range $1\leq p<2$ is supplied by interpolation
++from the second-moment estimate, with adjusted universal constants. The
++continuous-time proofs of
+ \cref{lem:linear-increment,lem:integrated-increments,lem:frozen-endpoint-law,lem:path-likelihood}
+-line by line, the formal proof uses finite-dimensional Gaussian likelihood
+-estimates, a coupling between finite Euler schemes and random-walk
+-Metropolis chains, and weak-limit stability.  This proves the same
+-stationary-rejection and overlap conclusions, with the parameter dependence
+-needed in the remainder of the paper.
+-
+-Several parts of the development are stated independently of MALA and may be
+-useful in other formalizations.  These reusable results include a lemma
+-deriving the usual Taylor and gradient estimates from two-sided Hessian
+-bounds; the equivalence between the \(L^2\) Poincar\'e and Rayleigh-quotient
+-definitions of the spectral gap; exact reversibility and Dirichlet-form
+-identities for measurable mixtures of Markov kernels; exact spectral-gap
+-scaling under half-lazification; the flow
+-aggregation results for finite families of reversible kernels; spectral-gap
+-upper bounds obtained from \(L^2\) test functions or measurable cuts; and
+-weak-limit stability results for metric-enlargement inequalities and
+-likelihood bounds.  The accompanying development contains no proof
+-placeholders or paper-specific axioms.
+-
+-The Lean package can be found in a GitHub repository \citep{qinMALALean2026}.
++are not transcribed into Lean. In particular, the additional nonconvex
++scope noted at the beginning of Appendix~B is not part of the formalization:
++the Lean stationary-rejection theorem retains the standing strong-convexity
++assumption. The isoperimetric bound is derived internally from the Gaussian
++Ornstein--Uhlenbeck argument and a finite-Euler weak limit, rather than
++assuming the contraction theorem cited in \cref{ssec:isoperimetry}.
++
++The development also contains reusable results on first-order Taylor
++bounds, equivalence of the $L^2$ Poincar\'e and Rayleigh formulations,
++reversibility and Dirichlet forms of kernel mixtures, lazification,
++flow aggregation, spectral-gap upper bounds, and weak-limit stability.
++The sole direct external Lean library is mathlib; its standard dependencies
++and Lean's logical foundations are retained. The revised source contains
++no proof placeholders or paper-specific axiom declarations.
++
++\paragraph{Status of the revised interface.}
++The supplied package records a successful kernel build of the earlier
++Hessian-based version. The new first-order interface and the extension to
++$p\geq1$ have not yet undergone a fresh Lean build in the environment used
++for this revision. Thus a completed kernel verification of these additions
++is not claimed here. The package includes a full-build and axiom-audit
++workflow that must succeed before this qualification can be removed.
++The source and its verification instructions are supplied with the
++repository \citep{qinMALALean2026}.
+ 
+ \section{Numerical experiments}\label{sec:simulations}
+ 
+@@ -1970,8 +2007,20 @@
+ 
+ \section{Proof of Proposition~\ref{prop:overlap}}\label{app:rejection-overlap}
+ 
+-This appendix proves \cref{prop:overlap}.  The main input is the following
+-stationary estimate for the pointwise rejection function
++This appendix proves \cref{prop:overlap}.
++The convexity assumption on \(U\) is not needed for
++\cref{prop:stationary-rejection,lem:linear-increment,lem:integrated-increments,lem:frozen-endpoint-law,lem:path-likelihood}.
++For these results it suffices that \(U\in C^1(\R^d)\), that
++\(\nabla U\) be globally \(L\)-Lipschitz for some \(L>0\), and that
++\(0<\int_{\R^d}e^{-U(x)}\,\df x<\infty\), with \(\pi\) the normalized
++measure and \(X_0\sim\pi\). Under these weaker assumptions the Langevin
++diffusion is still nonexplosive and reversible with respect to \(\pi\);
++see \citet[Section~2, assumption~L1 and the subsequent discussion]{DurmusMoulines2017}.
++The proofs of the stated results below use only these weaker assumptions.
++The globally safe assertion of \cref{prop:overlap}, proved at the end of
++this appendix, continues to use convexity.
++
++The main input is the following stationary estimate for the pointwise rejection function
+ \[
+ 	r_h(x)=1-\int\alpha_h(x,y)Q_h(x,\df y),
+ \]
+@@ -2140,14 +2189,15 @@
+ 	X_t=X_0-\int_0^t\nabla U(X_s)\,\df s+\sqrt{2}\,B_t,
+ 	\qquad t\geq0.
+ \end{equation}
+-Under the standing assumptions on \(U\), the Langevin semigroup is
+-symmetric with respect to \(\pi(\df x)\propto e^{-U(x)}\,\df x\):
++Under the weaker assumptions stated at the beginning of this appendix,
++the Langevin semigroup is symmetric with respect to
++\(\pi(\df x)\propto e^{-U(x)}\,\df x\):
+ \[
+ \int fS_tg\,\df\pi=\int gS_tf\,\df\pi
+ \]
+ for bounded measurable \(f,g\) and \(t\geq0\); see
+-\citet[Chapters~1 and~7]{FukushimaOshimaTakeda2011} and
+-\citet{BakryGentilLedoux2014}.
++\citet[Section~2]{DurmusMoulines2017} and
++\citet[Chapters~1 and~7]{FukushimaOshimaTakeda2011}.
+ Since \(S_t1=1\), taking \(f=1\) shows that \(\pi\) is invariant.
+ Consequently, the process started from \(X_0\sim\pi\) is stationary
+ and reversible.
+@@ -3207,8 +3257,8 @@
+ 
+ \subsection{Some basic properties of Gaussian distribution functions}
+ 
+-Equation~\eqref{eq:bakry-ledoux-enlargement}, due to
+-\citet{BakryLedoux1996}, states that
++The Gaussian enlargement inequality \eqref{eq:bakry-ledoux-enlargement},
++justified above under the first-order assumptions, states that
+ \[
+ 	\pi(A^r)
+ 	\geq

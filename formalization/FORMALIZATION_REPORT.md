@@ -1,61 +1,46 @@
 # Formalization report: uniform-random MALA
 
-Last recorded Lean validation: **2026-08-30**
+Validation date: **2026-09-15**.
 
-Documentation/PDF synchronization: **2026-09-05**; no new Lean build.
+This package kernel-checks the principal randomized-step lower bound and the
+fixed-step minimax upper bound in Qian Qin's *A global spectral gap for
+Metropolis-adjusted Langevin algorithm with a uniformly randomized step size*.
+The revised main theorem no longer assumes a twice differentiable potential.
 
-This package kernel-checks the main randomized-step lower bound and the
-fixed-step minimax upper bound in Qian Qin's *A global spectral gap for Metropolis-adjusted Langevin algorithm
-with a uniformly randomized step size*.
-The verification statements below refer to the recorded 2026-08-30 checks;
-this synchronization preserves every Lean source and build input. See
-`DOCUMENTATION_UPDATE_2026-09-05.md` for the new static/package checks.
+The paper-facing record `Concrete.C1Potential` uses only continuous
+differentiability, a first-order strong-convexity inequality, and global
+Lipschitz continuity of the actual Riesz gradient. `C1Potential.upperTaylor`
+derives the missing descent inequality; `toFirstOrderPotential` then connects
+these assumptions to the established discrete analytic core without a
+certificate parameter.
 
-The main manuscript-facing declarations are:
+The principal endpoint is:
 
 ```lean
-UniformRandomMALA.Concrete.exists_universal_nonlazy_paperMasterRHS_lower
-UniformRandomMALA.Concrete.exists_universal_lazy_paperMasterRHS_lower
-UniformRandomMALA.Concrete.HessianBoundedPotential.
-  sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower
-UniformRandomMALA.Concrete.fractionalAggregation_poincareLower
-UniformRandomMALA.Concrete.FirstOrderPotential.allParameterMALAFlowBounds
-UniformRandomMALA.Concrete.exists_universal_fixedStepMinimaxGap_paper_upper
+UniformRandomMALA.Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
 ```
 
-The lower-bound endpoint begins with the manuscript's actual `C²` Hessian
-bounds. `HessianBoundedPotential.toFirstOrderPotential` derives the Taylor
-inequalities and Lipschitz Riesz gradient rather than recording an unrelated
-vector field. The conclusion is stated with the manuscript's `L²` Rayleigh
-spectral gap, whose equivalence with the corresponding Poincaré formulation
-is proved in `Concrete/RayleighSpectralGap.lean`.
+It packages the non-lazy and concrete half-lazy clauses with shared universal
+constants satisfying `A₀ ≥ 1` and the paper's `L²` Rayleigh spectral gap. The package also includes
+both displays of Corollary 2.2, the `p ≥ 1` MALA overlap theorem, separated-set
+and full-parameter flow bounds, the exact fractional aggregation lemma, and
+the smooth fixed-step minimax obstruction. See `THEOREM_MAP.md`.
 
-The fixed-step endpoint takes the infimum over the exact class of `C∞`
-potentials with their actual second Fréchet derivative in `[mI,LI]`, followed
-by the supremum over every positive step size. It proves the manuscript's
-logarithmic/exponential ceiling with a universal exponential rate and a
-prefactor depending only on the lower condition-number cutoff.
+The full PowerShell gate passed under Lean/mathlib 4.33.0:
 
-The complete formalization also includes the concrete half-lazy kernel,
-Corollary 2.2 without a `pStar ≤ d` assumption, the exact `L²` fractional
-aggregation lemma, and the full-parameter form of Proposition 3.4.
-
-For theorem-by-theorem declarations, proof strategy, reusable results, and
-verification commands, see:
-
-- `COMPLETION_REPORT.md`;
-- `THEOREM_MAP.md`;
-- `PROOF_STRATEGY_LEDGER.md`;
-- `REUSABLE_RESULTS.md`;
-- `FORMALIZATION_STATUS.md`.
+- source audit: 155 files, 2,069 declarations, no proof bypasses;
+- PDF identity/inventory audit and seven audit regression tests: passed;
+- `lake build`: 3,439 jobs completed successfully;
+- public `AllResults` elaboration: passed;
+- actual `#print axioms`: 266 declarations, with only `propext`,
+  `Classical.choice`, and `Quot.sound`.
 
 The paper's continuous-time Appendix B derivation is not translated
-line-by-line. Its required stationary-rejection and local-overlap conclusions
-are proved by the documented finite Gaussian/Euler/RWM alternative. No final
-endpoint assumes an SDE theorem or a replacement certificate.
+line-by-line, and its extra nonconvex scope is not claimed. Lean proves the
+strongly convex rejection result needed by Theorem 2.1 through a documented
+finite-Gaussian/Euler/RWM route. The older Hessian adapter remains a reusable
+smooth special case, not a premise of the revised endpoint.
 
-The full `scripts/check.ps1` audit passed on 2026-08-30: static and numerical
-checks passed, `lake build` completed successfully with 3,435 jobs, the public
-aggregate import elaborated, and the dependency audit reported only
-`propext`, `Classical.choice`, and `Quot.sound`. There is no `sorry`, `admit`,
-or project-specific axiom.
+For detailed declarations, proof architecture, reusable results, commands, and
+limitations, read `COMPLETION_REPORT.md`, `PROOF_STRATEGY_LEDGER.md`,
+`REUSABLE_RESULTS.md`, `README.md`, and `TRUST_BOUNDARY.md`.
