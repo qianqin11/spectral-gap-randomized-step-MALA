@@ -40,9 +40,6 @@ using a finite-Euler/discrete-time argument instead of a line-by-line SDE
 formalization. The older Hessian adapter remains as an optional smooth special
 case and is still used by the deliberately smooth hard example.
 
-The public existential statements use `A₀ ≥ 1`, matching the revised draft.
-Their witness is the existing universal constant `concreteA0 ≥ 2`; all
-internal moment bounds and the non-lazy and lazy conclusions are preserved.
 
 ## Reader entry points
 
