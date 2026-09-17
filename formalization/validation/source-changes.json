@@ -1,0 +1,30 @@
+{
+  "validation_date": "2026-09-16",
+  "completed_at": "2026-09-16T21:45:00-05:00",
+  "status": "KERNEL_VERIFIED",
+  "lean_version": "4.33.0",
+  "mathlib_version": "4.33.0",
+  "change_scope": "Reader documentation, restored manuscript assets, Lean comments, and manuscript/reference audit scripts.",
+  "lean_statements_and_proofs": "Unchanged",
+  "paper_pdf_sha256": "a6baa1d1131e7c9f3b73022b1c2a46d73fb115e372af96eb476bc4f6894740be",
+  "paper_tex_sha256": "2adba0776db88e5daf040882a1a4f0831373ab1de4f2cfa1193dd1152b0fa939",
+  "paper_inventory": [
+    "hard_target_first_coordinate_trace.pdf",
+    "hard_target_origin_acceptance.pdf",
+    "hard_target_stationary_comparison.pdf",
+    "main.pdf",
+    "main.tex",
+    "uniform_random_mala.bib"
+  ],
+  "lean_reference_label_uses": 122,
+  "lean_number_label_pairs": 78,
+  "theorem_environments": 20,
+  "theorem_labels_checked_against_latex": 19,
+  "manuscript_audit_tests": 21,
+  "manuscript_pages": 47,
+  "source_pdf_correspondence": "Equal normalized extracted text on all 47 pages; not byte/pixel equivalence.",
+  "kernel_build": "PASS; 3439 jobs",
+  "public_import": "PASS",
+  "axiom_audit": "PASS; 266 declarations; propext, Classical.choice, Quot.sound only",
+  "remaining_scope_qualification": "Appendix B nonconvex extension and its continuous-time derivation are not formalized."
+}

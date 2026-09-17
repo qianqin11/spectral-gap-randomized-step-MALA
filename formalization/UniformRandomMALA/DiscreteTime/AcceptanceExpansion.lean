@@ -14,7 +14,7 @@ remainder from Mathlib and a separate large-`u` estimate; no Taylor theorem
 for random variables is required.
 
 We keep a harmless constant `1` in front of the quadratic term instead of
-the sharper `1 / 2`.  The proof of Proposition 3.2 only uses the order of
+the sharper `1 / 2`.  The proof of Proposition 3.2 (`prop:overlap`) only uses the order of
 the remainder, and this version is substantially easier to reuse in Lean.
 -/
 

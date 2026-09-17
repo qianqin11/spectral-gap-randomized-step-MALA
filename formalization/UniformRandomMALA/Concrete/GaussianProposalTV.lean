@@ -457,7 +457,7 @@ theorem abs_gaussianDensityProposal_apply_toReal_sub_le_startingDistance
   exact (V.abs_gaussianDensityProposal_apply_toReal_sub_le_sqrt hh x y hs).trans
     (Real.sqrt_le_sqrt hquot)
 
-/-- The numerical Gaussian proposal bound used in Proposition 3.2.  The
+/-- The numerical Gaussian proposal bound used in Proposition 3.2 (`prop:overlap`).  The
 proof is just the preceding setwise estimate plus squaring; it assumes the
 actual proposal step lies in the upper half of the scale interval. -/
 theorem abs_gaussianDensityProposal_apply_toReal_sub_le_one_div_32

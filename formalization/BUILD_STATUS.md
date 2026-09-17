@@ -1,139 +1,66 @@
-# Build status
+# Verification evidence
 
-Paper-synchronization date: **2026-09-05**
+Validation date: **2026-09-16**. The development uses pinned Lean 4.33.0 and
+mathlib 4.33.0. The full verification gate completed successfully.
 
-Last recorded full Lean build: **2026-08-30**
+| Check | Result |
+|---|---|
+| Lean source audit | Passed: 155 files; 2,069 top-level declarations counted by source regex; no placeholders |
+| First-order interface and imports | Passed; acyclic local imports; mathlib is the sole direct external Lean library |
+| Manuscript source | Passed: 108 labels, 252 reference uses, 117 citation-key uses, 58 bibliography entries, three figures |
+| Lean manuscript references | Passed: 122 label uses and 78 numbered theorem/label pairs |
+| Manuscript regression tests | Passed: 21 tests for missing/changed assets and invalid references |
+| Numerical sanity checks | Passed: 2,000 deterministic trials |
+| Lean build | Passed: `Build completed successfully (3439 jobs).` |
+| Public import | `lake env lean UniformRandomMALA/AllResults.lean` passed |
+| Axiom dependencies | All 266 selected declarations passed; only `propext`, `Classical.choice`, and `Quot.sound` |
+| LaTeX build | Passed: 47 pages; no unresolved references or citations; no overfull boxes |
+| Source/PDF correspondence | Bundled and rebuilt PDFs have equal normalized extracted text on all 47 pages |
 
-This is the recorded validation status for the Lean package accompanying
-Qian Qin's **A global spectral gap for Metropolis-adjusted Langevin algorithm
-with a uniformly randomized step size**. It is a build report; mathematical notation and the paper-to-Lean map
-are explained in `PAPER_READER_GUIDE.md`.
+The recent Lean edits add stable manuscript labels and correct two location
+references in comments. The theorem statements and proofs are unchanged.
+The public existential constant range remains `A₀ ≥ 1`, proved with the
+existing witness satisfying `A₀ ≥ 2`.
 
-The full-build and axiom-audit results below are historical records from
-2026-08-30, not new checks of this distribution. The 2026-09-05 update changes
-only documentation and the supplied manuscript PDF. All Lean sources and
-existing build/check inputs are byte-for-byte unchanged. Static and numerical
-checks were rerun for the update; their results and limitations are recorded
-in `DOCUMENTATION_UPDATE_2026-09-05.md`. No Lean executable is available in
-the update environment, so no new `lake build` or axiom audit was run.
+## Manuscript and theorem references
 
-- Target toolchain: `leanprover/lean4:v4.33.0`.
-- Target mathlib tag: `v4.33.0`.
-- Static project audit: **passed on 2026-08-30**; no `sorry`, `admit`, or
-  project-level axiom.
-- Deterministic numerical sanity audit: **passed on 2026-08-30**; 2,000
-  trials, including the current assumption-free Corollary 2.2
-  simplification.
-- Full Lean kernel build: **passed on 2026-08-30** (`lake build`, 3,435
-  jobs).
-- Content-named public API: **passed** through
-  `UniformRandomMALA.AllResults`.
-- Unconditional MALA local-overlap build: **passed** through
-  `UniformRandomMALA.MALAOverlap` and
-  `UniformRandomMALA.Concrete.MALAOverlapBounds`.
-- Reader-facing MALA local-overlap theorem:
-  `Concrete.FirstOrderPotential.mala_overlap_bounds`.
-- Exact non-lazy paper-form theorem:
-  `Concrete.exists_universal_nonlazy_paperMasterRHS_lower`.
-- Exact concrete lazy theorem:
-  `Concrete.exists_universal_lazy_paperMasterRHS_lower`.
-- Exact fixed-step minimax theorem:
-  `Concrete.exists_universal_fixedStepMinimaxGap_paper_upper`.
-- Explicit constants: `cr = 1/(16e)` and `Cr = 6144 e^3`.
-- Finite Euler likelihood audit: **passed**; energy MGF, real moments,
-  tilted/frozen endpoint identity, and endpoint contraction are unconditional.
-- Euler/RWM coupling audit: **passed**; pair kernel, stationary second
-  marginal, unequal-start recurrence, finite iteration, fixed-horizon
-  vanishing energy, retained-initial edge coupling, and common structured
-  weak limit are unconditional.
-- Moving-reference/MALA-meet audit: **passed**; RN closure, accepted-flow meet,
-  rejection marginal, and paper-scale stationary rejection are unconditional.
-- Local/global overlap audit: **passed**; both clauses of the paper's
-  moment-indexed local-overlap proposition (`prop:overlap`, Proposition 3.2
-  in the current draft) are unconditional.
-- Gaussian shift/separation audit: **passed**; Mills, quantile, shift, and
-  separated sets are checked from Bakry--Ledoux.
-- Bakry--Ledoux finite Gaussian-image layer: **passed**; strong monotonicity,
-  finite Euler innovation sensitivity, Euclidean block norm packaging,
-  endpoint `LipschitzWith`, the finite geometric coefficient, and its sharp
-  mesh limit `1/m` are kernel-checked.
-- Bakry--Ledoux weak-limit stability is checked twice: at the abstract profile
-  level and, in `Concrete/GaussianWeakLimit.lean`, directly for the
-  endpoint-corrected Gaussian shift.  The Gaussian theorem needs only the
-  usual interior-mass finite inequalities and avoids an extra ENNReal
-  endpoint-profile hypothesis.
-- The Gaussian normal-profile calculus and Mehler OU module are checked:
-  profile symmetry/strict concavity, `I I'' = -1`, quantile/profile endpoint
-  limits, a continuous closed profile, Gaussian
-  invariance, the semigroup law, invariant integration, long-time convergence,
-  and Fréchet-derivative commutation for bounded `C¹` data.
-- The local Gaussian OU residual argument and its functional closure
-  (historical development stages G3 and G4) are checked through the explicit
-  canonical field.
-  `Concrete/GaussianOUCanonicalFields.lean` fixes
-  `Q_s = sqrt(I(P_(t-s)f)^2 + (1-exp(-2s))|grad P_(t-s)f|^2)`, proves its
-  endpoints, joint continuity, a uniform compact-time bound, and continuity
-  of `s ↦ P_s Q_s`.  `Concrete/GaussianOUGenerator.lean` proves Gaussian
-  integration by parts, direct fixed/time-dependent Mehler differentiation,
-  the coordinate generator identity, the residual algebra/sign, and the
-  monotonicity closure.  `GaussianOUCanonicalResidual.lean` and
-  `GaussianOUCanonicalInterpolation.lean` complete the higher derivatives,
-  time derivative, integrable path domination, and bounded residual package.
-- The functional long-time limit, continuous closed-profile passage, and
-  endpoint truncation are checked. The smooth-ramp-to-enlargement stage
-  (historically G5) is also checked without external approximation
-  or enlargement-continuity premises: `Concrete/GaussianRampMollification.lean`
-  constructs normalized smooth bump convolutions of expanded distance ramps,
-  and `Concrete/GaussianEnlargement.lean` proves the strip/perimeter, intrinsic
-  right-continuity, Dini comparison, closed-set, and Radon steps.
-- `Concrete/FiniteEulerEnlargement.lean` proves the Lipschitz-image transfer,
-  packages finite Euler endpoint laws, and combines the mesh coefficient
-  limit with Gaussian weak-limit stability.  Thus any weak limit of the
-  finite endpoint laws satisfies sharp curvature-`m` Bakry--Ledoux.
-  `GaussianRampCanonicalInterpolation.lean` supplies the Gaussian theorem in
-  every finite innovation dimension and the diagonal endpoint convergence
-  identifies the limit with the normalized target.
-- Defective-conductance audit: **passed** for the concrete dyadic MALA
-  kernels, including both clauses of the full-parameter Proposition 3.4
-  wrapper `FirstOrderPotential.allParameterMALAFlowBounds`.
-- Fractional component-aggregation audit: **passed** with the paper's exact
-  `L²` energy-domination scope; bounded `L²` caps justify the hypothesis and
-  make ENNReal cancellation and monotone convergence valid.
-- Exceptional-budget and ladder-assignment audit: **passed**.
-- Harmonic-sum audit: **passed** with explicit constant `6·2^30`.
-- Hessian-to-first-order calculus audit: **passed**; the actual second
-  Fréchet derivative bounds yield the exact Taylor inequalities, Riesz
-  gradient, continuity, and Lipschitz gradient used by the internal
-  `FirstOrderPotential` chain.
-- Spectral-gap definition audit: **passed**; the `L²` Poincaré and Rayleigh
-  formulations are formally equivalent, including zero-variance and
-  infinite-energy cases.
-- Concrete master theorem: **passed from the manuscript's `C²` Hessian
-  assumptions** through
-  `HessianBoundedPotential.universal_masterRHS_rayleighSpectralGap_lower`
-  and `exists_universal_nonlazy_paperMasterRHS_lower`.
-- Concrete lazification audit: **passed**; Markovness, reversibility, exact
-  half-energy, exact half-Rayleigh-gap, and the lazy paper endpoint are
-  checked for the literal identity/kernel mixture.
-- Corollary 2.2 audit: **passed** for both displays; the final simplification
-  does not assume `pStar ≤ d`.
-- Proposition 2.3 audit: **passed**; the explicit `C∞` hard potential,
-  Hessian bounds, local test branch, sticky cut branch, scalar optimization,
-  and literal supremum–infimum endpoint are kernel-checked.
-- Dependency audit: **passed**; audited declarations use only the standard
-  Lean/mathlib logical dependencies `propext`, `Classical.choice`, and
-  `Quot.sound`.
-- Reproducible full check: `./scripts/check.sh` or the included GitHub Actions
-  workflow.
+`paper/` contains `main.tex`, `main.pdf`, `uniform_random_mala.bib`, and the
+three figure PDFs used by the source. The PDF checksum is recorded in
+[manuscript-pdf.sha256](validation/manuscript-pdf.sha256).
+The source-label audit checks active labels, references, citations, figure
+inputs, and the labels and numbers written in Lean comments.
 
-The static and numerical audits are useful bug-finding checks; neither is a
-substitute for Lean elaboration and kernel checking.
+All 19 theorem-level labels agree with the fresh LaTeX build. The Mills-ratio
+lemma has no theorem-level label; its equation labels identify Lemma C.1.
+[THEOREM_MAP.md](THEOREM_MAP.md) covers all 20 theorem environments and
+distinguishes direct formalizations from alternative proofs and scope limits.
 
-The paper's continuous-time Appendix B SDE derivation is not formalized.
-Its stationary-rejection and overlap outputs are established by the checked
-finite discrete-time replacement described in `PAPER_READER_GUIDE.md`.
+The bundled PDF was produced with MiKTeX and retained unchanged. A separate
+TeX Live 2025 build produced the same page count and normalized extracted
+text. PDF bytes and exact rendering can differ across TeX distributions.
+Four underfull-box warnings remain; the LaTeX build has no overfull boxes.
+LaTeX also reports four duplicate PDF-destination warnings for `equation.18`.
+Source labels and theorem numbers are unique and resolved; the duplicate
+destination may affect the PDF equation hyperlink. Details are recorded in
+`validation/manuscript-build.txt`; the manuscript source and PDF were preserved.
 
-The legacy `MainTheorem` assembles caller-supplied fields from the old
-`PaperAnalyticInterfaces` record. It remains for compatibility and modular
-experiments. The concrete route proves the corresponding inputs internally
-and does not depend on that record.
+## Reproduction and records
+
+Run `lake exe cache get`, then `scripts/check.ps1` on Windows or
+`bash scripts/check.sh` on Linux/macOS. The gate checks source, manuscript
+references, regression tests, numerics, the full Lean build, the public
+import, and the actual axiom output. It does not invoke LaTeX automatically.
+Typesetting instructions are in [README.md](README.md).
+
+- [CHECK_OUTPUT.txt](CHECK_OUTPUT.txt): compact gate summary.
+- [Manuscript audit](validation/manuscript-audit.txt): source and reference checks.
+- [Reference audit](validation/lean-reference-audit.txt): concordance details.
+- [Manuscript build](validation/manuscript-build.txt): typesetting and PDF comparison.
+- [Compiled labels](validation/manuscript-labels.json): label numbers and page locations.
+
+Full local logs are `validation/local/restored-source-gate.log` and
+`validation/local/axioms.log`; generated files are excluded from distribution.
+Earlier records under `validation/historical/` document their own snapshots.
+Static and numerical audits are supporting checks, distinct from Lean kernel
+verification. The axiom audit covers a selected set of declarations; the
+source audit and library build cover the complete development.

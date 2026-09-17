@@ -3,11 +3,12 @@ import UniformRandomMALA.Concrete.MALALocalOverlap
 /-!
 # MALA overlap from a stationary rejection-moment bound
 
-This module makes the last analytic hypothesis for Proposition 3.2 visible in
-one theorem.  It assumes a stationary `L^p` rejection estimate at every fixed
-step.  Everything after that estimate -- the dyadic good set, Gaussian
-proposal comparison, accept/reject triangle, and globally safe clause -- is
-proved by the imported elementary modules.
+This module contains the retained sharper `p ≥ 2` core behind Proposition
+3.2 (`prop:overlap`).  It assumes a stationary `L^p` rejection estimate at every fixed step.
+Everything after that estimate -- the dyadic good set, Gaussian proposal
+comparison, accept/reject triangle, and globally safe clause -- is proved by
+the imported elementary modules.  The revised paper's full `p ≥ 1` public
+endpoint is `Concrete.C1Potential.mala_overlap_bounds`.
 -/
 
 namespace UniformRandomMALA
@@ -27,7 +28,7 @@ supplied by the discrete-time analysis.  The factor `Cr / 3` is chosen so that
 Markov's inequality produces the paper's exceptional-set constant `Cr`.
 
 The estimate is required only in the same small-step regime used by the local
-clause of Proposition 3.2. -/
+clause of Proposition 3.2 (`prop:overlap`). -/
 def StationaryMALARejectionMomentBound (cr Cr : ℝ) : Prop :=
   ∀ p h : ℝ, 2 ≤ p → 0 < h →
     h ≤ cr / (V.L * Real.sqrt (p * ((d : ℝ) + p))) →
@@ -37,8 +38,9 @@ def StationaryMALARejectionMomentBound (cr Cr : ℝ) : Prop :=
         ∂(V.target : Measure (State d))) ≤
       ((Cr / 3) * V.L * h * Real.sqrt (p * ((d : ℝ) + p))) ^ p
 
-/-- Both clauses of Proposition 3.2, conditional only on the displayed
-fixed-step stationary rejection moment estimate.
+/-- Both clauses of the sharper retained `p ≥ 2` Proposition 3.2 (`prop:overlap`) core,
+conditional only on the displayed fixed-step stationary rejection moment
+estimate.
 
 The harmless normalization `cr ≤ 1` guarantees that the local step range is
 inside `h ≤ 2/L`, where the elementary Gaussian proposal comparison applies.

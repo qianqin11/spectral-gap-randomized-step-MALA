@@ -197,7 +197,7 @@ theorem exists_universal_fixedStepWorstPotentialGap_le_twoBranchEnvelope :
       hd hm hmL hh ha hc hca)
 
 /-- Explicit optimized fixed-step minimax bound.  This is the sharp
-pre-absorption form of Proposition 2.3: the first coefficient displays its
+pre-absorption form of Proposition 2.3 (`prop:minimax-fixed-step-ceiling`): the first coefficient displays its
 dependence on the lower condition-number cutoff `κ₀`, while the exponential
 rate is universal. -/
 theorem exists_universal_fixedStepMinimaxGap_explicit_upper :
@@ -275,7 +275,7 @@ theorem explicitMinimaxMax_le_paperMax
           max (Real.log (κ * d) / (κ * d)) (Real.exp (-c * d)) :=
         mul_le_mul_of_nonneg_left (le_max_right _ _) hC0
 
-/-- Paper-form Proposition 2.3.  The infimum is over the exact class of
+/-- Paper-form Proposition 2.3 (`prop:minimax-fixed-step-ceiling`).  The infimum is over the exact class of
 infinitely differentiable potentials satisfying the actual Hessian bounds,
 and the supremum ranges over every positive fixed step size. -/
 theorem exists_universal_fixedStepMinimaxGap_paper_upper :

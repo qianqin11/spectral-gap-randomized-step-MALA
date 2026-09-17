@@ -116,7 +116,10 @@ def main() -> int:
             if "\t" in line:
                 errors.append(f"{path}:{no}: tab character")
 
-    root_imports = set(IMPORT.findall((ROOT / "UniformRandomMALA.lean").read_text(encoding="utf-8")))
+    root_text = strip_comments_and_strings(
+        (ROOT / "UniformRandomMALA.lean").read_text(encoding="utf-8")
+    )
+    root_imports = set(IMPORT.findall(root_text))
     for path in sorted((ROOT / "UniformRandomMALA").rglob("*.lean")):
         module = ".".join(path.relative_to(ROOT).with_suffix("").parts)
         if path.stem != "Prelude" and module not in root_imports:

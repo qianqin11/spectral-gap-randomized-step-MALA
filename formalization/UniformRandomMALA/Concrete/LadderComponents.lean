@@ -439,7 +439,8 @@ lemma ladderHarmonicBound_pos (p : Parameters) :
     (mul_pos (mul_pos p.hm (sq_pos_of_pos p.ladderTheta_pos))
       (sq_pos_of_pos p.hb0))
 
-/-- Elementary proof of the harmonic-sum estimate.  The only ingredients
+/-- Lemma F.1 (`lem:ladder-sum`) for the chosen universal parameters.
+The only ingredients
 are `p_J < 4d`, the coarse cardinality bound `J ≤ p⋆`, and the exact
 summand identities above. -/
 theorem ladderHarmonicReal_le (p : Parameters) (hsmall : p.pStar < p.d) :
@@ -594,7 +595,7 @@ namespace FirstOrderPotential
 
 variable {d : ℕ} (V : FirstOrderPotential d)
 
-/-- Every ladder step satisfies Proposition 3.2's moment-dependent step
+/-- Every ladder step satisfies Proposition 3.2 (`prop:overlap`)'s moment-dependent step
 restriction when `b₀` is chosen below its small constant. -/
 lemma ladderEndpoint_le_proposition32_scale
     (p : Parameters) (hmatch : PotentialParametersMatch V p)

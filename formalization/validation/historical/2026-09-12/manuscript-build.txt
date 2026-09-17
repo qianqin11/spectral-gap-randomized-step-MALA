@@ -1,0 +1,22 @@
+FINAL MANUSCRIPT SOURCE BUILD — PASSED (2026-09-12)
+
+Command:
+  latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+
+Pages: 47
+Unique source labels: 106 (no duplicates)
+Reference uses: 240 over 103 distinct labels (all resolved)
+Citation commands/key uses: 94/120 over 48 distinct bibliography keys
+  (all resolved)
+Equation labels: all referenced
+PDF named destinations/actions: 225/543 (all resolved)
+Undefined citations/references: none
+Duplicate PDF destinations: none
+Overfull boxes: none
+Underfull boxes: five harmless bibliography-formatting warnings
+Visual review: pages 13--15 inspected at high resolution; the status paragraph
+and surrounding Section 6 text are clean and searchable.
+
+The canonical source, bibliography, figures, and rebuilt PDF are under
+`paper/`. This is manuscript validation, not Lean elaboration or kernel
+verification; the independent Lean result is in `kernel-gate-passed.txt`.

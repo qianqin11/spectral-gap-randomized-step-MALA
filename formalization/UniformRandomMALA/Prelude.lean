@@ -10,9 +10,11 @@ import Mathlib.Tactic.Ring
 /-!
 # Uniform-random MALA: common imports
 
-This project formalizes the algebraic and logical assembly of the paper
-"Uniform-random MALA" and records the stochastic-analysis and geometric
-inputs as explicit typed interfaces.
+This project formalizes the main results of Qian Qin's
+*A global spectral gap for Metropolis-adjusted Langevin algorithm with a
+uniformly randomized step size*.  The checked public route constructs its
+stochastic-analysis and geometric inputs in Lean; older typed interfaces are
+retained as modular compatibility APIs.
 -/
 
 namespace UniformRandomMALA

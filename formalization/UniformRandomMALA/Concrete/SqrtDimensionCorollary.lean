@@ -4,7 +4,7 @@ import UniformRandomMALA.EndpointCorollaries
 /-!
 # The square-root-dimension endpoint corollary
 
-This file formalizes both displays of Corollary 2.2 at
+This file formalizes both displays of Corollary 2.2 (`cor:sqrt-d-endpoint`) at
 `H = c / (L * sqrt d)`.  In particular, the simplified display is proved for
 the full parameter range: no assumption `pStar ≤ d` is used.
 -/
@@ -18,18 +18,18 @@ noncomputable section
 
 namespace Parameters
 
-/-- The first displayed right-hand side in Corollary 2.2. -/
+/-- The first displayed right-hand side in Corollary 2.2 (`cor:sqrt-d-endpoint`). -/
 def sqrtDimensionCorollaryRHS (p : Parameters) (c : ℝ) : ℝ :=
   p.c0 / (p.kappa * Real.sqrt p.d) *
     min c (p.b0 ^ 2 / c *
       max (p.d / (p.pStar * (p.d + p.pStar))) (1 / p.d))
 
-/-- The simplified second displayed right-hand side in Corollary 2.2. -/
+/-- The simplified second displayed right-hand side in Corollary 2.2 (`cor:sqrt-d-endpoint`). -/
 def sqrtDimensionCorollarySimplifiedRHS (p : Parameters) (c : ℝ) : ℝ :=
   p.c0 / (p.kappa * Real.sqrt p.d) *
     min c (p.b0 ^ 2 / (2 * c * p.pStar))
 
-/-- The exact scalar simplification quoted in Corollary 2.2.  It holds
+/-- The exact scalar simplification quoted in Corollary 2.2 (`cor:sqrt-d-endpoint`).  It holds
 without assuming `pStar ≤ d`. -/
 theorem min_sqrtDimensionDenominator_le_two_pStar (p : Parameters) :
     min (p.pStar * (p.d + p.pStar) / p.d) p.d ≤ 2 * p.pStar := by
@@ -58,7 +58,7 @@ theorem one_div_two_pStar_le_sqrtDimensionShape (p : Parameters) :
       (mul_pos (by norm_num) p.hpStar_pos) p.hd).2
     nlinarith [p.pStar_nonneg]
 
-/-- The simplified Corollary 2.2 right-hand side is no larger than the first
+/-- The simplified Corollary 2.2 (`cor:sqrt-d-endpoint`) right-hand side is no larger than the first
 display, without a comparison hypothesis between `pStar` and `d`. -/
 theorem sqrtDimensionCorollarySimplifiedRHS_le
     (p : Parameters) (c : ℝ) (hc : 0 < c) :
@@ -85,7 +85,7 @@ theorem sqrtDimensionCorollarySimplifiedRHS_le
   exact mul_le_mul_of_nonneg_left
     (min_le_min le_rfl hsecond) hpref
 
-/-- The rejection/safe max in Corollary 2.2 is bounded by `d * M²`.
+/-- The rejection/safe max in Corollary 2.2 (`cor:sqrt-d-endpoint`) is bounded by `d * M²`.
 This direction is all that is needed for the endpoint lower bound. -/
 theorem sqrtDimensionShape_le_d_mul_M_sq (p : Parameters) :
     max (p.d / (p.pStar * (p.d + p.pStar))) (1 / p.d) ≤
@@ -115,7 +115,7 @@ theorem sqrtDimensionShape_le_d_mul_M_sq (p : Parameters) :
         field_simp [ne_of_gt p.hd]
       _ ≤ p.d * p.M ^ 2 := hsafeScaled
 
-/-- At `H = c/(L sqrt d)`, the first displayed Corollary 2.2 right-hand
+/-- At `H = c/(L sqrt d)`, the first displayed Corollary 2.2 (`cor:sqrt-d-endpoint`) right-hand
 side is bounded by the master right-hand side. -/
 theorem sqrtDimensionCorollaryRHS_le_masterRHS
     (p : Parameters) (c : ℝ) (hc : 0 < c)
@@ -161,7 +161,7 @@ theorem sqrtDimensionCorollaryRHS_le_masterRHS
         rw [hrootSq]
         ring
 
-/-- Transfer of the first Corollary 2.2 display from any proved master-gap
+/-- Transfer of the first Corollary 2.2 (`cor:sqrt-d-endpoint`) display from any proved master-gap
 lower bound. -/
 theorem sqrtDimensionCorollaryRHS_le_gap
     (p : Parameters) (c : ℝ) (hc : 0 < c)
@@ -171,7 +171,7 @@ theorem sqrtDimensionCorollaryRHS_le_gap
   (ENNReal.ofReal_le_ofReal
     (p.sqrtDimensionCorollaryRHS_le_masterRHS c hc hendpoint)).trans hmaster
 
-/-- Transfer of the simplified second Corollary 2.2 display from any proved
+/-- Transfer of the simplified second Corollary 2.2 (`cor:sqrt-d-endpoint`) display from any proved
 master-gap lower bound, in the full parameter range. -/
 theorem sqrtDimensionCorollarySimplifiedRHS_le_gap
     (p : Parameters) (c : ℝ) (hc : 0 < c)
@@ -188,8 +188,8 @@ namespace Concrete.HessianBoundedPotential
 
 variable {d : ℕ}
 
-/-- Corollary 2.2, first display, for randomized MALA under the manuscript's
-`C²` Hessian assumptions. -/
+/-- Legacy smooth specialization of Corollary 2.2 (`cor:sqrt-d-endpoint`)'s first display. The revised
+paper-facing theorem is namespaced under `C1Potential`. -/
 theorem sqrtDimensionCorollary_rayleighSpectralGap_lower
     (V : HessianBoundedPotential d) (c : ℝ) (hc : 0 < c) :
     let W := V.toFirstOrderPotential
@@ -207,8 +207,9 @@ theorem sqrtDimensionCorollary_rayleighSpectralGap_lower
   have hmaster := V.universal_masterRHS_rayleighSpectralGap_lower H hH
   exact p.sqrtDimensionCorollaryRHS_le_gap c hc rfl hmaster
 
-/-- Corollary 2.2, simplified second display, for randomized MALA under the
-manuscript's `C²` Hessian assumptions and without assuming `pStar ≤ d`. -/
+/-- Legacy smooth specialization of Corollary 2.2 (`cor:sqrt-d-endpoint`)'s simplified second display,
+without assuming `pStar ≤ d`. The revised paper-facing theorem is namespaced
+under `C1Potential`. -/
 theorem sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower
     (V : HessianBoundedPotential d) (c : ℝ) (hc : 0 < c) :
     let W := V.toFirstOrderPotential

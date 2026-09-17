@@ -1,0 +1,6 @@
+MANUSCRIPT PDF AUDIT PASSED
+Bundled manuscript: paper/main.pdf only
+SHA-256: eb3ec374502cbc7b01a2552164f8d64693f64fef333f9948173f575d09a6c4f9
+PDF header/end marker and recorded checksum: matched
+TeX, bibliography, and separate figures are not bundled.
+No LaTeX build, reference/citation audit, or Lean kernel check is performed here.

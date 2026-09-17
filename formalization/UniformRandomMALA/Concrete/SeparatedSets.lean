@@ -68,7 +68,7 @@ private theorem thickening_subset_union_compl_of_separated_symm
     obtain ⟨b, hb, hby⟩ := (mem_thickening_iff.mp hy)
     exact (not_lt_of_ge (by simpa [dist_comm] using hsep y hyA b hb)) hby
 
-/-- Proposition 3.3 from Bakry--Ledoux and the Gaussian shift. -/
+/-- Proposition 3.3 (`prop:separated`) from Bakry--Ledoux and the Gaussian shift. -/
 theorem separatedSets_of_bakryLedoux_of_gaussianShift
     (π : Measure α) [IsProbabilityMeasure π]
     (m : ℝ) (hm : 0 ≤ m) (Phi PhiInv : ℝ → ℝ)

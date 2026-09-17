@@ -1,154 +1,85 @@
 # Trust boundary
 
-Last recorded Lean validation: **2026-08-30**
+The mathematical input, proof dependencies, and scope limits described here
+apply to the public first-order interface. The latest validation evidence is
+in [BUILD_STATUS.md](BUILD_STATUS.md); reproducible commands are in
+[README.md](README.md).
 
-Documentation/PDF synchronization: **2026-09-05**; no new Lean build.
+## Input assumptions
 
-This document states what must be trusted when checking the Lean formalization
-of the main lower-bound theorem in Qian Qin's **A global spectral gap for Metropolis-adjusted Langevin algorithm
-with a uniformly randomized step size**. Mathematical assumptions on the target are described
-separately in `PAPER_READER_GUIDE.md`.
+`Concrete.C1Potential d` contains a potential `U`, constants `m` and `L`, a
+positive dimension, `0 < m ≤ L`, `ContDiff ℝ 1 U`, the first-order
+strong-convexity inequality, and a Lipschitz bound on mathlib's actual
+gradient. These correspond to `eq:first-order-assumptions` in the bundled
+[paper/main.tex](paper/main.tex).
 
-## Project trust boundary
+`C1Potential.upperTaylor` proves the descent inequality, and
+`C1Potential.toFirstOrderPotential` sets the internal drift to `∇ U`.
+`C1Potential.exists_universal_paperMasterRHS_bounds` states both clauses of
+Theorem 2.1 (`thm:main`) with constants chosen before all dimensions,
+potentials, and time horizons. The record and theorem require no Hessian,
+independent drift, upper-Taylor assumption, stationary-rejection certificate,
+isoperimetric certificate, or spectral-gap certificate.
 
-The project adds no project-specific axioms and contains no `sorry` or
-`admit`.  `UniformRandomMALA/DependencyAudit.lean` runs `#print axioms` on
-the main declarations.  Their implementation uses only standard
-Lean/mathlib logical principles such as `propext`, `Classical.choice`, and
-`Quot.sound`.
+## Analytic arguments proved internally
 
-## Moment-indexed MALA local overlap
+Target isoperimetry follows from Gaussian OU/Bobkov interpolation, smooth
+ramps, finite-Euler image estimates, and a weak limit. The contraction theorem
+cited in the manuscript is not a Lean axiom or package dependency.
 
-```lean
-UniformRandomMALA.Concrete.FirstOrderPotential.mala_overlap_bounds
-```
+The rejection result uses finite Gaussian likelihoods, Euler energy bounds,
+Euler/RWM comparison, weak-limit density closure, and moment interpolation.
+The interpolation lemma assumes integrability of the powers in its
+statement; the rejection application establishes this from the bounded
+rejection mass. The rejection theorem retains strong convexity. Appendix B's
+additional nonconvex generalization and continuous-time proof are outside
+the formalized scope. The required strongly convex conclusion of
+Proposition B.1 (`prop:stationary-rejection`) is supplied internally.
 
-is the content-named entry point for `prop:overlap` (Proposition 3.2 in the
-current paper draft). It is unconditional and kernel-checked. It takes
-neither a stationary
-rejection hypothesis nor a continuous-time convergence theorem.  The proof
-is a finite discrete-time construction followed by an ordinary Prokhorov
-subsequence argument.  Euler--Maruyama and Ethier--Kurtz do not occur.
+The Hessian adapter and smooth hard-target/minimax endpoints are optional
+special cases. Importing them does not add differentiability hypotheses to
+a theorem whose argument is a `C1Potential`. Conditional assembly interfaces
+also remain available as reusable lemmas; the public endpoint supplies their
+analytic inputs through proved results.
 
-## Exact paper-form endpoints
+## External dependencies and logical axioms
 
-The non-lazy Theorem 2.1 endpoint is
+The sole direct external Lean library is mathlib, pinned with the Lean
+toolchain by `lakefile.toml`, `lake-manifest.json`, and `lean-toolchain`.
+Lean core and mathlib's ordinary transitive packages form the surrounding
+proof environment.
 
-```lean
-UniformRandomMALA.Concrete.exists_universal_nonlazy_paperMasterRHS_lower
-```
+The static audit rejects `sorry`, `admit`, project axiom declarations,
+`native_decide`, `implemented_by`, `sorryAx`, and unsafe declarations.
+The dependency audit executes `#print axioms` for the declarations selected
+in `UniformRandomMALA/DependencyAudit.lean` and allows only:
 
-It quantifies the universal constants before the dimension and target,
-starts from `HessianBoundedPotential`, and concludes the displayed bound for
-the manuscript's `L²` Rayleigh spectral gap. The concrete lazy endpoint is
-`exists_universal_lazy_paperMasterRHS_lower`. The exact Corollary 2.2
-endpoints are
-`HessianBoundedPotential.sqrtDimensionCorollary_rayleighSpectralGap_lower`
-and
-`HessianBoundedPotential.sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower`.
+- `propext`;
+- `Classical.choice`;
+- `Quot.sound`.
 
-`HessianBoundedPotential.toFirstOrderPotential` constructs the internal
-first-order interface from the paper's displayed `C²` bounds on the actual
-second Fréchet derivative. It proves the Taylor inequalities, continuity,
-and gradient Lipschitz bound, and records mathlib's Riesz gradient of `U`.
-The bridge is therefore inside the kernel-checked chain.
+`scripts/check_axioms.py` fails when a requested declaration is absent from
+the output, Lean reports an error, or another axiom occurs. The selection is
+broad but finite. The complete source audit covers the Lean files separately;
+its declaration total is a source-regex count, not a count of every
+declaration in the elaborated Lean environment. Full compilation checks the
+proof terms accepted by Lean. The selected axiom audit provides additional
+information about their logical dependencies.
 
-`l2PoincareLower_iff_le_rayleighSpectralGap` and
-`l2SpectralGap_eq_rayleighSpectralGap` connect the Poincaré and Rayleigh
-definitions, including zero variance and infinite energy.
-`fractionalAggregation_le_spectralGap` proves Lemma 3.5 using the paper's
-`L²` energy-domination scope; its bounded truncations and limiting argument
-are checked rather than hidden in a stronger premise.
+## Manuscript and auxiliary checks
 
-Everything after Bakry--Ledoux is checked internally:
+The manuscript is exposition and a specification for correspondence, not
+part of the Lean trust base. `paper/` contains the TeX source, bibliography,
+three figure PDFs, and the typeset paper. The checksum is recorded in
+[validation/manuscript-pdf.sha256](validation/manuscript-pdf.sha256).
 
-- standard Gaussian Mills inequalities, quantile estimates, and the shift
-  bound;
-- separated-set geometry;
-- defective conductance for dyadic MALA, including the full-parameter
-  Proposition 3.4 wrapper `allParameterMALAFlowBounds`;
-- coarea, median truncation, fractional aggregation, and its hard-assignment
-  corollary;
-- safe-component conductance and spectral gap;
-- the geometric ladder, exceptional budget, and exhaustive cut assignment;
-- the real and ENNReal harmonic-sum estimates;
-- the safe/ladder max-scale assembly;
-- explicit admissible choices of `b₀`, `A₀`, and `c₀`.
-
-The lazification proof is concrete: `halfLazyKernel` is the actual
-identity/kernel mixture, `Dirichlet.energy_halfLazyKernel` proves exact
-half-energy scaling, and `rayleighSpectralGap_halfLazyKernel` proves exact
-half-gap scaling.
-
-Accordingly, the exact final theorem has no extra mathematical theorem
-argument. `GaussianOUCanonicalInterpolation.lean` proves the differentiated
-residual identity and sign, and `GaussianRampCanonicalInterpolation.lean`
-connects it to the target and final gap theorem.
-
-No external smooth-ramp or enlargement-continuity premise remains (the
-development stage formerly called G5).
-`Concrete/GaussianRampMollification.lean` constructs
-the smooth distance-ramp approximation by normalized bump convolution.
-`Concrete/GaussianEnlargement.lean` proves the transition-strip estimate,
-Gaussian perimeter step, intrinsic right-continuity of closed enlargement
-masses, Dini/quantile comparison, sharp closed-set inequality, and Radon
-inner approximation.
-
-No weak-limit profile premise remains either.
-`Concrete/GaussianWeakLimit.lean` proves stability directly for the Gaussian
-shift using interior masses and the open/closed Portmanteau sandwich.
-`Concrete/FiniteEulerEnlargement.lean` combines this with the finite Gaussian
-image estimate.  `FiniteEulerTargetIdentification.lean` proves the explicit
-diagonal endpoint laws converge to the normalized `exp(-U)` target, entirely
-in discrete time.
-
-The continuous-time derivation in Appendix B, including stationary time
-reversal for Langevin increments and the subsequent Girsanov comparison,
-is not formalized line by line. The package replaces it with the finite
-discrete-time argument above and proves the same public stationary-rejection
-and overlap conclusions. No continuous-time reversal identity or SDE theorem
-is included in the trust claim. The manuscript's revised increment proof
-introduces no new assumption, axiom, or dependency in Lean; the Lean source
-and pinned build inputs are unchanged.
-
-## Fixed-step minimax theorem
-
-The exact Proposition 2.3 endpoint is
-
-```lean
-UniformRandomMALA.Concrete.
-  exists_universal_fixedStepMinimaxGap_paper_upper
-```
-
-`fixedStepMinimaxGap` is literally an `iSup` over positive steps of an
-`sInf` over gap values from `C∞` potentials satisfying the actual Hessian
-bounds. The explicit witness belongs to this class by
-`fixedStepHardPotential_mem_smoothHessianPotentialGapValues`.
-
-The checked route includes generic Rayleigh upper bounds, the exact
-indicator-flow identity, the Gaussian first-coordinate branch, the hard
-potential's Hessian and Hastings-ratio calculations, Gaussian trigonometric
-expectations and product concentration, acceptance-profile continuity, the
-small-ball sticky cut, and the scalar balance theorem
-`fixedStepTwoBranchEnvelope_le_log_max_exp`. No certificate parameter or
-problem-specific axiom is used.
-
-## Reusable conditional implications
-
-Theorems ending in `_of_bakryLedoux` state conditional mathematical
-implications: if a measure has Bakry--Ledoux enlargement, then certain
-separated-set, conductance, or spectral-gap estimates follow. They are useful
-when applying the downstream machinery to another measure. For this paper's
-target, `DiscreteTime.target_bakryLedoux` proves the hypothesis, and the final
-theorem supplies it internally. These theorem parameters are not axioms.
-
-## Legacy abstract assembly
-
-`PaperAnalyticInterfaces` and
-`paper_interfaces_imply_expanded_main_theorem` remain available. The former
-is a record whose fields stand for the analytic inputs of an early modular
-version of the paper proof; the latter assembles those fields. They remain
-for source compatibility and alternate-input experiments. A reader checking
-the completed theorem through `UniformRandomMALA.AllResults` does not need to
-construct the record, and its fields are not assumptions of
-`exists_universal_nonlazy_paperMasterRHS_lower` or its lazy counterpart.
+The manuscript audit checks the supplied files, active labels, references,
+citation keys, figure dependencies, and paper references in Lean. A valid
+label or matching checksum does not by itself prove that a Lean theorem and
+a paper statement have identical mathematical content. The correspondence
+and scope qualifications are documented in
+[THEOREM_MAP.md](THEOREM_MAP.md) and
+[FORMALIZATION_STATUS.md](FORMALIZATION_STATUS.md). LaTeX builds and numerical
+sanity checks provide separate evidence; `BUILD_STATUS.md` identifies which
+checks were performed. Earlier records in `validation/historical/` remain
+historical evidence.

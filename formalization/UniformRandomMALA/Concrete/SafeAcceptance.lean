@@ -9,7 +9,7 @@ import UniformRandomMALA.DiscreteTime.GaussianMaximum
 The proof is split into deterministic pieces.  In particular, the exact
 Gaussian proposal log ratio is rewritten before any exponential or integral
 is introduced.  This is the form needed by the discrete proof of Proposition
-3.2.
+3.2 (`prop:overlap`).
 -/
 
 namespace UniformRandomMALA

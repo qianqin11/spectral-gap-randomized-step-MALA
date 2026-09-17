@@ -67,7 +67,7 @@ lemma ladderMoment_before_top_lt
     (Nat.find_min (exists_ladderMoment_ge_dimension p) hj)
 
 /-- In the ladder regime, the terminal moment lies in `[d,4d)`, exactly
-as in equation `(pJ-range)` of the paper. -/
+as in equation `eq:pJ-range` of the paper. -/
 theorem ladderMoment_top_range
     (p : Parameters) (hsmall : p.pStar < p.d) :
     p.d ≤ ladderMoment p (ladderTopIndex p) ∧

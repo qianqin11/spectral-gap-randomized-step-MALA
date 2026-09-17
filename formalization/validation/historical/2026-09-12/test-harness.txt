@@ -1,0 +1,18 @@
+CURRENT VALIDATION HARNESS — PASS (2026-09-12)
+
+Actual PowerShell gate: PASS.
+Actual full Lean build: PASS (3439 jobs).
+Actual public AllResults elaboration: PASS.
+Actual axiom allow-list gate: PASS (266 declarations; only propext,
+Classical.choice, and Quot.sound).
+
+Synthetic axiom-parser regression tests from the supplied candidate: PASS.
+Positive case: all requested outputs present and only allowed axioms.
+Negative cases: missing output, extra sorryAx, and Lean error each rejected.
+Empty axiom-list wording accepted.
+
+Workflow YAML parse checks: PASS for root and standalone workflows.
+Bash check-script syntax: PASS.
+Python check-script syntax: PASS.
+Supplemental p-in-[1,2] interpolation/scaling numerics: PASS (20,000 trials,
+including endpoints). These numerical tests are supporting checks, not proofs.

@@ -2,7 +2,7 @@ import UniformRandomMALA.Concrete.MALAFullPathAssembly
 import UniformRandomMALA.Concrete.MALAOverlapFromRejection
 
 /-!
-# Unconditional MALA local-overlap bounds
+# Certificate-free `p >= 2` MALA local-overlap core
 
 The finite path estimate has constant `1024 e^3`.  Endpoint contraction and
 the Metropolis meet cost a factor six, giving `Cr = 6144 e^3`; its scalar
@@ -23,10 +23,10 @@ open DiscreteTime
 
 variable {d : ℕ} (V : FirstOrderPotential d)
 
-/-- Small-step constant in the elementary Proposition 3.2 proof. -/
+/-- Small-step constant in the elementary Proposition 3.2 (`prop:overlap`) proof. -/
 def proposition32CrSmall : ℝ := 1 / (16 * Real.exp 1)
 
-/-- Exceptional-set constant in the elementary Proposition 3.2 proof. -/
+/-- Exceptional-set constant in the elementary Proposition 3.2 (`prop:overlap`) proof. -/
 def proposition32CrLarge : ℝ := 6144 * (Real.exp 1) ^ 3
 
 lemma proposition32CrSmall_pos : 0 < proposition32CrSmall := by
@@ -43,15 +43,17 @@ lemma proposition32CrLarge_pos : 0 < proposition32CrLarge := by
   unfold proposition32CrLarge
   positivity
 
-/-- Unconditional stationary rejection estimate with the paper constants. -/
+/-- Certificate-free stationary rejection estimate with the sharper core
+constants, under `FirstOrderPotential`. -/
 theorem stationaryMALARejectionMomentBound_proposition32 :
     V.StationaryMALARejectionMomentBound
       proposition32CrSmall proposition32CrLarge := by
   simpa only [proposition32CrSmall, proposition32CrLarge] using
     V.stationaryMALARejectionMomentBound_paperScale
 
-/-- Proposition 3.2 with explicit elementary constants
-`cr = 1 / (16e)` and `Cr = 6144 e^3`. -/
+/-- Sharper `p >= 2` core of Proposition 3.2 (`prop:overlap`), with explicit elementary
+constants `cr = 1 / (16e)` and `Cr = 6144 e^3`. The revised `p >= 1`
+paper-facing wrapper is in `Concrete/C1MainTheorem.lean`. -/
 theorem proposition32_discreteTime :
     (∀ p t : ℝ, 2 ≤ p → ∀ ht : 0 < t,
       t ≤ proposition32CrSmall /

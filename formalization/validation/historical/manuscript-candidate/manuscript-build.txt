@@ -1,0 +1,15 @@
+SUPPLIED MANUSCRIPT BUILD RECORD — PASSED
+Command: latexmk -e '$bibtex = "bibtex.original %O %B";' -pdf -interaction=nonstopmode -halt-on-error main.tex
+Pages: 47
+Named labels: 214 (no duplicates)
+Referenced labels: 103 (all resolved)
+Undefined citations/references: none
+Overfull boxes: none
+LaTeX/font warnings: none
+Visual review: all 47 pages rendered into contact sheets; revised pages 5, 8, 13, 14, and 21 inspected at larger resolution.
+This record and the original PDF came with the supplied revision candidate.
+Editable TeX, the bibliography, and figure sources are not included in this
+Lean package, so the 2026-09-12 Lean audit did not rerun this command. The
+current PDF is a targeted post-build edit: only the obsolete page-14 audit
+status paragraph was replaced after the successful Lean check.
+This is TeX compilation, NOT Lean elaboration or kernel verification.

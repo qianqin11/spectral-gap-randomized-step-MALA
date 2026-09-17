@@ -67,7 +67,7 @@ theorem malaRejectionMass_toReal_le
   linarith
 
 /-- Fixed-step, paper-ready global overlap estimate.  This is the elementary
-core of the global clause of Proposition 3.2; averaging over an interval of
+core of the global clause of Proposition 3.2 (`prop:overlap`); averaging over an interval of
 steps is a subsequent scalar integration step. -/
 theorem abs_malaKernel_apply_toReal_sub_le_seventeen_div_32
     {t h : ℝ} (ht : 0 < t) (hh : 0 < h) (hhalf : t / 2 ≤ h)
@@ -115,7 +115,7 @@ theorem abs_malaKernel_apply_toReal_sub_le_seventeen_div_32
 set_option maxHeartbeats 800000 in
 /-- The global fixed-step estimate is preserved by the paper's upper-half
 step-size mixture.  This proves the setwise form of the global clause of
-Proposition 3.2 with the stronger constant `17/32 < 3/4`. -/
+Proposition 3.2 (`prop:overlap`) with the stronger constant `17/32 < 3/4`. -/
 theorem abs_dyadicMALA_apply_toReal_sub_le_seventeen_div_32
     {t : ℝ} (ht : 0 < t)
     (hsmall : t ≤ 1 / (2 * V.L * (d : ℝ)))
@@ -235,7 +235,7 @@ theorem setwiseTV_dyadicMALA_le_seventeen_div_32
     V.abs_dyadicMALA_apply_toReal_sub_le_seventeen_div_32
       ht hsmall x y hxy hB
 
-/-- The global clause of Proposition 3.2 in the project's concrete
+/-- The global clause of Proposition 3.2 (`prop:overlap`) in the project's concrete
 total-variation convention. -/
 theorem setwiseTV_dyadicMALA_le_three_quarters
     {t : ℝ} (ht : 0 < t)

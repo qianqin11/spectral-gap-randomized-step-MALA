@@ -313,7 +313,7 @@ def finiteEulerV (delta : ℝ) (x0 : State d)
     (z : Fin n → State d) : ℝ :=
   delta * ∑ k, ‖finiteEulerTheta V delta x0 z k‖ ^ 2
 
-/-- Discrete path energy used in the Lean replacement for Appendix B. -/
+/-- Discrete path energy used in the Lean replacement for Appendix B (`app:rejection-overlap`). -/
 def finiteEulerEnergy (delta : ℝ) (x0 : State d)
     (z : Fin n → State d) : ℝ :=
   delta * ∑ k : Fin n, ‖finiteEulerState V delta x0 z k - x0‖ ^ 2

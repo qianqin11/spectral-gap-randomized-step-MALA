@@ -3,12 +3,12 @@ import UniformRandomMALA.Concrete.RayleighSpectralGap
 import UniformRandomMALA.Concrete.GaussianRampCanonicalInterpolation
 
 /-!
-# The randomized-MALA master bound from the paper's Hessian assumptions
+# Legacy smooth specialization of the randomized-MALA master bound
 
-This file joins the calculus bridge, the existing concrete lower-bound chain,
-and the manuscript's `L²` Rayleigh definition of the spectral gap.  No
-analytic certificate or independently supplied gradient remains in the
-public endpoint.
+This optional compatibility file joins the Hessian calculus bridge, the
+concrete lower-bound chain, and the manuscript's `L²` Rayleigh definition.
+The revised paper-facing endpoint uses `C1Potential` instead and does not
+require this smooth specialization.
 -/
 
 namespace UniformRandomMALA.Concrete.HessianBoundedPotential
@@ -20,8 +20,8 @@ noncomputable section
 
 variable {d : ℕ}
 
-/-- The non-lazy master lower bound under the paper's `C²` Hessian
-assumptions, stated with the package's original all-measurable Poincaré gap. -/
+/-- The non-lazy master lower bound for the legacy `C²` Hessian special case,
+stated with the package's original all-measurable Poincaré gap. -/
 theorem universal_masterRHS_spectralGap_lower
     (V : HessianBoundedPotential d) (H : ℝ) (hH : 0 < H) :
     let W := V.toFirstOrderPotential
@@ -31,7 +31,7 @@ theorem universal_masterRHS_spectralGap_lower
         (W.uniformMALA p.H p.hH) := by
   exact V.toFirstOrderPotential.universal_masterRHS_spectralGap_lower H hH
 
-/-- Exact paper-form non-lazy endpoint: the hypotheses are `C²` regularity
+/-- Smooth compatibility endpoint: the hypotheses are `C²` regularity
 and quadratic-form bounds on the actual Hessian, the MALA drift is the Riesz
 gradient of `U`, all universal constants are the explicit package constants,
 and the conclusion uses the manuscript's `L²` Rayleigh spectral gap. -/
@@ -63,7 +63,7 @@ internal positive-parameter record. -/
 def paperMomentThreshold {d : ℕ} (V : HessianBoundedPotential d) (A₀ : ℝ) : ℝ :=
   A₀ * (1 + Real.log ((d : ℝ) + 1) + Real.log (V.L / V.m))
 
-/-- The right-hand side displayed in the non-lazy clause of Theorem 2.1. -/
+/-- The right-hand side displayed in the non-lazy clause of Theorem 2.1 (`thm:main`). -/
 def paperMasterRHS {d : ℕ} (V : HessianBoundedPotential d)
     (A₀ b₀ c₀ H : ℝ) : ℝ :=
   let pStar := paperMomentThreshold V A₀
@@ -72,12 +72,12 @@ def paperMasterRHS {d : ℕ} (V : HessianBoundedPotential d)
       max (1 / Real.sqrt (pStar * ((d : ℝ) + pStar)))
         (1 / (d : ℝ)))) ^ 2
 
-/-- Theorem 2.1 in its displayed existential-constant form.  The witnesses
+/-- Theorem 2.1 (`thm:main`) in its displayed existential-constant form.  The witnesses
 are explicit universal constants, are chosen before the dimension and
 potential, and the conclusion uses the paper's `L²` Rayleigh quotient gap. -/
 theorem exists_universal_nonlazy_paperMasterRHS_lower :
     ∃ A₀ b₀ c₀ : ℝ,
-      2 ≤ A₀ ∧ 0 < b₀ ∧ b₀ ≤ 1 / 2 ∧ 0 < c₀ ∧
+      1 ≤ A₀ ∧ 0 < b₀ ∧ b₀ ≤ 1 / 2 ∧ 0 < c₀ ∧
       ∀ {d : ℕ} (V : HessianBoundedPotential d) (H : ℝ) (hH : 0 < H),
         ENNReal.ofReal (paperMasterRHS V A₀ b₀ c₀ H) ≤
           rayleighSpectralGap
@@ -85,7 +85,7 @@ theorem exists_universal_nonlazy_paperMasterRHS_lower :
             (V.toFirstOrderPotential.uniformMALA H hH) := by
   refine ⟨FirstOrderPotential.concreteA0,
     FirstOrderPotential.concreteB0, concreteGapConstant,
-    FirstOrderPotential.concreteA0_ge_two,
+    le_trans (by norm_num : (1 : ℝ) ≤ 2) FirstOrderPotential.concreteA0_ge_two,
     FirstOrderPotential.concreteB0_pos,
     FirstOrderPotential.concreteB0_le_half,
     concreteGapConstant_pos, ?_⟩

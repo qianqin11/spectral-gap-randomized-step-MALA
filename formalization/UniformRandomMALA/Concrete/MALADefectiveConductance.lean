@@ -4,10 +4,11 @@ import UniformRandomMALA.Concrete.StandardGaussianShift
 /-!
 # Concrete defective conductance for the dyadic MALA components
 
-This is the direct adapter from the unconditional Proposition 3.2 theorem to
-the generic Appendix D.1 argument.  Its globally safe clause now depends
-only on the separated-set theorem (and hence, once the Gaussian shift is
-closed, on Bakry--Ledoux).
+This is the direct adapter from the certificate-free `p >= 2` overlap core
+(the range used by the multiscale proof of Proposition 3.4 (`prop:flow`)) to the generic
+Appendix D.1 (proof of `lem:defective` in `app:defective`) argument. Its globally safe clause depends only on the
+separated-set theorem and hence, once the Gaussian shift is closed, on
+Bakry--Ledoux.
 -/
 
 namespace UniformRandomMALA
@@ -22,7 +23,7 @@ namespace FirstOrderPotential
 
 variable {d : ℕ} (V : FirstOrderPotential d)
 
-/-- The second assertion of Proposition 3.4, for the concrete dyadic MALA
+/-- The second assertion of Proposition 3.4 (`prop:flow`), for the concrete dyadic MALA
 kernel. -/
 theorem safe_dyadicMALA_boundaryFlow_lower
     (hseparated :
@@ -58,7 +59,7 @@ theorem safe_dyadicMALA_boundaryFlow_lower
     have hden0 : 0 ≤ (2 : ℝ) ^ 13 := by norm_num
     exact div_nonneg (mul_nonneg hmass0 hmin0) hden0
 
-/-- Local Proposition 3.2 plus an explicit scalar exceptional-budget
+/-- Local Proposition 3.2 (`prop:overlap`) plus an explicit scalar exceptional-budget
 comparison imply the first defective-conductance bound.  This formulation
 keeps the remaining multiscale arithmetic independent of measure theory. -/
 theorem local_dyadicMALA_boundaryFlow_lower
@@ -137,7 +138,7 @@ theorem safe_dyadicMALA_boundaryFlow_lower_of_bakryLedoux
     t ht hsmall hS hSpos hShalf
 
 /-- Local dyadic MALA conductance, with Bakry--Ledoux and the explicit scalar
-exceptional-budget inequality as the only inputs beyond Proposition 3.2. -/
+exceptional-budget inequality as the only inputs beyond Proposition 3.2 (`prop:overlap`). -/
 theorem local_dyadicMALA_boundaryFlow_lower_of_bakryLedoux
     (hBL : BakryLedouxEnlargement
       (V.target : Measure (State d)) V.m

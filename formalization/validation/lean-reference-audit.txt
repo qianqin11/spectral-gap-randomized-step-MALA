@@ -1,0 +1,21 @@
+PAPER-TO-LEAN REFERENCE AUDIT PASSED — 2026-09-16
+
+All 108 active source labels are present in the freshly compiled LaTeX auxiliary file.
+All 19 theorem-level labels have matching printed numbers.
+The map also covers the unlabeled Mills Lemma C.1 through eq:mills-two-sided
+and eq:log-tail-simple, for 20 theorem environments in total.
+
+Lean comments: 122 manuscript-label uses and 78 numbered theorem/label pairs checked.
+All numbered manuscript mentions require an adjacent stable TeX label.
+The explicitly external Nesterov Theorem 2.1.5 citation is handled separately.
+THEOREM_MAP.md: all 52 named declarations resolve in compiled metadata;
+all 50 local links resolve.
+
+Corrected references: nonexistent Section 4.1 to Section 4 (sec:main-proof),
+and the incomplete pJ-range label to eq:pJ-range.
+Lean changes are documentation-only: declarations and proofs are unchanged.
+The continuous-time Appendix B statements and their discrete replacements
+are distinguished explicitly in THEOREM_MAP.md.
+
+TeX SHA-256: 2adba0776db88e5daf040882a1a4f0831373ab1de4f2cfa1193dd1152b0fa939
+Compiled label data: validation/manuscript-labels.json

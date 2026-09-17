@@ -1,0 +1,39 @@
+KERNEL GATE PASSED — 2026-09-12
+
+Toolchain:
+  Lake version 5.0.0-src+d8b1897 (Lean version 4.33.0)
+  mathlib 4.33.0
+
+STATIC AUDIT PASSED
+  Lean files: 155
+  Declarations: 2069
+  Explicit `by` proof blocks: 5805
+  Placeholders (`sorry`, `admit`, project `axiom`): none
+
+FIRST-ORDER SOURCE AUDIT PASSED
+  Local import graph: 155 modules; no cycles
+  Direct external library: mathlib only
+  C1 input: actual gradient; no Hessian or upper-Taylor certificate field
+  No detected native_decide, unsafe, implemented_by, sorryAx, or ofReduceBool
+
+MANUSCRIPT SOURCE AUDIT PASSED
+  Labels: 106 unique; no duplicates
+  References: 240 uses over 103 labels; all resolved
+  Citations: 94 commands / 120 key uses over 48 keys; all resolved
+  Bibliography: 58 unique entries
+  Equation labels: 72; all referenced
+  Figures: 3 includes; all present
+  Current Lean verification statement: present
+
+NUMERIC SANITY PASSED
+  Seed: 20260815
+  Random trials: 2000
+
+Build completed successfully (3439 jobs).
+Public entry-point check passed:
+  lake env lean UniformRandomMALA/AllResults.lean
+AXIOM AUDIT PASSED: 266 declarations; only
+  ['Classical.choice', 'Quot.sound', 'propext']
+FULL SOURCE BUILD AND AXIOM AUDIT PASSED
+
+PowerShell wrapper exit status: 0

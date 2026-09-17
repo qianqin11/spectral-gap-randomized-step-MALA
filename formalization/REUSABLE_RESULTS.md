@@ -1,14 +1,67 @@
 # Reusable mathematical results
 
+> **2026-09-12 first-order revision:** the public input is `C1Potential`
+> (actual gradient, strong convexity, and gradient Lipschitzness), and the
+> rejection/overlap exports include `p >= 1`. The complete package was
+> kernel-checked with pinned Lean/mathlib 4.33.0. Earlier Hessian endpoints are
+> retained as compatibility special cases.
+
+## Added first-order entry route
+
+`C1Potential` -> proved descent lemma -> `FirstOrderPotential` -> existing
+concrete proof. No target Hessian is required. The p >= 1 rejection/overlap
+exports use a second-moment interpolation inequality; in that reusable lemma,
+integrability of the relevant `p`-th and second powers is an explicit
+hypothesis, and the rejection application proves it from boundedness. The old
+p >= 2 estimates and Gaussian OU/Euler–RWM core are unchanged. See
+`FIRST_ORDER_REVISION.md` for exact names and the Appendix B scope
+qualification.
+
 This guide describes results that can be imported independently of the final
 uniform-random-MALA theorem. All names below begin with the namespace
 `UniformRandomMALA`; code blocks omit that common prefix when space is tight.
+For a standalone file, put `open UniformRandomMALA` after the import shown in
+the relevant section. Without that `open`, use fully qualified names such as
+`UniformRandomMALA.Concrete.C1Potential`. Thus a minimal narrow-import file
+has the form:
+
+```lean
+import UniformRandomMALA.Concrete.C1ToFirstOrder
+
+open UniformRandomMALA
+
+#check Concrete.C1Potential.upperTaylor
+```
 
 “Checked” means that the theorem has elaborated with the pinned Lean/mathlib
 toolchain and contains no placeholder proof. Ordinary mathematical hypotheses
 remain visible in its type.
 
-## A coordinate-free Hessian calculus bridge
+## First-order actual-gradient bridge
+
+Import:
+
+```lean
+import UniformRandomMALA.Concrete.C1ToFirstOrder
+```
+
+The reader-facing structure and results are:
+
+```lean
+#check Concrete.C1Potential
+#check Concrete.C1Potential.upperTaylor
+#check Concrete.C1Potential.toFirstOrderPotential
+```
+
+`C1Potential` stores `ContDiff ℝ 1 U`, the first-order strong-convexity
+supporting inequality written using mathlib's actual Riesz gradient `∇ U`, and
+`LipschitzWith` for that same gradient. `upperTaylor` derives the descent
+inequality by differentiating along an affine line. The adapter then sets the
+internal `gradU` field definitionally equal to `∇ U`. This is the principal
+bridge used by the revised paper theorem and requires no Hessian or upper
+Taylor certificate.
+
+## Optional coordinate-free Hessian calculus bridge
 
 Import:
 
@@ -59,6 +112,7 @@ Taylor residuals. The gradient Lipschitz estimate is then derived from those
 Taylor inequalities through a Baillon--Haddad/cocoercivity argument; it is
 not assumed as an additional operator-norm hypothesis.
 
+This smooth adapter is not required by the revised main theorem.
 `toFirstOrderPotential` is useful whenever a later development is phrased in
 terms of strong convexity and a Lipschitz gradient. Its recorded `gradU` is
 definitionally `∇ U`, which prevents accidental use of an unrelated vector
@@ -154,8 +208,11 @@ E_{(I+K)/2}(f,f) = (1/2) E_K(f,f)
 ```
 
 and hence exact halving of every Rayleigh quotient and of the Rayleigh gap.
-The gap theorem is stated in `ℝ≥0∞` and handles an empty test family or an
-infinite original gap without an auxiliary finiteness assumption.
+The reversibility, energy, quotient, and gap-scaling theorems assume that the
+reference measure `π` is `SFinite`; the concrete paper target is a probability
+measure and therefore satisfies this hypothesis. The gap theorem is stated in
+`ℝ≥0∞` and handles an empty test family or an infinite original gap without an
+auxiliary assumption that the gap itself is finite.
 
 The same module specializes the construction to the paper's concrete kernel:
 
@@ -224,6 +281,15 @@ hypothesis is invoked only on the capped functions, after those functions
 have been proved `L²`. This is why the theorem has the manuscript's exact
 `L²` premise instead of the stronger all-measurable premise used by an older
 component-aggregation interface.
+
+The two displayed aggregation endpoints conclude the package's stronger
+all-measurable `PoincareLower` predicate and its supremum `spectralGap`.
+They therefore imply the paper's `L²` Rayleigh-gap lower bound by composing
+`fractionalAggregation_le_spectralGap` with
+`Concrete.spectralGap_le_rayleighSpectralGap` from
+`UniformRandomMALA.Concrete.RayleighSpectralGap`. The declaration named
+`fractionalAggregation_le_spectralGap` is not itself stated directly using
+`rayleighSpectralGap`.
 
 The hard-assignment specialization is:
 
@@ -412,15 +478,22 @@ interpolation residual, endpoint closure, mollified distance ramps, Gaussian
 perimeter, inverse-CDF comparison, and Radon inner approximation. The
 zero-dimensional case is included.
 
-For the normalized density proportional to `exp(-U)`, use:
+For the normalized density proportional to `exp(-U)`, first-order users can
+import `Concrete/C1MainTheorem.lean` and use:
+
+```lean
+#check Concrete.C1Potential.target_bakryLedoux
+```
+
+The underlying reusable theorem is:
 
 ```lean
 #check DiscreteTime.target_bakryLedoux
 ```
 
 It takes a `FirstOrderPotential d` and returns curvature-`m` enlargement of
-its concrete target. A downstream user starting from actual Hessian bounds
-can compose it with `HessianBoundedPotential.toFirstOrderPotential`.
+its concrete target. Smooth downstream users may instead compose it with the
+optional `HessianBoundedPotential.toFirstOrderPotential` adapter.
 
 The proof uses finite Gaussian innovation spaces and contractive Euler
 endpoint maps, followed by an explicit weak-limit identification. It does
@@ -459,6 +532,12 @@ Portmanteau inequalities handle the moving set. No continuity-in-radius
 hypothesis on enlargement masses is required.
 
 ## Lipschitz images and finite-Euler transfer
+
+Import:
+
+```lean
+import UniformRandomMALA.Concrete.FiniteEulerEnlargement
+```
 
 The map theorem
 
@@ -609,9 +688,14 @@ than one. The finite-product API is:
   exists_contraction_factor_for_independent_gaussianTrigonometric_sum
 ```
 
-The last theorem produces universal `t > 0` and `0 ≤ ρ < 1` such that the
-probability of a nonnegative sum of independent variance-two Gaussian
-increments is at most `ρ` to the number of coordinates.
+For each supplied finite independent Gaussian family, the last theorem returns
+`t > 0` and `0 ≤ ρ < 1` such that the probability of a nonnegative sum is at
+most `ρ` to the number of coordinates. Its proof constructs those witnesses
+from the same one-dimensional Gaussian MGF, but the theorem's literal
+quantifier order places the family before `∃ t ρ`; it does not expose a single
+pair quantified uniformly over all ambient probability spaces and families.
+The later pi-scaled negative-threshold theorem below does expose one pair
+before quantifying over the dimension.
 
 ## Negative-threshold Gaussian product concentration
 
@@ -799,7 +883,10 @@ import UniformRandomMALA.AllResults
 
 open UniformRandomMALA
 
-#check Concrete.HessianBoundedPotential.toFirstOrderPotential
+#check Concrete.C1Potential.upperTaylor
+#check Concrete.C1Potential.toFirstOrderPotential
+#check Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
+#check Concrete.C1Potential.sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower
 #check Concrete.l2SpectralGap_eq_rayleighSpectralGap
 #check Concrete.rayleighSpectralGap_halfLazyKernel
 #check Concrete.fractionalAggregation_poincareLower
@@ -807,6 +894,7 @@ open UniformRandomMALA
 #check DiscreteTime.target_bakryLedoux
 #check Concrete.exists_universal_fixedStepMinimaxGap_paper_upper
 
+#print axioms Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
 #print axioms Concrete.fractionalAggregation_poincareLower
 #print axioms DiscreteTime.target_bakryLedoux
 #print axioms Concrete.exists_universal_fixedStepMinimaxGap_paper_upper

@@ -5,7 +5,7 @@ import UniformRandomMALA.BaillonHaddad
 # Elementary cocoercivity for the concrete potential
 
 This file derives the exact Baillon--Haddad inequality used by Proposition
-3.2 directly from the recorded lower and upper Taylor inequalities.  It does
+3.2 (`prop:overlap`) directly from the recorded lower and upper Taylor inequalities.  It does
 not import a convex-analysis Baillon--Haddad theorem.
 -/
 

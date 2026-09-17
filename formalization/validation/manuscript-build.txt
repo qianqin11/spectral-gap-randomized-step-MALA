@@ -1,0 +1,24 @@
+MANUSCRIPT BUILD PASSED — 2026-09-16
+
+From paper/:
+  latexmk -pdf -interaction=nonstopmode -halt-on-error "-outdir=../tmp/manuscript-build" main.tex
+
+LaTeX distribution: TeX Live 2025; latexmk 4.86a.
+Result: 47 pages; bibliography and all three figure inputs resolved.
+Unresolved references or citations: none.
+Duplicate source labels: none.
+PDF hyperlink warnings: four duplicate-destination warnings for equation.18.
+These appear at main.tex:1659; the earlier unnumbered ESJD display uses
+equation with nonumber at main.tex:1478. The manuscript files were preserved.
+Overfull boxes: 0. Underfull boxes: 4.
+All 108 active source labels were checked against the compiled auxiliary file.
+
+The bundled PDF was produced with MiKTeX; its bytes were preserved.
+The bundled and rebuilt PDFs have identical extracted text on all 47 pages
+after whitespace and Unicode normalization (checked with pypdf).
+Representative rendered pages were inspected. Text equality does not assert
+byte-identical PDFs or pixel-identical rendering across TeX distributions.
+
+Bundled PDF SHA-256: a6baa1d1131e7c9f3b73022b1c2a46d73fb115e372af96eb476bc4f6894740be
+TeX source SHA-256: 2adba0776db88e5daf040882a1a4f0831373ab1de4f2cfa1193dd1152b0fa939
+Scratch build and full LaTeX logs: tmp/manuscript-build/ (excluded from distribution).

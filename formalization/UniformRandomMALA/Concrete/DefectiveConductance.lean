@@ -6,7 +6,7 @@ import Mathlib.MeasureTheory.Integral.Lebesgue.Markov
 /-!
 # The generic defective-conductance argument
 
-This file formalizes Appendix D.1 directly for a Mathlib probability
+This file formalizes Appendix D.1 (proof of `lem:defective` in `app:defective`) directly for a Mathlib probability
 measure and Markov kernel.  The construction uses only measurable sets,
 Markov's inequality, reversibility, and the event definition of total
 variation.  In particular, it introduces no diffusion or continuous-time
@@ -28,7 +28,7 @@ namespace Concrete
 
 variable {α : Type*} [MeasurableSpace α]
 
-/-- Concrete real-valued formulation of Proposition 3.3.  It is deliberately
+/-- Concrete real-valued formulation of Proposition 3.3 (`prop:separated`).  It is deliberately
 stated with pointwise separation, avoiding an additional extended-real
 `infDist` API. -/
 def SeparatedSets
@@ -75,7 +75,7 @@ theorem measurableSet_retainedRight
   exact (hS.compl.inter hG).inter
     (measurableSet_lt (K.measurable_coe hS) measurable_const)
 
-/-- Markov's inequality in exactly the form used in Appendix D.1. -/
+/-- Markov's inequality in exactly the form used in Appendix D.1 (proof of `lem:defective` in `app:defective`). -/
 theorem measure_badEscapeSet_le
     (π : Measure α) (K : Kernel α α)
     {S : Set α} (hS : MeasurableSet S) :
@@ -360,7 +360,7 @@ theorem retained_points_far
       |(K x).real S - (K y).real S| := le_abs_self _
   linarith
 
-/-- Appendix D.1, with its sole geometric input exposed as
+/-- Appendix D.1 (proof of `lem:defective` in `app:defective`), with its sole geometric input exposed as
 `SeparatedSets π m`.  All other assumptions are literal measure/kernel
 properties. -/
 theorem defectiveConductance_of_separatedSets

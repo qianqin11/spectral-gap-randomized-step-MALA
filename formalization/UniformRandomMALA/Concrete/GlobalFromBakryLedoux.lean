@@ -3,11 +3,11 @@ import UniformRandomMALA.Concrete.LadderComponents
 /-!
 # Global concrete gap from Bakry--Ledoux
 
-This module closes the elementary proof chain after Proposition 3.2.  Its
-main theorem has one analytic premise, the Bakry--Ledoux enlargement
-inequality.  The remaining hypotheses are explicit numerical parameter
-choices and the definitional identification of the abstract arithmetic
-parameters with the concrete potential.
+This module closes the elementary proof chain after the `p >= 2` overlap core
+used by the multiscale argument. Its main theorem has one analytic premise,
+the Bakry--Ledoux enlargement inequality. The remaining hypotheses are
+explicit numerical parameter choices and the definitional identification of
+the abstract arithmetic parameters with the concrete potential.
 -/
 
 namespace UniformRandomMALA

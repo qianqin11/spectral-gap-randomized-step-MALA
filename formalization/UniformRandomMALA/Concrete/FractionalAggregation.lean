@@ -357,7 +357,7 @@ theorem fractionalCost_ne_top
   intro j hj
   exact ENNReal.div_ne_top (ENNReal.pow_ne_top (hβtop j)) (hγ0 j)
 
-/-- The exact fractional Poincaré lower bound from Lemma 3.5.  The strict
+/-- The exact fractional Poincaré lower bound from Lemma 3.5 (`lem:fractional`).  The strict
 positivity premise is the paper's assumption `∑ β_j² / γ_j > 0`. -/
 theorem fractionalAggregation_poincareLower
     {N : ℕ} (π : Measure α) [IsProbabilityMeasure π]
@@ -394,7 +394,7 @@ theorem fractionalAggregation_poincareLower
     _ = Dirichlet.energy π P f :=
       ENNReal.inv_mul_cancel_left hC0 hCtop
 
-/-- Spectral-gap form of the fractional finite-component aggregation lemma.
+/-- Spectral-gap form of Lemma 3.5 (`lem:fractional`).
 It is valid when some `β j` vanish and its domination premise ranges exactly
 over measurable `L²` functions. -/
 theorem fractionalAggregation_le_spectralGap
@@ -437,7 +437,7 @@ theorem fractionalCost_inv_eq_harmonicCost
   simp only [pow_two]
   simp only [mul_comm]
 
-/-- The paper's hard-assignment aggregation theorem, now with its exact
+/-- Theorem 3.6 (`thm:aggregation`), with its exact
 `L²`-scoped energy-domination premise, obtained from the fractional lemma by
 setting `β j = (φ j)⁻¹`. -/
 theorem hardAssignmentAggregation_poincareLower
@@ -477,7 +477,8 @@ theorem hardAssignmentAggregation_poincareLower
   exact fractionalAggregation_poincareLower
     π P K hrev γ β hγ0 hγtop hβtop hcost hdom hflow'
 
-/-- Spectral-gap form of the exact `L²` hard-assignment aggregation theorem.
+/-- Spectral-gap form of Theorem 3.6 (`thm:aggregation`) with its exact
+`L²` energy-domination premise.
 -/
 theorem hardAssignmentAggregation_le_spectralGap
     {N : ℕ} (hN : 0 < N)

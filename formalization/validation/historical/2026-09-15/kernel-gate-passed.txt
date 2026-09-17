@@ -1,0 +1,50 @@
+CURRENT REVISED-DRAFT GATE PASSED — 2026-09-15
+Completed: 2026-09-15T23:33:08-05:00
+
+Summary extracted from validation/local/full-gate.log.
+The complete build output and 266-declaration axiom log remain in validation/local/.
+
+Lake version 5.0.0-src+d8b1897 (Lean version 4.33.0)
+mathlib 4.33.0
+
+STATIC AUDIT PASSED
+Lean files: 155
+Declarations: 2069
+Explicit `by` proof blocks: 5808
+Placeholders (`sorry`, `admit`, project `axiom`): none
+Local imports: resolved
+Comments, strings, and (), [], {} delimiters: balanced
+NOTE: this is not a Lean kernel check; run `lake build`.
+
+FIRST-ORDER SOURCE AUDIT PASSED
+Local import graph: 155 modules; no cycles
+Direct external library: mathlib only (standard transitive dependencies retained)
+C1 input: actual gradient; no Hessian or upper-Taylor certificate field
+No detected native_decide, unsafe, implemented_by, sorryAx, or ofReduceBool
+This is a source check, NOT Lean elaboration or kernel verification.
+
+MANUSCRIPT PDF AUDIT PASSED
+Bundled manuscript: paper/main.pdf only
+SHA-256: eb3ec374502cbc7b01a2552164f8d64693f64fef333f9948173f575d09a6c4f9
+PDF header/end marker and recorded checksum: matched
+TeX, bibliography, and separate figures are not bundled.
+No LaTeX build, reference/citation audit, or Lean kernel check is performed here.
+
+PDF audit regression tests: 7 passed.
+
+NUMERIC SANITY PASSED
+Seed: 20260815
+Random trials: 2000
+Checked: min/max gluing, theta identities, reciprocal constants,
+safe/ladder coefficients, both endpoint substitutions, and
+the current assumption-free Corollary 2.2 simplification.
+NOTE: this is not a proof and not a Lean kernel check.
+
+Build completed successfully (3439 jobs).
+Public import: lake env lean UniformRandomMALA/AllResults.lean passed.
+AXIOM AUDIT PASSED: 266 declarations; only ['Classical.choice', 'Quot.sound', 'propext']
+FULL SOURCE BUILD AND AXIOM AUDIT PASSED
+PowerShell wrapper exit status: 0
+
+The public existential statements use A₀ ≥ 1; the internal witness remains A₀ ≥ 2.
+No current TeX build or manuscript-source reference/citation audit is claimed.

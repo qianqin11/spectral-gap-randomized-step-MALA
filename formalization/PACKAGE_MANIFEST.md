@@ -1,70 +1,61 @@
-# Distribution package manifest
+# Package manifest
 
-Package name: `UniformRandomMALA-Lean-Complete-2026-09-05`
+The distribution contains Lean source, the accompanying manuscript and its
+source assets, documentation, and reproducibility scripts. Current build
+and audit results are recorded in [BUILD_STATUS.md](BUILD_STATUS.md).
 
-Lean source baseline: the supplied 2026-08-30 complete package.
-Documentation/PDF synchronization: 2026-09-05; not a new Lean build.
+## Lean development
 
-`Complete` refers to all manuscript-facing results recorded in
-`COMPLETION_REPORT.md`, including the randomized-step lower bound and the
-fixed-step minimax upper bound.
+| Path | Contents |
+|---|---|
+| `UniformRandomMALA/` | Library modules, organized by mathematical construction |
+| `UniformRandomMALA.lean` | Aggregate library root |
+| `UniformRandomMALA/AllResults.lean` | Public import surface |
+| `UniformRandomMALA/Concrete/C1ToFirstOrder.lean` | First-order assumptions and derived upper Taylor inequality |
+| `UniformRandomMALA/Concrete/C1MainTheorem.lean` | Paper-facing theorem, corollary, isoperimetry, rejection/overlap, and flow endpoints |
+| `UniformRandomMALA/DependencyAudit.lean` | Selected declarations for the actual axiom dependency audit |
+| `lakefile.toml`, `lake-manifest.json`, `lean-toolchain` | Pinned Lean and mathlib dependency configuration |
 
-## Included
+## Manuscript files
 
-- `UniformRandomMALA.lean`: complete project import;
-- `UniformRandomMALA/`: every Lean source module, including the content-named
-  public entry files;
-- `lakefile.toml`, `lake-manifest.json`, and `lean-toolchain`: reproducible
-  Lean/mathlib configuration;
-- `scripts/`: Unix, Windows, static, and numerical checks;
-- `.github/workflows/lean.yml`: CI build workflow;
-- `paper/`: only `main.pdf`, copied byte-for-byte from the author-supplied
-  `main(3).pdf` (46 pages); no source, bibliography, or legacy paper files;
-- `README.md`: installation, verification, and usage instructions;
-- `PAPER_READER_GUIDE.md`: mathematical conventions, paper-to-Lean proof
-  differences, and suggested reading paths;
-- `REUSABLE_RESULTS.md`: scope, imports, and examples for the general
-  Gaussian, Bakry--Ledoux, weak-limit, and transfer theorems;
-- `PROOF_STRATEGY_LEDGER.md`: concise current proof ledger;
-- `THEOREM_MAP.md`: detailed source-to-declaration cross-reference;
-- `FORMALIZATION_STATUS.md`, `FORMALIZATION_REPORT.md`, `BUILD_STATUS.md`, and
-  `TRUST_BOUNDARY.md`: validation and trust-boundary reports;
-- `COMPLETION_REPORT.md`: exact paper-result declarations, changed files,
-  reusable additions, build and axiom results, manuscript audit, and scope;
-- `LEAN_FRIENDLY_PROOF_LEDGER.md` and
-  `BAKRY_LEDOUX_DISCRETE_LANGEVIN_PROOF.md`: clearly marked archival
-  development and design records;
-- `MALA_OVERLAP_FORMALIZATION.md`: local-overlap source cross-reference;
-- `DOCUMENTATION_UPDATE_2026-09-05.md`: the revision, source/PDF checksums,
-  and explicit limits of the new validation;
-- `GITHUB_UPDATE_GUIDE.md`: safe PowerShell update and publishing workflow;
-- `repository-update/`: distribution-only migration helpers (a text-only
-  documentation patch, guarded PowerShell updater, and payload manifest).
-  These helpers run from the extracted download and need not be committed;
-- `.gitignore` and the recorded audit summaries.
+All of the following are included in `paper/`:
 
-## Public Lean entry files
+| File | Role |
+|---|---|
+| `main.pdf` | Typeset manuscript |
+| `main.tex` | Manuscript source, including theorem labels |
+| `uniform_random_mala.bib` | Bibliography database |
+| `hard_target_origin_acceptance.pdf` | Origin-acceptance figure |
+| `hard_target_first_coordinate_trace.pdf` | First-coordinate trace figure |
+| `hard_target_stationary_comparison.pdf` | Stationary comparison figure |
 
-```text
-UniformRandomMALA/MALAOverlap.lean
-UniformRandomMALA/WeakLimitStability.lean
-UniformRandomMALA/GaussianBobkov.lean
-UniformRandomMALA/BakryLedoux.lean
-UniformRandomMALA/SpectralGap.lean
-UniformRandomMALA/AllResults.lean
-```
+The manuscript PDF identity is recorded in
+[validation/manuscript-pdf.sha256](validation/manuscript-pdf.sha256).
+The TeX source uses the bundled bibliography and figure files. Instructions
+for typesetting and verification are in [README.md](README.md).
 
-The first five names describe mathematical content rather than paper section
-or proposition numbers.  `AllResults.lean` is the convenient aggregate import.
+## Documentation and validation
 
-## Intentionally excluded from the archive
+`PAPER_READER_GUIDE.md` introduces the formalization; `THEOREM_MAP.md` maps
+paper numbers and TeX labels to declarations. `FORMALIZATION_STATUS.md` and
+`TRUST_BOUNDARY.md` describe coverage and assumptions.
+`PROOF_STRATEGY_LEDGER.md` and `REUSABLE_RESULTS.md` describe the proof route
+and general lemmas.
 
-- `.lake/`: locally generated build products and downloaded dependencies;
-- `work/`: scratch experiments and external-library investigations;
-- editor metadata, temporary files, and Python bytecode caches;
-- manuscript LaTeX sources, separate bibliography/compiled-bibliography
-  files, and the legacy Davies companion note.
+`scripts/` contains source, first-order-interface, manuscript, numerical,
+build, public-import, and axiom gates for Bash and PowerShell, together with
+regression tests for the manuscript audit. `validation/` contains curated
+validation evidence and checksums. Records under `validation/historical/`
+are retained for provenance; `FIRST_ORDER_REVISION.md` describes the
+historical transition to the first-order interface.
 
-Reviewers should reconstruct `.lake/` with `lake exe cache get` and then run
-`lake build`.  Excluding local build products keeps the archive small and
-makes the verification process independent of the originating machine.
+The companion `../simulation/` directory contains the numerical experiment
+code, data, and figures at the repository level. It is separate from the
+Lean source distribution and its checksum manifest.
+
+The source distribution excludes `.lake/`, dependency caches, compiled Lean
+objects, Git data, Python bytecode, `tmp/`, and `validation/local/`. Local
+checks regenerate caches and logs. `validation/SHA256SUMS.txt` covers the
+distributed files under `formalization/` except itself; it does not cover the
+sibling simulation directory or repository-level documentation and workflow.
+[REPOSITORY_UPDATE.md](REPOSITORY_UPDATE.md) describes the update workflow.

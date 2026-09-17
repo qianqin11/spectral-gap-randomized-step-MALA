@@ -222,8 +222,9 @@ namespace HessianBoundedPotential
 
 variable {d : ℕ}
 
-/-- The lazy clause of Theorem 2.1 under the manuscript's `C²` Hessian
-assumptions: the non-lazy master right-hand side is divided exactly by two. -/
+/-- Legacy smooth specialization of the lazy theorem: under `C²` Hessian
+bounds the non-lazy master right-hand side is divided exactly by two. The
+revised paper-facing theorem is namespaced under `C1Potential`. -/
 theorem universal_half_masterRHS_lazy_rayleighSpectralGap_lower
     (V : HessianBoundedPotential d) (H : ℝ) (hH : 0 < H) :
     let W := V.toFirstOrderPotential
@@ -242,12 +243,12 @@ theorem universal_half_masterRHS_lazy_rayleighSpectralGap_lower
 
 end HessianBoundedPotential
 
-/-- The lazy clause of Theorem 2.1 in the same displayed
+/-- The lazy clause of Theorem 2.1 (`thm:main`) in the same displayed
 existential-constant form as `exists_universal_nonlazy_paperMasterRHS_lower`.
 The constants are chosen before the dimension and potential. -/
 theorem exists_universal_lazy_paperMasterRHS_lower :
     ∃ A₀ b₀ c₀ : ℝ,
-      2 ≤ A₀ ∧ 0 < b₀ ∧ b₀ ≤ 1 / 2 ∧ 0 < c₀ ∧
+      1 ≤ A₀ ∧ 0 < b₀ ∧ b₀ ≤ 1 / 2 ∧ 0 < c₀ ∧
       ∀ {d : ℕ} (V : HessianBoundedPotential d) (H : ℝ) (hH : 0 < H),
         (2 : ℝ≥0∞)⁻¹ *
             ENNReal.ofReal (paperMasterRHS V A₀ b₀ c₀ H) ≤
@@ -256,7 +257,7 @@ theorem exists_universal_lazy_paperMasterRHS_lower :
             (V.toFirstOrderPotential.lazyUniformMALA H hH) := by
   refine ⟨FirstOrderPotential.concreteA0,
     FirstOrderPotential.concreteB0, concreteGapConstant,
-    FirstOrderPotential.concreteA0_ge_two,
+    le_trans (by norm_num : (1 : ℝ) ≤ 2) FirstOrderPotential.concreteA0_ge_two,
     FirstOrderPotential.concreteB0_pos,
     FirstOrderPotential.concreteB0_le_half,
     concreteGapConstant_pos, ?_⟩

@@ -342,7 +342,7 @@ structure AllParameterMALAFlowBounds {d : ℕ}
           (boundaryFlow (V.target : Measure (State d))
             (V.dyadicMALA t ht) S).toReal
 
-/-- Proposition 3.4 in its full parameter range, with the paper's universal
+/-- Proposition 3.4 (`prop:flow`) in its full parameter range, with the paper's universal
 constants instantiated by `concreteA0` and `concreteB0`. -/
 theorem allParameterMALAFlowBounds : AllParameterMALAFlowBounds V where
   localBound p theta hp htheta hthetaOne _S hS hSmass hShalf :=

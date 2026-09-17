@@ -5,8 +5,9 @@ import Mathlib.Analysis.Convex.Deriv
 /-!
 # From Hessian bounds to the first-order potential interface
 
-This module supplies the coordinate-free calculus bridge from the assumptions
-stated in the paper to the interface used by the randomized-MALA proof.  The
+This module retains the coordinate-free calculus bridge for the earlier
+Hessian-based setup and for the smooth hard-target construction. The revised
+standing assumptions enter through `Concrete/C1ToFirstOrder.lean` instead.  The
 Hessian is the actual second Fréchet derivative of `U`, evaluated as a
 quadratic form.  The gradient stored in the resulting `FirstOrderPotential`
 is mathlib's Riesz gradient `gradient U`; it is not an independently recorded

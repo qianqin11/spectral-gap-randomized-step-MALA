@@ -4,7 +4,7 @@ import Mathlib.MeasureTheory.Integral.IntegralEqImproper
 /-!
 # Elementary Mills bounds for the standard Gaussian
 
-This file proves the two estimates used in Appendix C by one-dimensional
+This file proves the two estimates used in Appendix C (`app:gaussian`) by one-dimensional
 calculus.  The proof integrates the derivative of
 `c * φ(x) / (1 + x)` on a half-line.  It does not appeal to an external
 probability or asymptotic theorem.
@@ -145,7 +145,7 @@ private theorem density_le_neg_millsAuxDeriv_two
     mul_nonneg hd (sq_nonneg x)
   nlinarith
 
-/-- Lower Mills estimate in Lemma C.1. -/
+/-- Lower Mills estimate in Lemma C.1 (`eq:mills-two-sided`). -/
 theorem mills_lower (a : ℝ) (ha : 0 ≤ a) :
     normalDensity a / (1 + a) ≤ normalTailReal a := by
   have hderiv : ∀ x ∈ Ici a,
@@ -174,7 +174,7 @@ theorem mills_lower (a : ℝ) (ha : 0 ≤ a) :
   rw [normalTailReal_eq_integral]
   simpa [millsAux] using hmono
 
-/-- Upper Mills estimate in Lemma C.1. -/
+/-- Upper Mills estimate in Lemma C.1 (`eq:mills-two-sided`). -/
 theorem mills_upper (a : ℝ) (ha : 0 ≤ a) :
     normalTailReal a ≤ 2 * normalDensity a / (1 + a) := by
   have hderiv : ∀ x ∈ Ici a,

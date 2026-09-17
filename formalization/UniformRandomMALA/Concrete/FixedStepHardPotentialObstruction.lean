@@ -97,8 +97,10 @@ theorem exists_universal_fixedStepHardPotential_obstruction :
     exact ENNReal.ofReal_le_ofReal (by nlinarith)
   · exact hsticky'
 
-/-- Dimension-indexed form of the generic obstruction, matching the paper's
-statement for every `d ≥ 2`. -/
+/-- The gap bound `eq:generic-fixed-step-gap-upper` in Proposition A.1
+(`prop:generic-fixed-step-obstruction`), for every `d ≥ 2`.
+Smoothness and Hessian bounds for the same witness are proved in
+`FixedStepHardPotential.lean`. -/
 theorem exists_universal_fixedStepHardPotential_obstruction_allDimensions :
     ∃ c : ℝ, 0 < c ∧
       ∀ {d : ℕ} (hd : 2 ≤ d) {m L h : ℝ}

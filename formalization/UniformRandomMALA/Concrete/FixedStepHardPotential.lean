@@ -7,13 +7,15 @@ import Mathlib.Analysis.Calculus.FDeriv.WithLp
 # The smooth perturbed-Gaussian fixed-step obstruction
 
 This module defines the explicit separable potential used in the appendix's
-fixed-step obstruction.  Its definitions use the paper's formula literally:
+fixed-step obstruction, Proposition A.1 (`prop:generic-fixed-step-obstruction`).
+Its definitions use `eq:generic-hard-potential` literally:
 the zeroth coordinate is Gaussian with curvature `m`, while every remaining
 coordinate is a quadratic potential plus a cosine perturbation at wavelength
 `sqrt h`.
 
 The potential is proved `C^∞`.  The second Fréchet derivative is computed as
-a diagonal quadratic form and is bounded between `m` and `L`; consequently
+a diagonal quadratic form and is bounded between `m` and `L`
+(`eq:generic-hard-curvature`); consequently
 the general Hessian-to-first-order bridge constructs the concrete target and
 MALA kernel without recording an unrelated gradient field.
 -/

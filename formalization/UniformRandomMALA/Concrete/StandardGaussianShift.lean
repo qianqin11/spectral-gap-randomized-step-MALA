@@ -237,7 +237,8 @@ lemma normalCDFReal_neg (a : ℝ) :
   unfold normalCDFReal normalTailReal
   rw [normalCDF_neg]
 
-/-- The abstract Gaussian-shift hypothesis used by the separated-set proof,
+/-- Lemma C.2 (`lem:gaussian-shift`), the Gaussian-shift hypothesis used
+by the separated-set proof,
 now instantiated by Mathlib's standard Gaussian measure and the elementary
 lower quantile. -/
 theorem standardGaussianShift :

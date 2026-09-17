@@ -11,12 +11,12 @@ weak endpoint limit.  In particular, no Brownian motion, stochastic integral,
 SDE, Euler--Maruyama convergence theorem, or Ethier--Kurtz diffusion limit
 occurs in the dependency graph below.
 
-The quantitative leaf estimates are deliberately exposed as propositions.
-Concrete pieces already proved elsewhere include the scalar acceptance
-linearization, the reversible Gaussian RWM kernel, and the full
-moving-reference `L^p` closure theorem.  The fields below mark the exact
-remaining analytic probability lemmas rather than concealing them with proof
-placeholders.
+The quantitative estimates are exposed here as propositions in a conditional
+proof interface. Their concrete proofs include acceptance linearization,
+reversible Gaussian RWM, and moving-reference `L^p` closure. These fields are
+explicit hypotheses of the interface, not outstanding proof obligations in
+the concrete result. The public theorem is
+`Concrete.C1Potential.stationary_rejection_moments`.
 -/
 
 namespace UniformRandomMALA
@@ -40,7 +40,7 @@ structure StationaryRejectionObjects where
   rwmEndpointSymmetric : ℝ → ℕ → Prop
   limitingEndpointSymmetric : ℝ → Prop
 
-/-- Lean-side finite-energy input replacing the continuous Appendix B route. -/
+/-- Lean-side finite-energy input replacing the continuous Appendix B (`app:rejection-overlap`) route. -/
 def FiniteEulerEnergy
     (p : Parameters) (o : StationaryRejectionObjects) : Prop :=
   ∃ c₀ C₀ C : ℝ, 0 < c₀ ∧ 0 < C₀ ∧ 0 < C ∧
@@ -100,7 +100,9 @@ def SymmetricMovingReferenceLimit
       o.limitingLikelihoodLp h moment ≤
         C * p.L * h * Real.sqrt (moment * (p.d + moment))
 
-/-- The stationary rejection estimate, Proposition B.1 in the current draft. -/
+/-- The `p >= 2` stationary-rejection core used in the construction. The
+revised paper range `p >= 1` is exported by
+`Concrete.C1Potential.stationary_rejection_moments`. -/
 def StationaryRejectionBound
     (p : Parameters) (o : StationaryRejectionObjects) : Prop :=
   ∃ c C : ℝ, 0 < c ∧ 0 < C ∧
@@ -135,7 +137,9 @@ structure StationaryRejectionInterfaces
 
 namespace StationaryRejectionInterfaces
 
-/-- Assemble Proposition B.1 along the fully discrete/weak-limit route. -/
+/-- Conditional assembly of the `p ≥ 2` core of Proposition B.1
+(`prop:stationary-rejection`) along the discrete/weak-limit route.
+The concrete public `p ≥ 1` result retains strong convexity. -/
 theorem stationaryRejection
     (p : Parameters) (o : StationaryRejectionObjects)
     (a : StationaryRejectionInterfaces p o) :

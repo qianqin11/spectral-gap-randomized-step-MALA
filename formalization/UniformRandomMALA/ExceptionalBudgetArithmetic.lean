@@ -4,9 +4,10 @@ import UniformRandomMALA.AggregationArithmetic
 # Arithmetic in the exceptional-set budget
 
 This file proves the unsaturated estimate `m t u ≤ b₀/2` in
-`lem:exceptional-budget`.  The exponential/rpow comparison that fixes the
-universal moment constant `A₀` remains an analytic-real-arithmetic
-obligation in `ExceptionalSetBudget`.
+Lemma D.2 (`lem:exceptional-budget`), together with the endpoint
+exponential/rpow comparison under an explicit logarithmic condition.
+`Concrete/UniversalConstants.lean` supplies a universal `A₀` satisfying that
+condition, and `Concrete/LadderComponents.lean` applies the resulting budget.
 -/
 
 namespace UniformRandomMALA
@@ -71,7 +72,7 @@ theorem exceptional_budget_unsaturated
   apply (div_le_iff₀ (mul_pos hkappaPos hroot)).2
   nlinarith
 
-/-- The logarithmic sufficient condition from Appendix D implies the
+/-- The logarithmic sufficient condition from Appendix D (`app:defective`) implies the
 exceptional-set inequality at the upper endpoint `u = moment/2`.  This proof
 uses logarithms only after establishing strict positivity of both sides. -/
 theorem exceptional_budget_endpoint_of_log_condition

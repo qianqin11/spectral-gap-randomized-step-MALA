@@ -1,0 +1,14 @@
+revision_date=2026-09-12
+lean_version=4.33.0
+mathlib_version=4.33.0
+static_audit_status=PASS
+first_order_source_status=PASS
+manuscript_source_status=PASS_106_LABELS_240_REFERENCES_94_CITATION_COMMANDS_120_KEY_USES
+numeric_sanity_status=PASS
+kernel_build_status=PASS_3439_JOBS
+public_import_status=PASS
+dependency_audit_status=PASS_266_DECLARATIONS
+allowed_axioms=propext,Classical.choice,Quot.sound
+full_gate_exit_status=0
+status=KERNEL_VERIFIED
+historical_build_records=validation/historical/pre-first-order/

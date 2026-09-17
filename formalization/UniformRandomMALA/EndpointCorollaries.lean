@@ -87,7 +87,7 @@ theorem sqrt_dimension_endpoint_identity
     ne_of_gt hc]
   <;> ring
 
-/-- The general `H = c/(L sqrt d)` form underlying Corollary 2.2. -/
+/-- The general `H = c/(L sqrt d)` form underlying Corollary 2.2 (`cor:sqrt-d-endpoint`). -/
 theorem sqrt_dimension_endpoint
     (p : Parameters) (c : ℝ) (hc : 0 < c)
     (hendpoint : p.H = c / (p.L * Real.sqrt p.d))
@@ -120,7 +120,7 @@ theorem M_lower_of_moment_le_dimension
   exact le_trans hrecip (le_max_left _ _)
 
 /--
-A directly formalized `pStar ≤ d` specialization of Corollary 2.2, after factoring
+A directly formalized `pStar ≤ d` specialization of Corollary 2.2 (`cor:sqrt-d-endpoint`), after factoring
 `sqrt (2*pStar*d) = sqrt (2*pStar) * sqrt d`.
 -/
 theorem sqrt_dimension_endpoint_small_moment

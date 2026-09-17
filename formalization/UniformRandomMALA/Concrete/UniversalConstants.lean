@@ -19,7 +19,7 @@ noncomputable section
 namespace Concrete
 namespace FirstOrderPotential
 
-/-- Explicit small universal constant satisfying both Proposition 3.2
+/-- Explicit small universal constant satisfying both Proposition 3.2 (`prop:overlap`)
 constraints and the safe-component constraint. -/
 def concreteB0 : ℝ :=
   min (1 / 2 : ℝ)
@@ -59,7 +59,10 @@ lemma exceptionalBudgetSlope_pos : 0 < exceptionalBudgetSlope := by
   rw [hlog16]
   nlinarith [Real.log_two_gt_d9]
 
-/-- Explicit large universal moment-threshold coefficient. -/
+/-- Explicit universal moment-threshold coefficient satisfying the choices
+in Lemma D.2 (`lem:exceptional-budget`), `eq:explicit-A0-choice` and
+`eq:A0-sufficient`. The witness is at least two; the public existential
+statement in Theorem 2.1 (`thm:main`) requires only `A₀ ≥ 1`. -/
 def concreteA0 : ℝ :=
   max 2
     ((13 * Real.log 2 + (1 / 2) * Real.log (2 / concreteB0) + 1) /

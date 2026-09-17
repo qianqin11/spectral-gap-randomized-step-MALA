@@ -1,5 +1,20 @@
 # Lean proof-strategy ledger
 
+> **2026-09-12 first-order revision:** the public input is `C1Potential`
+> (actual gradient, strong convexity, and gradient Lipschitzness), and the
+> rejection/overlap exports include `p >= 1`. The complete source was
+> kernel-checked with Lean/mathlib 4.33.0; the 266-entry axiom gate permits only
+> `propext`, `Classical.choice`, and `Quot.sound`. Earlier Hessian endpoints are
+> retained as compatibility special cases.
+
+## Added first-order entry route
+
+`C1Potential` -> proved descent lemma -> `FirstOrderPotential` -> existing
+concrete proof. No target Hessian is required. The p >= 1 rejection/overlap
+exports use second-moment interpolation; the old p >= 2 estimates and Gaussian
+OU/Euler–RWM core are unchanged. See `FIRST_ORDER_REVISION.md` for exact names
+and the Appendix B scope qualification.
+
 This ledger gives a reviewer-oriented path through the completed formalization
 of the main lower-bound theorem in Qian Qin's **A global spectral gap for Metropolis-adjusted Langevin algorithm
 with a uniformly randomized step size**. Each row records the mathematical result, its public
@@ -7,42 +22,36 @@ Lean entry point, the principal implementation modules, and the proof
 mechanism. Paper labels are cross-referenced in `THEOREM_MAP.md`; mathematical
 content, rather than provisional numbering, is used here.
 
-Last recorded Lean validation: **2026-08-30**.
-
-Documentation/PDF synchronization: **2026-09-05**; no new Lean build.
+Current verification evidence is recorded in `BUILD_STATUS.md`.
 
 ## Result dependency graph
 
 ```text
-MALA finite likelihood and coupling --------------------+
-                                                        |
-                                                        v
-                                               MALA local overlap
-                                                        |
-                                                        v
+C1 actual-gradient input -> proved descent lemma -> FirstOrderPotential
+                                                     |             |
+                                                     |             +-> concrete MALA kernels
+                                                     |
+finite Gaussian likelihood + Euler/RWM coupling -----+
+  -> stationary rejection moments -> p >= 1 interpolation
+  -> MALA local overlap
+
 Gaussian normal profile -> OU interpolation -> Bobkov functional inequality
-                                                        |
-                                                        v
-smooth distance ramps -> finite Gaussian Bakry--Ledoux  |
-                          |                             |
-                          v                             |
-finite Euler Gaussian image -> weak-limit stability     |
-                          |                             |
-                          v                             |
-discrete target identification -> target Bakry--Ledoux-+
-                                                        |
-                                                        v
-separated sets -> defective conductance -> component aggregation
-                                                        |
-                                                        v
-                                  universal spectral-gap lower bound
+  -> smooth distance ramps -> finite Gaussian Bakry--Ledoux
+                                      |
+FirstOrderPotential -> finite Euler Gaussian images --+
+  -> discrete target identification + weak-limit stability
+  -> target Bakry--Ledoux
+
+target Bakry--Ledoux + MALA local overlap
+  -> separated sets -> defective conductance -> component aggregation
+  -> universal spectral-gap lower bound -> paper Rayleigh and lazy endpoints
 ```
 
 ## Foundations and target model
 
 | Mathematical content | Public entry | Implementation | Strategy and output | Status |
 |---|---|---|---|---|
-| Strongly convex smooth target | `SpectralGap.lean` | `Concrete/EuclideanTarget.lean` | Define `FirstOrderPotential`, prove integrability of `exp (-U)`, normalize the target, and install probability-measure facts. | Checked |
+| First-order strongly convex target | `Concrete/C1MainTheorem.lean` | `Concrete/C1ToFirstOrder.lean`, `EuclideanTarget.lean` | Record `C¹`, the strong-convexity supporting inequality, and Lipschitzness of the actual gradient; prove the descent lemma; build `FirstOrderPotential`; normalize `exp (-U)`. | Checked |
 | MALA and RWM kernels | `MALAOverlap.lean` | `Concrete/GaussianProposal.lean`, `MetropolisHastings.lean`, `MALA.lean`, `RandomWalkMetropolis.lean`, `MALAFamily.lean` | Construct measurable Gaussian proposals, MH correction, fixed-step kernels, dyadic mixtures, uniform mixtures, reversibility, and stationary edge measures. | Checked |
 | Spectral gap and conductance | `SpectralGap.lean` | `Concrete/SpectralGap.lean`, `Conductance.lean` | Define the variational spectral gap and Dirichlet energy; prove indicator-energy, symmetry, layer-cake, and coarea identities. | Checked |
 
@@ -59,17 +68,18 @@ continuous-time increment identities.
 | Finite Gaussian likelihood | `MALAOverlap.lean` | `DiscreteTime/FiniteGaussianLikelihood.lean`, `Concrete/FiniteEulerLikelihoodBounds.lean`, `FiniteEulerRealMoments.lean` | Use an explicit finite product likelihood recursion.  Bound its centered moments through scalar Gaussian MGFs and finite energy rather than conditional-expectation infrastructure. | Checked |
 | Euler/RWM comparison | `MALAOverlap.lean` | `DiscreteTime/EulerRWMPairChain.lean`, `EulerRWMFiniteRecurrence.lean`, `EulerRWMEdgeCoupling.lean`, `EulerRWMEdgeVanishing.lean` | Couple Euler and stationary RWM chains, iterate a finite recurrence, and construct a common symmetric fixed-horizon weak limit with the target as both marginals. | Checked |
 | Moving-density closure | `MALAOverlap.lean` | `DiscreteTime/MovingReference.lean`, `MovingDensityClosure.lean`, `MetropolisMeet.lean` | Transfer `L^p` control under simultaneous weak convergence using bounded-continuous approximation and truncated Radon--Nikodym duality; identify the accepted-flow meet. | Checked |
-| Stationary rejection moments | `MALAOverlap.lean` | `Concrete/MALAFullPathAssembly.lean`, `Concrete/MALAOverlapBounds.lean` | Assemble the finite likelihood and coupling bounds into the stationary MALA rejection estimate with explicit constants. | Checked |
-| MALA local-overlap bounds | `MALAOverlap.lean` | `Concrete/MALALocalOverlap.lean`, `Concrete/MALAOverlapBounds.lean` | Combine rejection good sets with equal-covariance Gaussian proposal TV and accept/reject discrepancy.  Public declaration: `mala_overlap_bounds`. | **Unconditional** |
+| Stationary rejection moments | `Concrete/C1MainTheorem.lean` | `Concrete/MALAFullPathAssembly.lean`, `MALAOverlapBounds.lean`, `DiscreteTime/MomentInterpolation.lean`, `Concrete/RejectionMomentsOne.lean` | Assemble the finite likelihood and coupling bounds; interpolate the second-moment estimate to cover every real `p ≥ 1`. | Checked |
+| MALA local-overlap bounds | `Concrete/C1MainTheorem.lean` | `Concrete/MALALocalOverlap.lean`, `MALAOverlapBounds.lean`, `RejectionMomentsOne.lean` | Combine rejection good sets with equal-covariance Gaussian proposal TV and accept/reject discrepancy. Public declaration: `C1Potential.mala_overlap_bounds`. | **Certificate-free under the standing assumptions** |
 
 The public overlap theorem uses
 
 ```text
-cr = 1/(16e),       Cr = 6144 e^3,
+cr = 1/(32e),       Cr = 12288 e^3,
 ```
 
 and proves both a high-probability local statement and a global sufficiently
-small-step statement.
+small-step statement for `p ≥ 1`. The sharper constants `1/(16e)` and
+`6144 e^3` remain available in the checked `p ≥ 2` core.
 
 ## Gaussian Bobkov inequality
 
@@ -103,7 +113,7 @@ Concrete.gaussianRampMollified_bobkov
 | Arbitrary finite index types | `BakryLedoux.lean` | `Concrete/GaussianRampCanonicalInterpolation.lean` | Reindex Euclidean Gaussian space through a linear isometry and handle the empty-index case separately. | Checked |
 | Finite Euler Gaussian images | `BakryLedoux.lean` | `Concrete/FiniteEulerGaussianImage.lean`, `FiniteEulerEnlargement.lean` | Prove deterministic innovation sensitivity and the endpoint Lipschitz coefficient `2/(2m-L^2 delta)`; transfer finite Gaussian enlargement through the endpoint map. | Checked |
 | Direct target identification | `BakryLedoux.lean` | `Concrete/FiniteEulerTargetIdentification.lean` | Choose an explicit diagonal mesh/horizon schedule.  Combine Euler/RWM comparison, likelihood bounds, and contraction to prove endpoint laws converge directly to the normalized target. | Checked without SDEs |
-| Target Bakry--Ledoux | `BakryLedoux.lean` | `Concrete/GaussianRampCanonicalInterpolation.lean` | Apply finite-index Gaussian enlargement to every diagonal endpoint and pass to the target using weak-limit stability and the coefficient limit `1/m`. | **Unconditional** |
+| Target Bakry--Ledoux | `BakryLedoux.lean` | `Concrete/GaussianRampCanonicalInterpolation.lean` | Apply finite-index Gaussian enlargement to every diagonal endpoint and pass to the target using weak-limit stability and the coefficient limit `1/m`. | **Certificate-free under `FirstOrderPotential`** |
 
 The public endpoint is:
 
@@ -122,7 +132,7 @@ martingale-problem theorem is a dependency.
 | Defective conductance | `SpectralGap.lean` | `Concrete/MALADefectiveConductance.lean`, `SafeComponent.lean` | Combine separation with MALA overlap to obtain safe and local dyadic boundary-flow estimates. | Checked |
 | Component aggregation | `SpectralGap.lean` | `Concrete/CoareaCauchySchwarz.lean`, `ComponentAggregationFinal.lean` | Use median decomposition, bounded caps, monotone convergence, and finite Cauchy--Schwarz.  Avoid invalid extended-real cancellation. | Checked |
 | Exceptional budget and ladder | `SpectralGap.lean` | `ExceptionalBudgetArithmetic.lean`, `Concrete/LadderComponents.lean` | Construct the finite cut assignment, control exceptional mass, and prove the finite harmonic bound with constant `6 * 2^30`. | Checked |
-| Parameterized master bound | `SpectralGap.lean` | `Concrete/GlobalFromBakryLedoux.lean`, `GaussianRampCanonicalInterpolation.lean` | Assemble safe and ladder gap bounds and discharge target Bakry--Ledoux internally. | **Unconditional** |
+| Parameterized master bound | `SpectralGap.lean` | `Concrete/GlobalFromBakryLedoux.lean`, `GaussianRampCanonicalInterpolation.lean` | Assemble safe and ladder gap bounds and discharge target Bakry--Ledoux internally. | **Certificate-free under `FirstOrderPotential`** |
 | Universal master bound | `SpectralGap.lean` | `Concrete/UniversalConstants.lean`, `GaussianRampCanonicalInterpolation.lean` | Fix explicit `A0`, `b0`, and `c0`; prove all arithmetic side conditions; expose a theorem requiring only `FirstOrderPotential` and `H > 0`. | **Final checked result** |
 
 The first-order assembly declaration is:
@@ -132,20 +142,21 @@ UniformRandomMALA.Concrete.FirstOrderPotential.
   universal_masterRHS_spectralGap_lower
 ```
 
-The manuscript-facing endpoint additionally discharges the displayed
-`C²` Hessian assumptions and uses the paper's `L²` Rayleigh definition:
+The manuscript-facing endpoint starts from the revised `C¹` first-order
+assumptions and uses the paper's `L²` Rayleigh definition:
 
 ```lean
-UniformRandomMALA.Concrete.exists_universal_nonlazy_paperMasterRHS_lower
+UniformRandomMALA.Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
 ```
 
 ## Manuscript-facing calculus, gap, lazification, and aggregation
 
 | Mathematical content | Implementation | Strategy and output | Status |
 |---|---|---|---|
-| Hessian-to-first-order bridge | `Concrete/HessianToFirstOrder.lean` | Record `ContDiff ℝ 2 U` and quadratic bounds on `iteratedFDeriv ℝ 2 U`; restrict to affine lines for the exact Taylor inequalities; derive cocoercivity and the Lipschitz Riesz gradient; build `FirstOrderPotential` with `gradU = ∇ U`. | **Checked** |
+| Revised first-order bridge | `Concrete/C1ToFirstOrder.lean` | Record `ContDiff ℝ 1 U`, the lower supporting inequality, and Lipschitzness of `∇ U`; derive the descent inequality along affine lines; build `FirstOrderPotential` with `gradU = ∇ U`. | **Checked** |
+| Optional smooth adapter | `Concrete/HessianToFirstOrder.lean` | Derive the first-order interface from actual Hessian quadratic bounds. This is a reusable special case, not a revised-paper hypothesis. | **Checked** |
 | Paper Rayleigh gap | `Concrete/RayleighSpectralGap.lean` | Define measurable `L²` tests and extended-valued quotients; prove equivalence between quotient infimum and the `L²` Poincaré-lower-bound supremum, treating zero variance, infinite energy, and an empty test family. | **Checked** |
-| Non-lazy paper theorem | `Concrete/HessianMainTheorem.lean` | Compose the actual-Hessian bridge, the unconditional first-order lower-bound chain, and the Poincaré-to-Rayleigh implication; choose universal constants before the target parameters. | **Checked** |
+| Main paper theorem | `Concrete/C1MainTheorem.lean` | Compose the first-order bridge, certificate-free lower-bound chain, Poincaré-to-Rayleigh implication, and concrete half-lazification; choose shared universal constants before target parameters. | **Checked** |
 | Concrete half-lazification | `Concrete/LazyKernel.lean` | Realize `(I+K)/2` as a fair Boolean parameter mixture; preserve Markovness and reversibility; compute exact half energy and half Rayleigh gap; specialize to randomized MALA. | **Checked** |
 | Square-root-dimension corollary | `Concrete/SqrtDimensionCorollary.lean` | Substitute `H=c/(L sqrt d)` and prove `min{pStar(d+pStar)/d,d} ≤ 2 pStar` without a `pStar ≤ d` assumption. | **Checked** |
 | Fractional aggregation | `Concrete/FractionalAggregation.lean` | Add weighted extended-valued Cauchy--Schwarz; use coarea, layer cake, median splitting, bounded `L²` truncations, and monotone convergence; allow zero `β_j`; specialize to hard assignment. | **Checked** |
@@ -154,13 +165,13 @@ UniformRandomMALA.Concrete.exists_universal_nonlazy_paperMasterRHS_lower
 The principal declarations are:
 
 ```lean
-Concrete.HessianBoundedPotential.toFirstOrderPotential
+Concrete.C1Potential.upperTaylor
+Concrete.C1Potential.toFirstOrderPotential
 Concrete.l2SpectralGap_eq_rayleighSpectralGap
-Concrete.exists_universal_nonlazy_paperMasterRHS_lower
-Concrete.exists_universal_lazy_paperMasterRHS_lower
-Concrete.HessianBoundedPotential.sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower
+Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
+Concrete.C1Potential.sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower
 Concrete.fractionalAggregation_poincareLower
-Concrete.FirstOrderPotential.allParameterMALAFlowBounds
+Concrete.C1Potential.allParameterMALAFlowBounds
 ```
 
 ## Fixed-step minimax obstruction
@@ -187,8 +198,8 @@ UniformRandomMALA.Concrete.exists_universal_fixedStepMinimaxGap_paper_upper
 | Check | Command | Expected result |
 |---|---|---|
 | Public API | `lake env lean UniformRandomMALA/AllResults.lean` | exit code 0 |
-| Full kernel build | `lake build` | all jobs complete successfully |
-| Axiom report | `lake env lean UniformRandomMALA/DependencyAudit.lean` | audited results list only standard Lean/mathlib logical axioms |
+| Full kernel build | `lake build` | passed: 3,439 jobs |
+| Axiom report | `lake env lean UniformRandomMALA/DependencyAudit.lean` | passed: 266 results, only `propext`, `Classical.choice`, `Quot.sound` |
 | Placeholder/import audit | `python3 scripts/static_audit.py` | no placeholders and all local imports resolve |
 | Numerical transcription audit | `python3 scripts/numeric_sanity.py` | 2,000 deterministic trials pass |
 | Complete Unix check | `./scripts/check.sh` | exit code 0 |
@@ -205,7 +216,7 @@ supplies it internally.
 
 `PaperAnalyticInterfaces` is a legacy record from an earlier development
 stage that bundled several analytic inputs as fields. It is kept for source
-compatibility and modular experiments, but it is not on the dependency path
-from `AllResults.lean` to the concrete final theorem. The extended file
+compatibility and modular experiments, but it is not a premise of the
+concrete C1 final theorem. The extended file
 `LEAN_FRIENDLY_PROOF_LEDGER.md` is an archival development record; this file
 is the concise account of the completed proof.
