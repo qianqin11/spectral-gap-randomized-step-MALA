@@ -3,7 +3,10 @@
 The mathematical input, proof dependencies, and scope limits described here
 apply to the public first-order interface. The latest validation evidence is
 in [BUILD_STATUS.md](BUILD_STATUS.md); reproducible commands are in
-[README.md](README.md).
+[README.md](README.md). The reader guide links the
+[algorithm and quantity definitions](PAPER_READER_GUIDE.md#2-compare-the-algorithm-and-quantity-definitions)
+and the [concrete proof route](PAPER_READER_GUIDE.md#3-trace-the-proof-to-its-inputs)
+to the source files needed to check these claims.
 
 ## Input assumptions
 

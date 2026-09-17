@@ -6,8 +6,12 @@ the displayed numbers agree with the supplied manuscript. The `paper/`
 directory contains the PDF, TeX source, bibliography, and figures used by
 the source.
 
-Start with [the reader guide](PAPER_READER_GUIDE.md) for assumptions and scope,
-and [the build status](BUILD_STATUS.md) for verification evidence. The public
+Start with [the reader guide](PAPER_READER_GUIDE.md) to compare assumptions,
+algorithm and quantity definitions, and the complete proof route. Its
+[definition map](PAPER_READER_GUIDE.md#2-compare-the-algorithm-and-quantity-definitions)
+locates the target, proposal, acceptance rule, mixtures, energy, gap, and
+rejection quantities used by the statements below. See
+[the build status](BUILD_STATUS.md) for verification evidence. The public
 import is `UniformRandomMALA.AllResults`. Unless a namespace is written in
 full below, declaration names have the prefix `UniformRandomMALA.Concrete.`.
 
@@ -23,15 +27,18 @@ full below, declaration names have the prefix `UniformRandomMALA.Concrete.`.
 | Proposition 2.3 (`prop:minimax-fixed-step-ceiling`), fixed-step minimax upper bound | `exists_universal_fixedStepMinimaxGap_paper_upper` | [FixedStepMinimax.lean](UniformRandomMALA/Concrete/FixedStepMinimax.lean) |
 
 The main theorem chooses its universal constants before the dimension,
-potential, and endpoint. Its public range is `A₀ ≥ 1`, as in the manuscript;
-the proof supplies an explicit witness satisfying `A₀ ≥ 2`. The definitions
-`C1Potential.paperMomentThreshold` and `C1Potential.paperMasterRHS` spell out
-`p⋆` and the right-hand side of `eq:master-gap`.
+potential, and endpoint. The definitions `C1Potential.paperMomentThreshold`
+and `C1Potential.paperMasterRHS` spell out `p⋆` and the right-hand side of
+`eq:master-gap`.
 
 Both corollary declarations use `H = c/(L√d)`. The simplified bound does not
 require `p⋆ ≤ d`. The fixed-step upper bound ranges over the smooth,
 Hessian-bounded class specified in Proposition 2.3; this smoothness requirement
 belongs to the obstruction result, not to the lower bound in Theorem 2.1.
+The definitions `smoothHessianPotentialGapValues`,
+`fixedStepWorstPotentialGap`, and `fixedStepMinimaxGap` at the start of
+[FixedStepMinimax.lean](UniformRandomMALA/Concrete/FixedStepMinimax.lean)
+specify that class and the order of the infimum and supremum.
 
 ## Assumptions and spectral-gap convention
 

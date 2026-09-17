@@ -1,85 +1,188 @@
 # Reading the paper alongside the Lean source
 
-The public Lean interface follows the first-order assumptions in
-[paper/main.tex](paper/main.tex), label `eq:first-order-assumptions`.
-The typeset paper, TeX source, bibliography, and figure PDFs are bundled in
-`paper/`. Use [THEOREM_MAP.md](THEOREM_MAP.md) to navigate by theorem number
-or TeX label, and [BUILD_STATUS.md](BUILD_STATUS.md) for verification evidence.
+Use this guide to check the formalization against the [paper](paper/main.pdf)
+and its [LaTeX source](paper/main.tex), then trace the proofs back to their
+inputs. [THEOREM_MAP.md](THEOREM_MAP.md) is the complete index by theorem
+number and TeX label. [BUILD_STATUS.md](BUILD_STATUS.md) records verification
+evidence; the [README](README.md) gives commands to reproduce it.
 
-## 1. Start with the assumptions
+## 1. Compare the assumptions and theorem statements
 
-Read
-[C1ToFirstOrder.lean](UniformRandomMALA/Concrete/C1ToFirstOrder.lean).
-`Concrete.C1Potential` records `ContDiff ℝ 1 U`, the strong-convexity
-supporting inequality, and `LipschitzWith` for mathlib's Riesz gradient
-`∇ U`, together with the dimension and scalar side conditions.
-It contains no Hessian, independent drift, upper-Taylor certificate,
-isoperimetric certificate, or rejection certificate.
+Start with [C1ToFirstOrder.lean](UniformRandomMALA/Concrete/C1ToFirstOrder.lean).
+`UniformRandomMALA.Concrete.C1Potential` records the assumptions in Section 2
+(`eq:first-order-assumptions`): a potential on Euclidean space, continuous
+differentiability, the strong-convexity supporting inequality, and a
+Lipschitz bound on mathlib's actual Riesz gradient `∇ U`.
+`C1Potential.upperTaylor` derives the descent inequality, and
+`C1Potential.toFirstOrderPotential` supplies the internal record with
+`gradU := ∇ U`. Reading this adapter verifies that subsequent kernels use
+the gradient of the same potential that defines the target.
 
-`C1Potential.upperTaylor` proves the descent inequality by restricting the
-potential to an affine line. `C1Potential.toFirstOrderPotential` connects
-these assumptions to the internal analytic interface with `gradU := ∇ U`
-definitionally.
+Next open [C1MainTheorem.lean](UniformRandomMALA/Concrete/C1MainTheorem.lean).
+Start with `C1Potential.exists_universal_paperMasterRHS_bounds`, the single
+statement of both clauses of Theorem 2.1 (`thm:main`). Check the quantifiers:
+the constants are chosen before the dimension, potential, and endpoint
+`H`; both the ordinary and half-lazy bounds use those same constants.
+`paperMomentThreshold` and `paperMasterRHS`, immediately above the theorem,
+write out the paper's threshold and lower-bound expression. The theorem's
+proof connects those expressions to the internal parameterized bound.
 
-## 2. Read the main endpoints
+The corollary endpoints in that file are
+`C1Potential.sqrtDimensionCorollary_rayleighSpectralGap_lower` and
+`C1Potential.sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower`.
+Their right-hand sides are defined as `Parameters.sqrtDimensionCorollaryRHS`
+and `Parameters.sqrtDimensionCorollarySimplifiedRHS` in
+[SqrtDimensionCorollary.lean](UniformRandomMALA/Concrete/SqrtDimensionCorollary.lean).
+Compare both displays in Corollary 2.2 (`cor:sqrt-d-endpoint`), with
+`H = c/(L√d)`; the simplified bound has no extra restriction on `p⋆`.
 
-[C1MainTheorem.lean](UniformRandomMALA/Concrete/C1MainTheorem.lean) contains
-the principal reader-facing declarations. All names below have prefix
-`UniformRandomMALA.Concrete.C1Potential.`.
+For Proposition 2.3 (`prop:minimax-fixed-step-ceiling`), open
+[FixedStepMinimax.lean](UniformRandomMALA/Concrete/FixedStepMinimax.lean).
+`exists_universal_fixedStepMinimaxGap_paper_upper` chooses a universal
+exponential rate, then a prefactor depending only on `κ₀`, before quantifying
+over the dimension and curvature parameters. Read the three definitions
+at the top of the file to check the optimization itself:
 
-| Paper result and TeX label | Lean declaration |
+| Declaration (in `UniformRandomMALA.Concrete`) | Paper meaning |
 |---|---|
-| Theorem 2.1 (`thm:main`), both clauses with shared constants | `exists_universal_paperMasterRHS_bounds` |
-| Theorem 2.1, non-lazy clause | `universal_masterRHS_rayleighSpectralGap_lower` |
-| Theorem 2.1, half-lazy clause | `universal_half_masterRHS_lazy_rayleighSpectralGap_lower` |
-| Corollary 2.2 (`cor:sqrt-d-endpoint`), first bound | `sqrtDimensionCorollary_rayleighSpectralGap_lower` |
-| Corollary 2.2, simplified bound | `sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower` |
-| Proposition 3.2 (`prop:overlap`) | `mala_overlap_bounds` |
-| Proposition 3.3 (`prop:separated`) | `separatedSets` |
-| Proposition 3.4 (`prop:flow`) | `allParameterMALAFlowBounds` |
+| `smoothHessianPotentialGapValues` | Gap values for smooth potentials with the prescribed actual Hessian bounds |
+| `fixedStepWorstPotentialGap` | Infimum over those potentials at a fixed step `h` |
+| `fixedStepMinimaxGap` | Supremum of that infimum over all positive steps |
 
-The main existential statement chooses universal constants before the
-dimension, potential, and time horizon. It states the paper's `A₀ ≥ 1`
-range. The chosen internal witness satisfies `A₀ ≥ 2`; the theorem does not
-assert that every choice of `A₀ ≥ 1` works.
+The smooth class is specified by `HessianBoundedPotential` in
+[HessianToFirstOrder.lean](UniformRandomMALA/Concrete/HessianToFirstOrder.lean),
+with `ContDiff ℝ ⊤` additionally required in the gap-value set. These
+smoothness assumptions belong to the obstruction result; the randomized
+lower bound takes `C1Potential`.
 
-The fixed-step minimax endpoint for Proposition 2.3
-(`prop:minimax-fixed-step-ceiling`) is
-`UniformRandomMALA.Concrete.exists_universal_fixedStepMinimaxGap_paper_upper`.
-Its smooth hard witness corresponds to Proposition A.1
-(`prop:generic-fixed-step-obstruction`).
+## 2. Compare the algorithm and quantity definitions
 
-## 3. Follow the proof ingredients
+For a public input `V : C1Potential d`, write
+`W := V.toFirstOrderPotential`. Most algorithm definitions below are in the
+namespace `UniformRandomMALA.Concrete.FirstOrderPotential` and are applied
+to `W`. This is the same `W` appearing in the public theorem statements.
+Other abbreviated namespaces are relative to `UniformRandomMALA`.
 
-The randomized-step proof combines the disjoint mixture-energy comparison
-(Lemma 3.1, `lem:Kt`), overlap and separation, the flow bounds, and the
-fractional and hard-assignment aggregation results (Lemma 3.5,
-`lem:fractional`; Theorem 3.6, `thm:aggregation`).
-[PROOF_STRATEGY_LEDGER.md](PROOF_STRATEGY_LEDGER.md) explains this chain.
+### Target and transition kernels
 
-For isoperimetry, the manuscript cites a nonsmooth contraction theorem.
-Lean obtains target enlargement from Gaussian OU/Bobkov interpolation,
-smooth ramps, finite-Euler transport, and a weak limit identified with the
-target. The contraction theorem is not assumed by the formal proof.
+| Paper object | Definitions and identities to inspect | Source |
+|---|---|---|
+| State space `ℝᵈ` and normalized target `π(dx) ∝ exp(-U(x)) dx` | `Concrete.State`; `boltzmannWeight`, `boltzmannMeasure`, `target`, `targetDensity`; `target_apply` and `target_toMeasure_eq_withDensity` identify the normalized measure and density | [EuclideanTarget.lean](UniformRandomMALA/Concrete/EuclideanTarget.lean) |
+| Proposal `Y = x - h∇U(x) + √(2h) Z` and its density `q_h` | `proposalMean`, `proposalMap`, `gaussianProposal`, `proposalDensityReal`, `gaussianDensityProposal` | [GaussianProposal.lean](UniformRandomMALA/Concrete/GaussianProposal.lean) |
+| Acceptance `α_h(x,y) = min(1, π(y)q_h(y,x)/(π(x)q_h(x,y)))` | `malaAcceptance` specializes `MetropolisHastings.acceptance`; `edgeDensity` fixes the orientation of the ratio | [MALA.lean](UniformRandomMALA/Concrete/MALA.lean), [MetropolisHastings.lean](UniformRandomMALA/Concrete/MetropolisHastings.lean) |
+| Fixed-step kernel `P_h`, including the rejection atom at `x` | `malaKernel` specializes `MetropolisHastings.kernel`; inspect `accepted`, `acceptanceMass`, and `rejected` | [MALA.lean](UniformRandomMALA/Concrete/MALA.lean), [MetropolisHastings.lean](UniformRandomMALA/Concrete/MetropolisHastings.lean) |
+| Randomized kernel `P̄_H = H⁻¹ ∫₀ᴴ P_h dh` | `malaKernelFamily`, `sectR_malaKernelFamily`, `uniformStepMeasure`, `uniformStepMeasure_lintegral_of_pos`, and `uniformMALA` | [MALAFamily.lean](UniformRandomMALA/Concrete/MALAFamily.lean) |
+| Dyadic component `K_t = (2/t) ∫_(t/2)^t P_h dh` | `intervalStepMeasure`, `dyadicStepMeasure`, and `dyadicMALA` | [MALAFamily.lean](UniformRandomMALA/Concrete/MALAFamily.lean) |
+| Integration of a family of transitions | `UniformRandomMALA.Kernel.parameterMixture` and `parameterMixture_apply` identify the transition probability on each measurable set | [KernelMixture.lean](UniformRandomMALA/KernelMixture.lean) |
+| Half-lazy kernel `(I + P̄_H)/2` | `Concrete.halfLazyKernel`, `halfLazyKernel_apply`, and `FirstOrderPotential.lazyUniformMALA`; `rayleighSpectralGap_halfLazyKernel` proves exact gap scaling | [LazyKernel.lean](UniformRandomMALA/Concrete/LazyKernel.lean) |
 
-For stationary rejection (Proposition B.1, `prop:stationary-rejection`),
-Lean uses finite Gaussian likelihoods, finite-Euler estimates, Euler/RWM
-comparison, and weak-limit closure. Moment interpolation extends the
-retained `p ≥ 2` core to the public `p ≥ 1` range. The public overlap
-constants are `1/(32e)` and `12288 e³`.
+The proposal has both a Gaussian-image construction and a density
+construction. Their equality is proved by
+`DiscreteTime.gaussianProposal_eq_gaussianDensityProposal` in
+[GaussianLawBridge.lean](UniformRandomMALA/DiscreteTime/GaussianLawBridge.lean).
+This connects the explicit sampling formula to the proposal used by the
+Metropolis kernel.
 
-## 4. Identify the scope boundary
+The step measures use `(0,H]` and `(t/2,t]`; their endpoints have zero
+Lebesgue mass, so they give the paper's uniform laws. The joint family uses
+`effectiveStep` to define a kernel for every real parameter, and
+`effectiveStep_of_pos` proves it equals the supplied step on the positive
+intervals used here. `uniformMALA` averages the already corrected `P_h`
+kernels: it represents drawing a fresh step and then doing one MALA
+transition. `malaKernel_isReversible` and `uniformMALA_isReversible` prove
+detailed balance for these concrete definitions.
 
-The continuous-time proofs of `lem:linear-increment`,
-`lem:integrated-increments`, `lem:frozen-endpoint-law`, and
-`lem:path-likelihood` are not transcribed. Appendix B's additional
-nonconvex `C¹` generalization is also outside the formalization. The
-discrete proof establishes the strongly convex rejection input used by
-Theorem 2.1.
+### Energy, gap, and proof quantities
 
-`HessianToFirstOrder.lean` supplies an optional smooth adapter. The
-fixed-step obstruction deliberately uses a smooth, Hessian-bounded hard
-witness. These smooth interfaces do not add assumptions to the `C1Potential`
-lower-bound theorem. [TRUST_BOUNDARY.md](TRUST_BOUNDARY.md) gives the precise
-logical boundary, and [README.md](README.md) provides commands for checking
-the complete development.
+| Paper quantity | Definition to inspect | Source |
+|---|---|---|
+| Dirichlet form `E_K(f,f) = ½ ∫ π(dx) K(x,dy) (f(x)-f(y))²` | `UniformRandomMALA.Dirichlet.energy`, including its factor `1/2` | [KernelMixture.lean](UniformRandomMALA/KernelMixture.lean) |
+| Right spectral gap `inf E_K(f,f)/Var_π(f)` over nonconstant `L²(π)` functions | `Concrete.L2RayleighTest`, `rayleighQuotient`, and `rayleighSpectralGap`; the test record requires measurability, `MemLp f 2 π`, and nonzero variance | [RayleighSpectralGap.lean](UniformRandomMALA/Concrete/RayleighSpectralGap.lean) |
+| Total variation `sup_A abs(μ(A)-ν(A))` | `UniformRandomMALA.setwiseTV`, with the supremum over measurable sets | [SetwiseTV.lean](UniformRandomMALA/Concrete/SetwiseTV.lean) |
+| Stationary flow `J_K(A,B)` and outgoing flow `J_K(A,Aᶜ)` | `Concrete.flow` and `Concrete.boundaryFlow` | [Conductance.lean](UniformRandomMALA/Concrete/Conductance.lean) |
+| Rejection probability conditional on the current state, and its dyadic average | `malaRejectionMassReal`, `malaRejectionMassReal_eq_fixed`, and `dyadicAverageRejection` | [MALARejectionGoodSet.lean](UniformRandomMALA/Concrete/MALARejectionGoodSet.lean) |
+| Stationary rejection moment in Proposition B.1 | `StationaryMALARejectionMomentBoundOne` integrates the `p`th power of that conditional rejection probability against the target | [RejectionMomentsOne.lean](UniformRandomMALA/Concrete/RejectionMomentsOne.lean) |
+| Threshold `p⋆` and right-hand side of Theorem 2.1 | `C1Potential.paperMomentThreshold` and `C1Potential.paperMasterRHS` | [C1MainTheorem.lean](UniformRandomMALA/Concrete/C1MainTheorem.lean) |
+
+Energy, variance, and the gap use nonnegative extended reals (`ℝ≥0∞`);
+`ENNReal.ofReal` embeds the real-valued lower bound in this type. The
+variance in the quotient is mathlib's `evariance`, which agrees with
+ordinary variance for `L²` tests (`MemLp.ofReal_variance_eq`, also used in
+[Variance.lean](UniformRandomMALA/Concrete/Variance.lean)).
+
+Some intermediate theorems use `Concrete.spectralGap`, defined through a
+Poincaré inequality for all measurable functions. The public endpoints use
+`rayleighSpectralGap`. In
+[RayleighSpectralGap.lean](UniformRandomMALA/Concrete/RayleighSpectralGap.lean),
+`spectralGap_le_rayleighSpectralGap` transfers the internal lower bound,
+while `l2SpectralGap_eq_rayleighSpectralGap` proves equivalence with the
+Poincaré formulation restricted to `L²`. These bridges make the change of
+formulation explicit.
+
+## 3. Trace the proof to its inputs
+
+Read the type and proof of the public endpoint first, then follow the
+declarations it invokes. A theorem that takes an isoperimetric or rejection
+bound as a hypothesis checks an implication; the full route must also
+provide a proof of that hypothesis. The following files show where this
+happens for the concrete target and kernels.
+
+| Stage | Files and connections to follow |
+|---|---|
+| Paper assumptions to the internal potential | [C1ToFirstOrder.lean](UniformRandomMALA/Concrete/C1ToFirstOrder.lean): `upperTaylor` and `toFirstOrderPotential` derive the internal fields from `C1Potential` |
+| Stationary rejection to local overlap | [MALAFullPathAssembly.lean](UniformRandomMALA/Concrete/MALAFullPathAssembly.lean): `stationaryMALARejectionMomentBound_paperScale` assembles finite Gaussian likelihood estimates and Euler/RWM weak-limit comparison; [MALAOverlapBounds.lean](UniformRandomMALA/Concrete/MALAOverlapBounds.lean) supplies the rejection input to the overlap argument; [RejectionMomentsOne.lean](UniformRandomMALA/Concrete/RejectionMomentsOne.lean) extends the public range to every real `p ≥ 1` |
+| Gaussian isoperimetry to target isoperimetry | [GaussianRampCanonicalInterpolation.lean](UniformRandomMALA/Concrete/GaussianRampCanonicalInterpolation.lean): `DiscreteTime.target_bakryLedoux` closes the Gaussian OU/Bobkov, finite-Euler enlargement, and target weak-limit construction |
+| Overlap and separation to component flow | [MALADefectiveConductance.lean](UniformRandomMALA/Concrete/MALADefectiveConductance.lean), [SafeComponent.lean](UniformRandomMALA/Concrete/SafeComponent.lean), and [AllParameterMALAFlow.lean](UniformRandomMALA/Concrete/AllParameterMALAFlow.lean) combine overlap with separated-set bounds |
+| Component estimates to the global gap | [Ladder.lean](UniformRandomMALA/Concrete/Ladder.lean) and [LadderComponents.lean](UniformRandomMALA/Concrete/LadderComponents.lean) construct the mixture components and their weights; [ComponentAggregationFinal.lean](UniformRandomMALA/Concrete/ComponentAggregationFinal.lean) and [GlobalFromBakryLedoux.lean](UniformRandomMALA/Concrete/GlobalFromBakryLedoux.lean) assemble the gap bound |
+| Discharge isoperimetry and choose universal constants | [UniversalConstants.lean](UniformRandomMALA/Concrete/UniversalConstants.lean) fixes the parameters; `FirstOrderPotential.universal_masterRHS_spectralGap_lower` in [GaussianRampCanonicalInterpolation.lean](UniformRandomMALA/Concrete/GaussianRampCanonicalInterpolation.lean) passes the proved `target_bakryLedoux` into the conditional bound |
+| Return to the paper's statement | [C1MainTheorem.lean](UniformRandomMALA/Concrete/C1MainTheorem.lean) applies the preceding theorem to `V.toFirstOrderPotential`, transfers to the Rayleigh gap, and obtains the half-lazy clause and corollary |
+| Fixed-step obstruction | [FixedStepHardPotential.lean](UniformRandomMALA/Concrete/FixedStepHardPotential.lean) constructs the smooth witness; [FixedStepHardPotentialObstruction.lean](UniformRandomMALA/Concrete/FixedStepHardPotentialObstruction.lean) proves its gap bound; [FixedStepMinimax.lean](UniformRandomMALA/Concrete/FixedStepMinimax.lean) inserts it into the stated potential class and optimizes over steps |
+
+[PROOF_STRATEGY_LEDGER.md](PROOF_STRATEGY_LEDGER.md) expands these stages.
+The generic aggregation statements of Lemma 3.5 and Theorem 3.6 are in
+[FractionalAggregation.lean](UniformRandomMALA/Concrete/FractionalAggregation.lean).
+The abstract records in `AnalyticInterfaces.lean` and theorems with names
+ending in `_of_bakryLedoux` are useful conditional interfaces. Their
+presence is not a gap in the public theorem: inspect the concrete endpoint
+above to see the analytic inputs supplied by proved results.
+
+## 4. Check compilation, dependencies, and scope
+
+Run the complete verification commands in [README.md](README.md). The gate
+checks all library sources and the public import
+[AllResults.lean](UniformRandomMALA/AllResults.lean).
+[DependencyAudit.lean](UniformRandomMALA/DependencyAudit.lean) selects the
+declarations for `#print axioms`, including the main theorem, both corollary
+endpoints, and the fixed-step minimax theorem.
+[check_axioms.py](scripts/check_axioms.py) checks the output against the
+allow-list described in [TRUST_BOUNDARY.md](TRUST_BOUNDARY.md).
+
+To inspect the main types and their transitive axiom dependencies separately,
+save the following as `Review.lean` in the package directory and run
+`lake env lean Review.lean` after building:
+
+```lean
+import UniformRandomMALA.AllResults
+
+#print UniformRandomMALA.Concrete.C1Potential
+#print UniformRandomMALA.Concrete.C1Potential.paperMasterRHS
+#check UniformRandomMALA.Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
+#check UniformRandomMALA.Concrete.exists_universal_fixedStepMinimaxGap_paper_upper
+#print axioms UniformRandomMALA.Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
+#print axioms UniformRandomMALA.Concrete.exists_universal_fixedStepMinimaxGap_paper_upper
+```
+
+Read theorem hypotheses as well as axiom output: an axiom audit does not
+show that an assumed analytic bound has been proved, nor that a definition
+matches the paper. The statement and definition comparisons above address
+those separate questions.
+
+The end-to-end claim concerns the mapped endpoints under their stated
+assumptions. For isoperimetry, Lean proves the needed enlargement through
+Gaussian OU/Bobkov interpolation and finite-Euler weak limits, whereas the
+paper invokes a contraction theorem from the literature. For rejection,
+Lean uses finite discrete chains and weak limits. The continuous-time
+lemmas B.2–B.5 and Appendix B's additional nonconvex generalization are
+outside the formalization. The strongly convex rejection estimate needed
+for the main theorem is proved internally. These proof differences and
+scope limits are detailed in [THEOREM_MAP.md](THEOREM_MAP.md).

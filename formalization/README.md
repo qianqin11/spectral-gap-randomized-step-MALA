@@ -2,66 +2,46 @@
 
 This package accompanies Qian Qin's *A global spectral gap for
 Metropolis-adjusted Langevin algorithm with a uniformly randomized step size*.
-It formalizes the principal randomized-step spectral-gap lower bound and the
-smooth fixed-step minimax obstruction in Lean 4.
+It formalizes the randomized-step spectral-gap bound (Theorem 2.1), its
+square-root-dimension corollary (Corollary 2.2), and the smooth fixed-step
+minimax obstruction (Proposition 2.3), together with their proof ingredients.
+The [paper PDF](paper/main.pdf) and [LaTeX source](paper/main.tex) are bundled.
 
-The manuscript is available as [paper/main.pdf](paper/main.pdf). The same
-directory includes [main.tex](paper/main.tex), the bibliography
-`uniform_random_mala.bib`, and the three PDF figures used by the source.
-[PACKAGE_MANIFEST.md](PACKAGE_MANIFEST.md) describes the distribution;
-the manuscript checksum is recorded in
-[validation/manuscript-pdf.sha256](validation/manuscript-pdf.sha256).
+## Where to start
 
-## Mathematical scope
+Two checks matter: that Lean proves the conclusions from the stated
+assumptions, and that the formal statements and definitions express the
+mathematics in the paper. The [reader guide](PAPER_READER_GUIDE.md) gives a
+route through both checks; the [theorem map](THEOREM_MAP.md) indexes results
+by paper number and TeX label.
 
-The input record `Concrete.C1Potential` expresses the paper's first-order
-assumptions (`eq:first-order-assumptions`): a continuously differentiable
-potential `U : EuclideanSpace ℝ (Fin d) → ℝ`, the `m`-strong-convexity
-supporting inequality, and an `L`-Lipschitz actual Riesz gradient, with
-`0 < m ≤ L`. The upper Taylor inequality is derived from these assumptions.
+| What to verify | Files to read |
+|---|---|
+| The paper's assumptions on the potential and its actual gradient | [C1ToFirstOrder.lean](UniformRandomMALA/Concrete/C1ToFirstOrder.lean): `C1Potential` and its adapter to the internal interface |
+| Theorem 2.1 and Corollary 2.2, including the quantities in their bounds | [C1MainTheorem.lean](UniformRandomMALA/Concrete/C1MainTheorem.lean): start with `exists_universal_paperMasterRHS_bounds`, `paperMomentThreshold`, and `paperMasterRHS` |
+| The target distribution and the MALA algorithm | [EuclideanTarget.lean](UniformRandomMALA/Concrete/EuclideanTarget.lean), [GaussianProposal.lean](UniformRandomMALA/Concrete/GaussianProposal.lean), [MALA.lean](UniformRandomMALA/Concrete/MALA.lean), and [MALAFamily.lean](UniformRandomMALA/Concrete/MALAFamily.lean); the [definition-by-definition guide](PAPER_READER_GUIDE.md#2-compare-the-algorithm-and-quantity-definitions) also covers acceptance, mixtures, and lazification |
+| The paper's Dirichlet form and spectral-gap convention | [KernelMixture.lean](UniformRandomMALA/KernelMixture.lean): `Dirichlet.energy`; [RayleighSpectralGap.lean](UniformRandomMALA/Concrete/RayleighSpectralGap.lean): `L2RayleighTest`, `rayleighQuotient`, and `rayleighSpectralGap` |
+| Proposition 2.3 and its order of optimization over steps and potentials | [FixedStepMinimax.lean](UniformRandomMALA/Concrete/FixedStepMinimax.lean): `fixedStepMinimaxGap` and `exists_universal_fixedStepMinimaxGap_paper_upper` |
+| How the proofs reach the concrete endpoints without assumed analytic results | The [proof route](PAPER_READER_GUIDE.md#3-trace-the-proof-to-its-inputs), [trust boundary](TRUST_BOUNDARY.md), and [DependencyAudit.lean](UniformRandomMALA/DependencyAudit.lean) |
 
-The development constructs the normalized target, concrete MALA and
-half-lazy kernels, the uniform-step mixture, and the paper's `L²` Rayleigh
-spectral gap. It proves both clauses of Theorem 2.1 (`thm:main`) with common
-universal constants satisfying `A₀ ≥ 1`, both bounds in Corollary 2.2
-(`cor:sqrt-d-endpoint`), the mixture, overlap, separation, flow, and aggregation
-results used in their proof, and the fixed-step minimax obstruction in
-Proposition 2.3 (`prop:minimax-fixed-step-ceiling`).
+The public import is `UniformRandomMALA.AllResults`. The main theorem starts
+from a continuously differentiable, strongly convex potential with a
+Lipschitz gradient. The target, kernels, rejection estimates, isoperimetry,
+and final gap bound are constructed or proved within the development; no
+rejection, isoperimetry, or spectral-gap certificate is an input to that
+endpoint. The reader guide shows where these dependencies are discharged.
 
-The additional nonconvex scope of Appendix B is not formalized. The rejection
-estimate needed for Theorem 2.1 is proved under the standing strong-convexity
-assumptions by a discrete-time argument. The manuscript's continuous-time
-SDE proof is not transcribed into Lean. The optional Hessian adapter remains
-available for smooth special cases and the smooth hard example.
+The formalization uses different proofs for two analytic inputs: Gaussian
+OU/Bobkov interpolation and finite-Euler weak limits for isoperimetry, and a
+discrete-time argument for rejection. Appendix B's continuous-time lemmas
+and additional nonconvex scope are not formalized. See the
+[theorem map](THEOREM_MAP.md) for result-by-result coverage and
+[FORMALIZATION_STATUS.md](FORMALIZATION_STATUS.md) for scope details.
 
-## Reading the formalization
+## Reproduce the verification
 
-Start with [PAPER_READER_GUIDE.md](PAPER_READER_GUIDE.md) for a route through
-the assumptions and endpoints. [THEOREM_MAP.md](THEOREM_MAP.md) pairs the
-paper's theorem numbers and TeX labels with Lean declarations.
-[FORMALIZATION_STATUS.md](FORMALIZATION_STATUS.md) records mathematical
-coverage, and [TRUST_BOUNDARY.md](TRUST_BOUNDARY.md) explains the assumptions
-and dependencies. The proof architecture and reusable results are described
-in [PROOF_STRATEGY_LEDGER.md](PROOF_STRATEGY_LEDGER.md) and
-[REUSABLE_RESULTS.md](REUSABLE_RESULTS.md).
-
-The public import is:
-
-```lean
-import UniformRandomMALA.AllResults
-
-#check UniformRandomMALA.Concrete.C1Potential
-#check UniformRandomMALA.Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
-#check UniformRandomMALA.Concrete.C1Potential.sqrtDimensionCorollary_rayleighSpectralGap_lower
-#check UniformRandomMALA.Concrete.C1Potential.sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower
-#check UniformRandomMALA.Concrete.C1Potential.allParameterMALAFlowBounds
-#check UniformRandomMALA.Concrete.exists_universal_fixedStepMinimaxGap_paper_upper
-```
-
-## Reproducing the checks
-
-The toolchain is pinned by `lean-toolchain`, `lakefile.toml`, and
-`lake-manifest.json`. Install Git, Python 3, and `elan`, then run from the
+Install Git, Python 3, and `elan`. The Lean and mathlib versions are pinned
+by `lean-toolchain`, `lakefile.toml`, and `lake-manifest.json`. Run from the
 `formalization/` directory. On Windows:
 
 ```powershell
@@ -77,34 +57,36 @@ lake exe cache get
 bash scripts/check.sh
 ```
 
-The gate runs the source, first-order-interface, manuscript, and numerical
-audits, the manuscript-audit regression tests, `lake build`, the public
-`AllResults` import, and the selected declarations' `#print axioms` audit.
-The axiom allow-list contains `propext`, `Classical.choice`, and `Quot.sound`.
+The gate builds the library, checks the public import, and runs
+`#print axioms` for the declarations selected in
+[DependencyAudit.lean](UniformRandomMALA/DependencyAudit.lean), including the
+main endpoints. It also runs the source, first-order-interface, manuscript,
+and numerical audits and the manuscript-audit regression tests. The only
+allowed logical axioms are `propext`, `Classical.choice`, and `Quot.sound`.
 The final success marker is:
 
 ```text
 FULL SOURCE BUILD AND AXIOM AUDIT PASSED
 ```
 
-[BUILD_STATUS.md](BUILD_STATUS.md) records the latest validation, its scope,
-and evidence. Manuscript checks and numerical trials are distinct from Lean
-kernel verification. The source-label audit checks correspondence with the
-bundled TeX; it does not itself establish mathematical equivalence or replace
-a LaTeX build.
+[BUILD_STATUS.md](BUILD_STATUS.md) records the latest validation and its
+evidence. A successful build checks the formal proofs; comparing their
+definitions and statements with the paper remains a separate reading task.
+The manuscript-label audit and numerical checks support that comparison
+but do not establish mathematical equivalence.
 
-To typeset the manuscript, run the following from `paper/` with a LaTeX
-distribution installed:
+## Further documentation
 
-```bash
-latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
-```
+The [proof-strategy ledger](PROOF_STRATEGY_LEDGER.md) gives a more detailed
+dependency route, and [REUSABLE_RESULTS.md](REUSABLE_RESULTS.md) describes
+general lemmas. The [package manifest](PACKAGE_MANIFEST.md) lists the
+distributed files; [REPOSITORY_UPDATE.md](REPOSITORY_UPDATE.md) gives
+maintainer instructions. Generated caches and logs live in `.lake/` and
+`validation/local/`; records in `validation/historical/` describe earlier
+snapshots.
 
-The figure PDFs and bibliography are supplied. See `BUILD_STATUS.md` for
-whether the current validation includes typesetting.
-
-The local check creates dependency caches and compiled files under `.lake/`
-and logs under `validation/local/`. These generated files are excluded from
-the source distribution. Historical validation records are retained under
-`validation/historical/`; they do not describe the current manuscript.
-[REPOSITORY_UPDATE.md](REPOSITORY_UPDATE.md) provides maintainer guidance.
+To typeset the bundled manuscript, run
+`latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex` from `paper/`
+with a LaTeX distribution installed. The bibliography and figure PDFs are
+supplied. Typesetting evidence and the manuscript checksum are linked from
+[BUILD_STATUS.md](BUILD_STATUS.md).
