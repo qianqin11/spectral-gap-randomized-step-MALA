@@ -29,6 +29,27 @@ satisfies `A₀ ≥ 2`, which also supplies the stronger bounds used in the
 moment estimates. This is an existential choice; the theorem does not assert
 the bound for every `A₀ ≥ 1` or specifically for `A₀ = 1`.
 
+## General aggregation results
+
+The fractional aggregation lemma (Lemma 3.5, `lem:fractional`) and the
+component-aggregation theorem (Theorem 3.6, `thm:aggregation`) are also
+formalized as reusable results for finite families of Markov kernels,
+independently of MALA or the assumptions on its potential.
+[FractionalAggregation.lean](UniformRandomMALA/Concrete/FractionalAggregation.lean)
+proves `fractionalAggregation_poincareLower` and
+`fractionalAggregation_le_spectralGap`, then derives
+`hardAssignmentAggregation_poincareLower` and
+`hardAssignmentAggregation_le_spectralGap` by the paper's reciprocal-flow
+coefficient substitution. The energy-domination premise has exactly the
+paper's `L²` scope. The internal gap bounds transfer to the paper's Rayleigh
+gap through `spectralGap_le_rayleighSpectralGap`.
+
+All four declarations are exported by
+[AllResults.lean](UniformRandomMALA/AllResults.lean) and included in
+[DependencyAudit.lean](UniformRandomMALA/DependencyAudit.lean). The
+[reader guide](PAPER_READER_GUIDE.md#aggregation-lemma-35-and-theorem-36)
+compares their assumptions, cost definitions, and conclusions with the paper.
+
 ## Coverage of paper results
 
 In this table, “formalized” describes the result's presence in the Lean
@@ -79,10 +100,8 @@ integrability from boundedness of the rejection mass.
 The concrete half-lazy kernel is Markov and reversible, with Dirichlet
 energy and Rayleigh gap equal to one half of those of the non-lazy kernel.
 The simplification in Corollary 2.2 does not assume `pStar ≤ d`.
-Fractional aggregation has the paper's `L²` scope, including extended-valued
-energies, truncation limits, and zero weights, subject to its stated
-energy-domination assumption. Hard-assignment aggregation follows as a
-corollary.
+The aggregation proofs allow extended-valued energies and zero fractional
+flow coefficients, using bounded truncations and monotone convergence.
 
 The package does not prove the independent Appendix B extension to arbitrary
 possibly nonconvex `C¹` potentials with Lipschitz gradient and integrable

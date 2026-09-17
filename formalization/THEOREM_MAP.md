@@ -76,9 +76,16 @@ and [RejectionMomentsOne.lean](UniformRandomMALA/Concrete/RejectionMomentsOne.le
 Proposition 3.4 uses the same chosen `A₀,b₀` as the main theorem and covers
 every admissible moment and multiplier, beyond the finite ladder instances.
 
-The aggregation declarations use precisely the manuscript's `L²`
+Lemma 3.5 and Theorem 3.6 are formalized as general results for finite
+families of Markov kernels, independently of the MALA application. The
+aggregation declarations use precisely the manuscript's `L²`
 energy-domination premise. Their conclusions use the stronger internal
 Poincaré gap; the transfer theorem above gives the Rayleigh-gap inequalities.
+Both the Poincaré and spectral-gap forms are exported by `AllResults` and
+selected in `DependencyAudit`. The
+[aggregation reader guide](PAPER_READER_GUIDE.md#aggregation-lemma-35-and-theorem-36)
+compares the flow hypotheses, cost formulas, and the specialization from
+the fractional lemma to the component-aggregation theorem.
 
 ## Appendix results and proof correspondence
 

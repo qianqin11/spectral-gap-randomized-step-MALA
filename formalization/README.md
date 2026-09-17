@@ -3,8 +3,10 @@
 This package accompanies Qian Qin's *A global spectral gap for
 Metropolis-adjusted Langevin algorithm with a uniformly randomized step size*.
 It formalizes the randomized-step spectral-gap bound (Theorem 2.1), its
-square-root-dimension corollary (Corollary 2.2), and the smooth fixed-step
-minimax obstruction (Proposition 2.3), together with their proof ingredients.
+square-root-dimension corollary (Corollary 2.2), the smooth fixed-step
+minimax obstruction (Proposition 2.3), the fractional aggregation lemma
+(Lemma 3.5), and the component-aggregation theorem (Theorem 3.6), together
+with their proof ingredients.
 The [paper PDF](paper/main.pdf) and [LaTeX source](paper/main.tex) are bundled.
 
 ## Where to start
@@ -22,7 +24,14 @@ by paper number and TeX label.
 | The target distribution and the MALA algorithm | [EuclideanTarget.lean](UniformRandomMALA/Concrete/EuclideanTarget.lean), [GaussianProposal.lean](UniformRandomMALA/Concrete/GaussianProposal.lean), [MALA.lean](UniformRandomMALA/Concrete/MALA.lean), and [MALAFamily.lean](UniformRandomMALA/Concrete/MALAFamily.lean); the [definition-by-definition guide](PAPER_READER_GUIDE.md#2-compare-the-algorithm-and-quantity-definitions) also covers acceptance, mixtures, and lazification |
 | The paper's Dirichlet form and spectral-gap convention | [KernelMixture.lean](UniformRandomMALA/KernelMixture.lean): `Dirichlet.energy`; [RayleighSpectralGap.lean](UniformRandomMALA/Concrete/RayleighSpectralGap.lean): `L2RayleighTest`, `rayleighQuotient`, and `rayleighSpectralGap` |
 | Proposition 2.3 and its order of optimization over steps and potentials | [FixedStepMinimax.lean](UniformRandomMALA/Concrete/FixedStepMinimax.lean): `fixedStepMinimaxGap` and `exists_universal_fixedStepMinimaxGap_paper_upper` |
+| Lemma 3.5 and Theorem 3.6, as general aggregation results | [FractionalAggregation.lean](UniformRandomMALA/Concrete/FractionalAggregation.lean): `fractionalAggregation_le_spectralGap` and `hardAssignmentAggregation_le_spectralGap`, with their `_poincareLower` versions; the [aggregation guide](PAPER_READER_GUIDE.md#aggregation-lemma-35-and-theorem-36) compares their hypotheses and bounds with the paper |
 | How the proofs reach the concrete endpoints without assumed analytic results | The [proof route](PAPER_READER_GUIDE.md#3-trace-the-proof-to-its-inputs), [trust boundary](TRUST_BOUNDARY.md), and [DependencyAudit.lean](UniformRandomMALA/DependencyAudit.lean) |
+
+The aggregation lemma and theorem are proved for general finite families of
+Markov kernels under the paper's energy-domination and flow hypotheses.
+They are reusable independently of MALA and require no potential or
+strong-convexity assumptions. Both are exported by the public import and
+included in the axiom audit.
 
 The public import is `UniformRandomMALA.AllResults`. The main theorem starts
 from a continuously differentiable, strongly convex potential with a

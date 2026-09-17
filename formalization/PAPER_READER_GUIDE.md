@@ -55,6 +55,45 @@ with `ContDiff ℝ ⊤` additionally required in the gap-value set. These
 smoothness assumptions belong to the obstruction result; the randomized
 lower bound takes `C1Potential`.
 
+### Aggregation: Lemma 3.5 and Theorem 3.6
+
+Both general aggregation results are proved in
+[FractionalAggregation.lean](UniformRandomMALA/Concrete/FractionalAggregation.lean).
+They apply to a probability measure and a finite family of Markov kernels
+on a measurable space, independently of the MALA application. Their inputs
+are the paper's reversibility, energy-domination, and one-step flow
+conditions, with no assumptions on a potential.
+
+| Paper result | Declarations in `UniformRandomMALA.Concrete` | Bound to compare |
+|---|---|---|
+| Lemma 3.5 (`lem:fractional`) | `fractionalAggregation_poincareLower`; `fractionalAggregation_le_spectralGap` | Reciprocal of `2 ∑ j, β_j²/γ_j` |
+| Theorem 3.6 (`thm:aggregation`) | `hardAssignmentAggregation_poincareLower`; `hardAssignmentAggregation_le_spectralGap` | Reciprocal of `2 ∑ j, 1/(γ_j φ_j²)` |
+
+In each statement, `hdom` requires energy domination for every measurable
+`L²` function, as in the paper. The fractional lemma's `hflow` bounds the
+mass of each measurable set of positive mass at most one half by the
+weighted sum of component boundary flows; its coefficients `β_j` may be zero. The
+theorem's `hflow` instead requires a suitable component for each such set.
+Its proof invokes the fractional lemma with `β_j = 1/φ_j`.
+`fractionalCost` in the same file and `harmonicCost` in
+[ComponentAggregation.lean](UniformRandomMALA/Concrete/ComponentAggregation.lean)
+define the two sums, and `fractionalCost_inv_eq_harmonicCost` proves the
+substitution identity.
+
+The conclusions first give the stronger internal Poincaré gap. Compose
+either `_le_spectralGap` result with `spectralGap_le_rayleighSpectralGap` in
+[RayleighSpectralGap.lean](UniformRandomMALA/Concrete/RayleighSpectralGap.lean)
+to obtain exactly the paper's Rayleigh-gap lower bound. Lean requires
+reversibility of the component kernels; the bound holds for a Markov
+kernel `P` without separately requiring its reversibility, so it covers
+the paper's reversible `P` as well.
+
+To follow the proof, read `fractionalAggregation_evariance_le` and its
+supporting truncation, coarea, and weighted Cauchy–Schwarz lemmas earlier in
+the file. The four declarations above are exported by
+[AllResults.lean](UniformRandomMALA/AllResults.lean) and explicitly selected
+in [DependencyAudit.lean](UniformRandomMALA/DependencyAudit.lean).
+
 ## 2. Compare the algorithm and quantity definitions
 
 For a public input `V : C1Potential d`, write
@@ -139,8 +178,9 @@ happens for the concrete target and kernels.
 | Fixed-step obstruction | [FixedStepHardPotential.lean](UniformRandomMALA/Concrete/FixedStepHardPotential.lean) constructs the smooth witness; [FixedStepHardPotentialObstruction.lean](UniformRandomMALA/Concrete/FixedStepHardPotentialObstruction.lean) proves its gap bound; [FixedStepMinimax.lean](UniformRandomMALA/Concrete/FixedStepMinimax.lean) inserts it into the stated potential class and optimizes over steps |
 
 [PROOF_STRATEGY_LEDGER.md](PROOF_STRATEGY_LEDGER.md) expands these stages.
-The generic aggregation statements of Lemma 3.5 and Theorem 3.6 are in
-[FractionalAggregation.lean](UniformRandomMALA/Concrete/FractionalAggregation.lean).
+The [aggregation comparison above](#aggregation-lemma-35-and-theorem-36)
+identifies the general statements and their proof, beyond the component
+estimates used in the MALA application.
 The abstract records in `AnalyticInterfaces.lean` and theorems with names
 ending in `_of_bakryLedoux` are useful conditional interfaces. Their
 presence is not a gap in the public theorem: inspect the concrete endpoint
@@ -153,7 +193,8 @@ checks all library sources and the public import
 [AllResults.lean](UniformRandomMALA/AllResults.lean).
 [DependencyAudit.lean](UniformRandomMALA/DependencyAudit.lean) selects the
 declarations for `#print axioms`, including the main theorem, both corollary
-endpoints, and the fixed-step minimax theorem.
+endpoints, the fixed-step minimax theorem, and both the Poincaré and
+spectral-gap forms of the aggregation lemma and theorem.
 [check_axioms.py](scripts/check_axioms.py) checks the output against the
 allow-list described in [TRUST_BOUNDARY.md](TRUST_BOUNDARY.md).
 
@@ -168,8 +209,12 @@ import UniformRandomMALA.AllResults
 #print UniformRandomMALA.Concrete.C1Potential.paperMasterRHS
 #check UniformRandomMALA.Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
 #check UniformRandomMALA.Concrete.exists_universal_fixedStepMinimaxGap_paper_upper
+#check UniformRandomMALA.Concrete.fractionalAggregation_le_spectralGap
+#check UniformRandomMALA.Concrete.hardAssignmentAggregation_le_spectralGap
 #print axioms UniformRandomMALA.Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
 #print axioms UniformRandomMALA.Concrete.exists_universal_fixedStepMinimaxGap_paper_upper
+#print axioms UniformRandomMALA.Concrete.fractionalAggregation_le_spectralGap
+#print axioms UniformRandomMALA.Concrete.hardAssignmentAggregation_le_spectralGap
 ```
 
 Read theorem hypotheses as well as axiom output: an axiom audit does not
