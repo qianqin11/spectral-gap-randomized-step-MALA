@@ -4,8 +4,8 @@ The mathematical input, proof dependencies, and scope limits described here
 apply to the public first-order interface. The latest validation evidence is
 in [BUILD_STATUS.md](BUILD_STATUS.md); reproducible commands are in
 [README.md](README.md). The reader guide links the
-[algorithm and quantity definitions](PAPER_READER_GUIDE.md#2-compare-the-algorithm-and-quantity-definitions)
-and the [concrete proof route](PAPER_READER_GUIDE.md#3-trace-the-proof-to-its-inputs)
+[algorithm and quantity definitions](PAPER_READER_GUIDE.md#3-compare-definitions-with-the-paper)
+and the [concrete proof route](PAPER_READER_GUIDE.md#4-follow-the-complete-proofs)
 to the source files needed to check these claims.
 
 ## Input assumptions
@@ -44,6 +44,16 @@ special cases. Importing them does not add differentiability hypotheses to
 a theorem whose argument is a `C1Potential`. Conditional assembly interfaces
 also remain available as reusable lemmas; the public endpoint supplies their
 analytic inputs through proved results.
+
+The mixing-time corollary additionally takes the paper's initial-law
+assumptions: a probability measure absolutely continuous with respect to the
+target and a square-integrable Radon–Nikodym density. Its TV-decay bound is
+proved in `L2MixingBase.lean`, `L2MixingEnergy.lean`, `L2Mixing.lean`,
+`L2DensityTV.lean`, and `L2MixingTV.lean` using mathlib integration and
+the existing variational gap. No external mixing theorem or convergence
+certificate is assumed. The prefactor depends only on the tuning parameter,
+as stated in the manuscript; [THEOREM_MAP.md](THEOREM_MAP.md) locates its
+definition and the optional fixed-tuning specialization.
 
 ## External dependencies and logical axioms
 

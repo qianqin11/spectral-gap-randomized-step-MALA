@@ -137,6 +137,16 @@ import UniformRandomMALA.Concrete.RayleighSpectralGap
 import UniformRandomMALA.Concrete.HessianMainTheorem
 import UniformRandomMALA.Concrete.LazyKernel
 import UniformRandomMALA.Concrete.SqrtDimensionCorollary
+import UniformRandomMALA.Concrete.TunedSpectralGap
+import UniformRandomMALA.Concrete.TargetGapRange
+import UniformRandomMALA.Concrete.PositiveContraction
+import UniformRandomMALA.Concrete.L2MixingBase
+import UniformRandomMALA.Concrete.L2MixingEnergy
+import UniformRandomMALA.Concrete.L2Mixing
+import UniformRandomMALA.Concrete.L2DensityTV
+import UniformRandomMALA.Concrete.L2MixingTV
+import UniformRandomMALA.Concrete.MixingTimeArithmetic
+import UniformRandomMALA.Concrete.MixingTime
 import UniformRandomMALA.Concrete.FractionalAggregation
 import UniformRandomMALA.Concrete.AllParameterMALAFlow
 import UniformRandomMALA.Concrete.SpectralGapUpperBounds

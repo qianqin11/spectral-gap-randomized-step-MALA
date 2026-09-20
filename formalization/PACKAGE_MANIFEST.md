@@ -13,6 +13,10 @@ and audit results are recorded in [BUILD_STATUS.md](BUILD_STATUS.md).
 | `UniformRandomMALA/AllResults.lean` | Public import surface |
 | `UniformRandomMALA/Concrete/C1ToFirstOrder.lean` | First-order assumptions and derived upper Taylor inequality |
 | `UniformRandomMALA/Concrete/C1MainTheorem.lean` | Paper-facing theorem, corollary, isoperimetry, rejection/overlap, and flow endpoints |
+| `UniformRandomMALA/Concrete/TunedSpectralGap.lean` | Tuned third display of the spectral-gap corollary |
+| `UniformRandomMALA/Concrete/MixingTime.lean` | Mixing-time definition, both ceiling bounds, and fixed-tuning universal corollary |
+| `UniformRandomMALA/Concrete/L2Mixing*.lean`, `L2DensityTV.lean`, `PositiveContraction.lean` | Proved gap-to-TV connection for the actual iterated half-lazy kernel |
+| `UniformRandomMALA/Concrete/MixingTimeArithmetic.lean`, `TargetGapRange.lean` | Logarithm/ceiling estimates and the concrete finite-gap range |
 | `UniformRandomMALA/DependencyAudit.lean` | Selected declarations for the actual axiom dependency audit |
 | `lakefile.toml`, `lake-manifest.json`, `lean-toolchain` | Pinned Lean and mathlib dependency configuration |
 

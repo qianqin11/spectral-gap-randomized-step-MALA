@@ -1,0 +1,15 @@
+PACKAGE INTEGRITY AND SCOPE — 2026-09-16
+
+Manuscript assets: main.tex, main.pdf, bibliography, and all three figure PDFs present.
+PDF SHA-256: a6baa1d1131e7c9f3b73022b1c2a46d73fb115e372af96eb476bc4f6894740be
+TeX SHA-256: 2adba0776db88e5daf040882a1a4f0831373ab1de4f2cfa1193dd1152b0fa939
+Source references/citations, figure inputs, and Lean paper labels checked.
+All 108 active labels agree with the compiled source; theorem numbers agree.
+Lean declarations and proof terms are unchanged by the comment updates.
+Full library build, public import, and 266-declaration axiom audit passed.
+Reader documentation describes mathematical scope, navigation, and reproduction.
+The independent nonconvex Appendix B extension remains outside formalized scope.
+
+SHA256SUMS.txt covers the distributed formalization/ files except itself,
+excluding .lake/, tmp/, validation/local/, Git metadata, and compiled artifacts.
+Historical evidence is retained under validation/historical/.

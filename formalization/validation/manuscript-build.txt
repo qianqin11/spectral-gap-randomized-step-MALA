@@ -1,24 +1,51 @@
-MANUSCRIPT BUILD PASSED — 2026-09-16
+MANUSCRIPT BUILD PASSED WITH NONFATAL WARNINGS - 2026-09-19
 
-From paper/:
-  latexmk -pdf -interaction=nonstopmode -halt-on-error "-outdir=../tmp/manuscript-build" main.tex
+The supplied files under paper/ were preserved. A fresh scratch build used
+tmp/manuscript-build-2026-09-19-corollary-alignment/ (excluded from distribution).
 
-LaTeX distribution: TeX Live 2025; latexmk 4.86a.
-Result: 47 pages; bibliography and all three figure inputs resolved.
+Commands used:
+  From paper/:
+    pdflatex -interaction=nonstopmode -halt-on-error "-output-directory=../tmp/manuscript-build-2026-09-19-corollary-alignment" main.tex
+  From tmp/manuscript-build-2026-09-19-corollary-alignment/ in PowerShell:
+    $env:BIBINPUTS = (Resolve-Path '../../paper').Path + ';'
+    bibtex main
+  From paper/:
+    latexmk -g -pdf -interaction=nonstopmode -halt-on-error "-outdir=../tmp/manuscript-build-2026-09-19-corollary-alignment" main.tex
+
+The bibliography was rebuilt in the scratch directory. The final run exited 0.
+LaTeX distribution: TeX Live 2025; pdfTeX 1.40.27; latexmk 4.86a;
+BibTeX 0.99d. The bibliography and all three figure inputs resolved.
+
+Final result: 48 pages.
 Unresolved references or citations: none.
-Duplicate source labels: none.
-PDF hyperlink warnings: four duplicate-destination warnings for equation.18.
-These appear at main.tex:1659; the earlier unnumbered ESJD display uses
-equation with nonumber at main.tex:1478. The manuscript files were preserved.
-Overfull boxes: 0. Underfull boxes: 4.
-All 108 active source labels were checked against the compiled auxiliary file.
+Duplicate source labels: none. All 110 active source labels match compiled
+auxiliary-file labels. Corollaries 2.2 and 2.4 are on page 7; Theorem 2.1 is
+on page 6; Lemma 3.5 and Theorem 3.6 are on pages 10 and 11. All label
+numbers and pages agree with the immediately preceding validation record.
+Corollary 2.4 states that C depends only on c in both the source and PDF.
 
-The bundled PDF was produced with MiKTeX; its bytes were preserved.
-The bundled and rebuilt PDFs have identical extracted text on all 47 pages
-after whitespace and Unicode normalization (checked with pypdf).
-Representative rendered pages were inspected. Text equality does not assert
-byte-identical PDFs or pixel-identical rendering across TeX distributions.
+Final nonfatal typesetting warnings:
+  Eight duplicate PDF destinations: four for equation.3 at main.tex:386,
+  and four for equation.18 at main.tex:1622.
+  Overfull boxes: 0. Underfull boxes: 7, all in the bibliography.
+  The Perl launcher also reported a locale fallback.
+These warnings were recorded without changing the manuscript.
 
-Bundled PDF SHA-256: a6baa1d1131e7c9f3b73022b1c2a46d73fb115e372af96eb476bc4f6894740be
-TeX source SHA-256: 2adba0776db88e5daf040882a1a4f0831373ab1de4f2cfa1193dd1152b0fa939
-Scratch build and full LaTeX logs: tmp/manuscript-build/ (excluded from distribution).
+The supplied and rebuilt PDFs both identify TeX Live 2025 as their producer.
+Their extracted text matches on all 48 pages after Unicode NFKC and
+whitespace normalization, checked page by page with pypdf. Their PDF bytes
+differ; text equality does not assert pixel-identical rendering.
+Rendered rebuilt pages 7 and 8 were inspected. The revised corollary and
+its proof have no visible clipping or overlap, and the following section
+starts cleanly. Visual inspection was limited to those pages.
+
+Supplied PDF SHA-256: feee07c1d78444bab3d4eea25807840935bd116c7c5888decb71587055cfa66b
+Rebuilt PDF SHA-256: cec3635b3d528bbf4f61d81288c1018e0d93c74c7421c87496a294a784de00cd
+TeX source SHA-256: 8ac5cbdac07ece71a04a0370ddb98566bc891ad329ad8e85b4e6a9de4757978f
+Bibliography SHA-256: 256355b8bdfee79a4ef44a2f9c8dc071f1fe2205be8f81e5b66a021ad7ac0960
+
+The previous manuscript-build.txt and manuscript-labels.json were preserved
+under validation/historical/2026-09-19-before-corollary-alignment/.
+Current compiled labels and source hash are in validation/manuscript-labels.json.
+Full build logs, parsed observations, extracted comparison text, and review
+images are in tmp/manuscript-build-2026-09-19-corollary-alignment/.

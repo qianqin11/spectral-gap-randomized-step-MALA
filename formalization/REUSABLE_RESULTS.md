@@ -1,24 +1,21 @@
 # Reusable mathematical results
 
-> **2026-09-12 first-order revision:** the public input is `C1Potential`
-> (actual gradient, strong convexity, and gradient Lipschitzness), and the
-> rejection/overlap exports include `p >= 1`. The complete package was
-> kernel-checked with pinned Lean/mathlib 4.33.0. Earlier Hessian endpoints are
-> retained as compatibility special cases.
-
-## Added first-order entry route
-
-`C1Potential` -> proved descent lemma -> `FirstOrderPotential` -> existing
-concrete proof. No target Hessian is required. The p >= 1 rejection/overlap
-exports use a second-moment interpolation inequality; in that reusable lemma,
-integrability of the relevant `p`-th and second powers is an explicit
-hypothesis, and the rejection application proves it from boundedness. The old
-p >= 2 estimates and Gaussian OU/Euler–RWM core are unchanged. See
-`FIRST_ORDER_REVISION.md` for exact names and the Appendix B scope
-qualification.
-
 This guide describes results that can be imported independently of the final
-uniform-random-MALA theorem. All names below begin with the namespace
+uniform-random-MALA theorem, including general aggregation, kernel mixing,
+Gaussian isoperimetry, and variational gap bounds. For the connection to
+the paper and the full proof, start with
+[PAPER_READER_GUIDE.md](PAPER_READER_GUIDE.md).
+
+| What to reuse | Start here |
+|---|---|
+| Potential assumptions and actual-gradient calculus | [First-order bridge](#first-order-actual-gradient-bridge) |
+| Gap definitions and lazification | [Rayleigh and Poincaré formulations](#rayleigh-and-poincaré-formulations-of-spectral-gap) and [fair lazification](#fair-lazification-of-arbitrary-markov-kernels) |
+| Spectral gap to total variation and mixing time | [Generic lazy-kernel convergence](#generic-lazy-kernel-convergence-and-mixing-time) |
+| Lemma 3.5 and Theorem 3.6 for general kernel families | [Fractional aggregation](#fractional-aggregation-for-finite-reversible-families) |
+| Gaussian enlargement and transport | [Finite-dimensional isoperimetry](#finite-dimensional-gaussian-isoperimetry) and [weak-limit stability](#weak-limit-stability-of-enlargement-inequalities) |
+| Test-function upper bounds and fixed-step obstructions | [Spectral-gap upper bounds](#spectral-gap-upper-bounds-from-tests-and-cuts) and [the smooth hard potential](#explicit-smooth-hard-potential-for-fixed-step-mala) |
+
+All names below begin with the namespace
 `UniformRandomMALA`; code blocks omit that common prefix when space is tight.
 For a standalone file, put `open UniformRandomMALA` after the import shown in
 the relevant section. Without that `open`, use fully qualified names such as
@@ -35,7 +32,8 @@ open UniformRandomMALA
 
 “Checked” means that the theorem has elaborated with the pinned Lean/mathlib
 toolchain and contains no placeholder proof. Ordinary mathematical hypotheses
-remain visible in its type.
+remain visible in its type. See [BUILD_STATUS.md](BUILD_STATUS.md) for the
+current package verification evidence.
 
 ## First-order actual-gradient bridge
 
@@ -223,6 +221,146 @@ The same module specializes the construction to the paper's concrete kernel:
 #check Concrete.FirstOrderPotential.energy_lazyUniformMALA
 #check Concrete.FirstOrderPotential.rayleighSpectralGap_lazyUniformMALA
 ```
+
+## Tuned spectral gap and a finite real gap
+
+Import:
+
+```lean
+import UniformRandomMALA.Concrete.TunedSpectralGap
+```
+
+The third display of Corollary 2.2 (`cor:sqrt-d-endpoint`) specializes the
+already proved second display by replacing its tuning constant with
+`c / sqrt pStar`. The scalar identities and transfer theorem are reusable:
+
+```lean
+#check Parameters.tunedSqrtDimensionCorollaryRHS_eq
+#check Parameters.tunedSqrtDimension_endpoint_eq
+#check Parameters.tunedSqrtDimensionCorollaryRHS_le_gap
+```
+
+For the actual target and randomized MALA kernel, inspect:
+
+```lean
+#check Concrete.C1Potential.paperTunedStep
+#check Concrete.C1Potential.paperTunedGapRHS
+#check Concrete.C1Potential.tunedSqrtDimensionCorollary_rayleighSpectralGap_lower
+```
+
+These give, for every `c > 0`,
+
+```text
+H = c / (L sqrt(d pStar)),
+Gap(P̄_H) ≥ c0 / (κ sqrt(d pStar)) * min(c, b0²/(2c)).
+```
+
+The universal constants are the same fixed witnesses used by the master
+theorem. The concrete endpoint assumes only `C1Potential` and `c > 0`;
+it proves the master-gap input internally, with no `pStar ≤ d` condition.
+
+The separate import
+
+```lean
+import UniformRandomMALA.Concrete.TargetGapRange
+
+#check Concrete.FirstOrderPotential.rayleighSpectralGap_le_two
+#check Concrete.FirstOrderPotential.rayleighSpectralGap_ne_top
+```
+
+provides `Gap(K) ≤ 2` and finiteness for **any** reversible Markov kernel
+on the concrete target. Its indicator test comes from the previously proved
+positive-mass target cut below one half. Combined with a positive lower
+bound, this justifies using the actual gap's `ENNReal.toReal` as a positive
+finite denominator.
+
+## Generic lazy-kernel convergence and mixing time
+
+The generic probability results apply on an arbitrary measurable state
+space. Import:
+
+```lean
+import UniformRandomMALA.Concrete.L2MixingTV
+```
+
+The initial-density definitions and TV theorem are:
+
+```lean
+#check Concrete.centeredDensity
+#check Concrete.centeredDensityL2Norm
+#check Concrete.setwiseTV_le_half_centeredDensityL2Norm
+#check Concrete.setwiseTV_iterate_halfLazy_le
+```
+
+For probability measures `μ ≪ π` with `dμ/dπ ∈ L²(π)`, a `π`-reversible
+Markov kernel `K`, and a proved half-lazy gap lower bound `0 ≤ g ≤ 1`, the
+last theorem states
+
+```text
+TV(μ ((I+K)/2)^n, π) ≤ (1/2) ‖dμ/dπ - 1‖₂ (1-g)^n.
+```
+
+`centeredDensityL2Norm` is literally the square root of the integral of the
+squared centered Radon--Nikodym density. The transition law is
+`DiscreteTime.finiteKernelIterate (halfLazyKernel K) n ∘ₘ μ`, where the
+zero iterate is the identity kernel. The proof does not require a bounded
+initial density: it pairs that `L²` density with bounded centered event
+indicators. Their variance at most `1/4` supplies the exact factor `1/2`
+for `setwiseTV`, the supremum of event discrepancies.
+
+The internal operator-free proof can also be imported in parts:
+
+| Module | Reusable declarations and purpose |
+|---|---|
+| [`Concrete/L2DensityTV.lean`](UniformRandomMALA/Concrete/L2DensityTV.lean) | `abs_integral_sub_le_centeredDensityL2Norm` bounds expectation discrepancies for an arbitrary `L²` test. |
+| [`Concrete/L2MixingBase.lean`](UniformRandomMALA/Concrete/L2MixingBase.lean) | `BoundedObservable`, its `average`, and `iterateAverage` package bounded measurable functions and actual kernel integration. |
+| [`Concrete/L2MixingEnergy.lean`](UniformRandomMALA/Concrete/L2MixingEnergy.lean) | `BoundedObservable.energy_eq_ofReal` and `inner_average_symm` identify Dirichlet energy and reversibility in integral form. |
+| [`Concrete/PositiveContraction.lean`](UniformRandomMALA/Concrete/PositiveContraction.lean) | `bilinear_cauchy_schwarz_of_quadratic_nonneg` and `sq_norm_contraction_of_positive_form` isolate the scalar positive-form argument. |
+| [`Concrete/L2Mixing.lean`](UniformRandomMALA/Concrete/L2Mixing.lean) | `BoundedObservable.sqNorm_halfLazy_contraction` and `sqNorm_iterate_halfLazy_le` derive the exact squared-norm factor `(1-g)^(2n)`. |
+| [`Concrete/L2MixingTV.lean`](UniformRandomMALA/Concrete/L2MixingTV.lean) | `BoundedObservable.integral_iterateAverage_eq_finiteKernelIterate` identifies observable iteration with transition laws; `setwiseTV_iterate_le_of_sqNorm_bound` transfers a supplied observable bound to TV. |
+
+For first hitting times and ceiling bounds, import:
+
+```lean
+import UniformRandomMALA.Concrete.MixingTime
+
+#check Concrete.mixingTime
+#check Concrete.mixingLog
+#check Concrete.mixingTime_halfLazy_le
+#check Concrete.mixingTime_halfLazy_le_actualGap
+```
+
+`mixingTime` takes values in `ℕ∞`: it is the infimum over natural times
+at which the actual TV error is at most `ε`, with `∞` for an empty set.
+For `ε > 0`, `mixingLog M ε = log(max 1 (M/(2ε)))`, with
+`M = ‖dμ/dπ-1‖₂`. The actual-gap theorem yields
+
+```text
+n_mix((I+K)/2, μ, ε) ≤ ceil(2 ell / Gap(K)).
+```
+
+Its additional generic hypotheses are a positive real non-lazy gap and
+`Gap(K) ≤ 2`. Exact half-lazy gap scaling explains the factor two. The
+scalar results in [`Concrete/MixingTimeArithmetic.lean`](UniformRandomMALA/Concrete/MixingTimeArithmetic.lean)
+include time zero and the endpoint `g = 1`, so no strict upper bound on the
+lazy gap or positive-logarithm assumption is required.
+
+The concrete paper endpoints discharge all kernel and gap inputs:
+
+```lean
+#check Concrete.paperMixingConstant
+#check Concrete.C1Potential.paperMixingScale
+#check Concrete.C1Potential.mixingTimeCorollary
+#check Concrete.C1Potential.exists_universal_mixingTimeCorollary
+```
+
+For Corollary 2.4 (`cor:mixing`), `mixingTimeCorollary` proves both ceilings
+with scale `κ sqrt(d pStar)` and the explicit prefactor
+`C(c) = 2 / (c0 * min(c, b0²/(2c)))`, which depends only on the positive
+tuning constant, as stated in the manuscript. The optional specialization
+`exists_universal_mixingTimeCorollary` chooses `c = b0` and its prefactor
+before quantifying over the dimension, potential, initial law, and accuracy.
+The step endpoint is independent of the requested accuracy.
 
 ## Fractional aggregation for finite reversible families
 
@@ -887,6 +1025,10 @@ open UniformRandomMALA
 #check Concrete.C1Potential.toFirstOrderPotential
 #check Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
 #check Concrete.C1Potential.sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower
+#check Concrete.C1Potential.tunedSqrtDimensionCorollary_rayleighSpectralGap_lower
+#check Concrete.setwiseTV_iterate_halfLazy_le
+#check Concrete.C1Potential.mixingTimeCorollary
+#check Concrete.C1Potential.exists_universal_mixingTimeCorollary
 #check Concrete.l2SpectralGap_eq_rayleighSpectralGap
 #check Concrete.rayleighSpectralGap_halfLazyKernel
 #check Concrete.fractionalAggregation_poincareLower
@@ -895,6 +1037,9 @@ open UniformRandomMALA
 #check Concrete.exists_universal_fixedStepMinimaxGap_paper_upper
 
 #print axioms Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
+#print axioms Concrete.C1Potential.tunedSqrtDimensionCorollary_rayleighSpectralGap_lower
+#print axioms Concrete.setwiseTV_iterate_halfLazy_le
+#print axioms Concrete.C1Potential.mixingTimeCorollary
 #print axioms Concrete.fractionalAggregation_poincareLower
 #print axioms DiscreteTime.target_bakryLedoux
 #print axioms Concrete.exists_universal_fixedStepMinimaxGap_paper_upper

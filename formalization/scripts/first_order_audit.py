@@ -55,6 +55,9 @@ def main() -> int:
         'UniformRandomMALA.DiscreteTime.MomentInterpolation',
         'UniformRandomMALA.Concrete.RejectionMomentsOne',
         'UniformRandomMALA.Concrete.C1MainTheorem',
+        'UniformRandomMALA.Concrete.TunedSpectralGap',
+        'UniformRandomMALA.Concrete.MixingTime',
+        'UniformRandomMALA.Concrete.L2MixingTV',
     ]:
         if required_public not in public_reachable:
             errors.append(

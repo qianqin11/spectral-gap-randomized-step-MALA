@@ -3,9 +3,17 @@
 The Lean development formalizes Theorem 2.1 (`thm:main`) from the paper's
 first-order assumptions (`eq:first-order-assumptions`), with both non-lazy
 and half-lazy conclusions and a common choice of universal constants
-satisfying `A₀ ≥ 1`. It also includes Corollary 2.2
-(`cor:sqrt-d-endpoint`) and the smooth fixed-step minimax obstruction in
-Proposition 2.3 (`prop:minimax-fixed-step-ceiling`).
+satisfying the paper's bounds. It also includes all three inequalities of
+Corollary 2.2 (`cor:sqrt-d-endpoint`), the mixing-time result of Corollary 2.4
+(`cor:mixing`), and the smooth fixed-step minimax obstruction in
+Proposition 2.3 (`prop:minimax-fixed-step-ceiling`). The fractional aggregation
+lemma (Lemma 3.5) and component-aggregation theorem (Theorem 3.6) are also
+available as general results independent of MALA.
+
+The mixing prefactor depends only on the tuning constant, matching the
+manuscript; a fixed universal tuning gives an optional specialization.
+The [reader guide](PAPER_READER_GUIDE.md) connects the paper's statements and
+definitions to the full proofs.
 
 The current kernel-build and audit results are maintained in
 [BUILD_STATUS.md](BUILD_STATUS.md). This report explains the coverage and
@@ -41,6 +49,8 @@ The development also contains the following reusable results:
   including zero-variance and infinite-energy cases;
 - Markov, reversibility, Dirichlet-energy, and Rayleigh-gap identities for
   the half-lazy kernel;
+- exact `L²` contraction and total-variation decay for iterated reversible
+  half-lazy kernels, including the initial-density factor and mixing-time ceiling;
 - real-exponent moment interpolation for the public `p ≥ 1` rejection range;
 - fractional aggregation with extended-valued energies and truncation limits;
 - Gaussian OU/Bobkov interpolation, finite-Euler transport, and weak-limit

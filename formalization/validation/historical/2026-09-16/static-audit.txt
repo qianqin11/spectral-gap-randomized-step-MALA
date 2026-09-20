@@ -1,0 +1,8 @@
+STATIC AUDIT PASSED
+Lean files: 155
+Declarations: 2069
+Explicit `by` proof blocks: 5808
+Placeholders (`sorry`, `admit`, project `axiom`): none
+Local imports: resolved
+Comments, strings, and (), [], {} delimiters: balanced
+NOTE: this is not a Lean kernel check; run `lake build`.

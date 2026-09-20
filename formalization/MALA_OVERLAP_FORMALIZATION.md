@@ -13,8 +13,8 @@ exports use second-moment interpolation; the old p >= 2 estimates and Gaussian
 OU/Euler–RWM core are unchanged. See `FIRST_ORDER_REVISION.md` for the exact
 names, mathematical scope, and Appendix B qualification.
 
-Current verification evidence is recorded in `BUILD_STATUS.md`. The complete 3,439-job build and the
-266-declaration axiom gate passed with Lean/mathlib 4.33.0.
+Current full-build and dependency-audit evidence is recorded in
+[BUILD_STATUS.md](BUILD_STATUS.md), using the pinned Lean/mathlib 4.33.0.
 
 This note concerns the moment-indexed local-overlap result labeled
 `prop:overlap` and numbered Proposition 3.2 in `paper/main.pdf`,

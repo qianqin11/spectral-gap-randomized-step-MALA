@@ -1,0 +1,57 @@
+MANUSCRIPT BUILD PASSED WITH NONFATAL WARNINGS - 2026-09-19
+
+The supplied files under paper/ were preserved. All build outputs went to
+tmp/manuscript-build-2026-09-19/, which is excluded from the distribution.
+
+Commands used:
+  From paper/:
+    latexmk -pdf -interaction=nonstopmode -halt-on-error "-outdir=../tmp/manuscript-build-2026-09-19" main.tex
+  From tmp/manuscript-build-2026-09-19/ in PowerShell:
+    $env:BIBINPUTS = (Resolve-Path '../../paper').Path + ';'
+    bibtex main
+  From paper/:
+    latexmk -g -pdf -interaction=nonstopmode -halt-on-error "-outdir=../tmp/manuscript-build-2026-09-19" main.tex
+
+The first latexmk invocation read the stale paper/main.bbl and reported
+12 unresolved citation occurrences. Running BibTeX in the scratch directory
+and forcing latexmk to rebuild resolved them all. The final run exited 0.
+LaTeX distribution: TeX Live 2025; pdfTeX 1.40.27; latexmk 4.86a;
+BibTeX 0.99d. The bibliography and all three figure inputs resolved.
+
+Final result: 48 pages (previous validated manuscript: 47 pages).
+Unresolved references or citations: none.
+Duplicate source labels: none. All 110 active source labels match compiled
+auxiliary-file labels (previous record: 108). New labels:
+  cor:mixing = Corollary 2.4, page 7.
+  sec:main = Section 2, page 5.
+No old labels were removed or renumbered; 77 old label page values changed.
+Corollary 2.2 is now on page 7; Lemma 3.5 and Theorem 3.6 are on pages 10
+and 11. Theorem 2.1 remains on page 6.
+
+Final nonfatal typesetting warnings:
+  Eight duplicate PDF destinations: four for equation.3 at main.tex:386,
+  and four for equation.18 at main.tex:1622.
+  Overfull boxes: 0. Underfull boxes: 7, all in the bibliography.
+  The prior validation had four equation.18 destination warnings and four
+  underfull boxes. The Perl launcher also reported a locale fallback.
+These warnings were recorded without changing the manuscript.
+
+The supplied and rebuilt PDFs both identify TeX Live 2025 as their producer.
+Their extracted text matches on all 48 pages after Unicode NFKC and
+whitespace normalization, checked page by page with pypdf. Their PDF bytes
+differ; text equality does not assert pixel-identical rendering.
+Rendered rebuilt pages 6, 7, 8, 10, 11, and 48 were inspected: the main
+definitions, revised gap corollary, new mixing corollary and its proof,
+aggregation statements, and final bibliography page have no visible clipping
+or overlap. Visual inspection was limited to those representative pages.
+
+Supplied PDF SHA-256: d3a9953ebaa7c4cc79a740676eb05d3178a9c3061afb308e3d7b8c77edc6c77a
+Rebuilt PDF SHA-256: b40d190a151ed3b8f28749a08ee07c75fb92439e9bcefd59b5998374a954978c
+TeX source SHA-256: fc8bd757f5e26b1c1dea80b55ff1738d9add023d17435b1fa8130ee2660b5296
+Bibliography SHA-256: 256355b8bdfee79a4ef44a2f9c8dc071f1fe2205be8f81e5b66a021ad7ac0960
+
+The previous manuscript-build.txt and manuscript-labels.json were preserved
+under validation/historical/2026-09-16/. Current compiled labels and source
+hash are recorded in validation/manuscript-labels.json.
+Full build logs, parsed observations, extracted comparison text, and review
+images are in tmp/manuscript-build-2026-09-19/ (excluded from distribution).

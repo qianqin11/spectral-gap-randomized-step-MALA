@@ -1,66 +1,71 @@
 # Verification evidence
 
-Validation date: **2026-09-16**. The development uses pinned Lean 4.33.0 and
-mathlib 4.33.0. The full verification gate completed successfully.
+The package uses pinned Lean 4.33.0 and mathlib 4.33.0. The full Lean gate
+passed on **2026-09-19**. All 165 Lean source files and the three dependency
+configuration files still match that verified version. The manuscript and
+documentation were checked again after the revision to Corollary 2.4;
+no Lean statement or proof needed to change.
+
+## Lean verification
+
+| Check | Result from the full gate |
+|---|---|
+| Source audit | 165 files; 2,161 declarations counted by source regex; no placeholders |
+| Interface and imports | Acyclic local imports; mathlib is the sole direct external Lean library |
+| Library build | `Build completed successfully (3976 jobs).` |
+| Public import | `lake env lean UniformRandomMALA/AllResults.lean` passed |
+| Axiom audit | All 281 selected declarations use only `propext`, `Classical.choice`, and `Quot.sound` |
+| Supporting numerical checks | 2,000 deterministic trials passed |
+
+These checks cover the development containing the randomized MALA gap and
+mixing results, the fixed-step obstruction, and the general aggregation
+lemma and theorem. The source audit and library build cover the complete
+development; the axiom audit covers the declarations selected in
+[DependencyAudit.lean](UniformRandomMALA/DependencyAudit.lean).
+
+## Paper correspondence and documentation
 
 | Check | Result |
 |---|---|
-| Lean source audit | Passed: 155 files; 2,069 top-level declarations counted by source regex; no placeholders |
-| First-order interface and imports | Passed; acyclic local imports; mathlib is the sole direct external Lean library |
-| Manuscript source | Passed: 108 labels, 252 reference uses, 117 citation-key uses, 58 bibliography entries, three figures |
-| Lean manuscript references | Passed: 122 label uses and 78 numbered theorem/label pairs |
-| Manuscript regression tests | Passed: 21 tests for missing/changed assets and invalid references |
-| Numerical sanity checks | Passed: 2,000 deterministic trials |
-| Lean build | Passed: `Build completed successfully (3439 jobs).` |
-| Public import | `lake env lean UniformRandomMALA/AllResults.lean` passed |
-| Axiom dependencies | All 266 selected declarations passed; only `propext`, `Classical.choice`, and `Quot.sound` |
-| LaTeX build | Passed: 47 pages; no unresolved references or citations; no overfull boxes |
-| Source/PDF correspondence | Bundled and rebuilt PDFs have equal normalized extracted text on all 47 pages |
+| Corollary 2.4 | The assumptions, definitions, and both bounds match `C1Potential.mixingTimeCorollary`; the constant depends only on the tuning parameter |
+| Manuscript source | 110 labels, 257 reference uses, 132 citation-key uses, 65 bibliography entries, and three figures checked |
+| Lean manuscript references | 134 label uses and 90 numbered theorem/label pairs checked |
+| Theorem numbers | All 20 theorem-level labels match the compiled paper; the unlabeled Mills lemma completes the 21 theorem environments in the map |
+| Manuscript-audit regression tests | 21 tests passed |
+| Theorem-map declarations | All 56 named declarations compile through `AllResults` |
+| Reader-guide example | Compiles through `AllResults`; printed logical dependencies are standard |
+| Documentation links | Local files and section anchors checked across the current package documentation |
+| LaTeX and PDF comparison | 48 pages; normalized extracted text agrees on every page of the supplied and rebuilt PDFs |
 
-The recent Lean edits add stable manuscript labels and correct two location
-references in comments. The theorem statements and proofs are unchanged.
-The public existential constant range remains `A₀ ≥ 1`, proved with the
-existing witness satisfying `A₀ ≥ 2`.
+The manuscript files were preserved as supplied. The PDF identity is in
+[manuscript-pdf.sha256](validation/manuscript-pdf.sha256). Typesetting has no
+unresolved references, citations, or overfull boxes. Seven bibliography
+underfull-box warnings and eight duplicate PDF-destination warnings remain;
+see [manuscript-build.txt](validation/manuscript-build.txt). Text equality
+is not a claim of byte-identical or pixel-identical PDFs.
 
-## Manuscript and theorem references
+The [reader guide](PAPER_READER_GUIDE.md) explains how to inspect definitions
+and trace the complete proofs. [THEOREM_MAP.md](THEOREM_MAP.md) and
+[FORMALIZATION_STATUS.md](FORMALIZATION_STATUS.md) describe coverage and proof
+differences, including the unformalized additional scope of Appendix B.
+Compilation and an axiom audit complement that comparison; neither alone
+establishes that the definitions express the paper's intended mathematics.
 
-`paper/` contains `main.tex`, `main.pdf`, `uniform_random_mala.bib`, and the
-three figure PDFs used by the source. The PDF checksum is recorded in
-[manuscript-pdf.sha256](validation/manuscript-pdf.sha256).
-The source-label audit checks active labels, references, citations, figure
-inputs, and the labels and numbers written in Lean comments.
+## Reproduce and inspect the checks
 
-All 19 theorem-level labels agree with the fresh LaTeX build. The Mills-ratio
-lemma has no theorem-level label; its equation labels identify Lemma C.1.
-[THEOREM_MAP.md](THEOREM_MAP.md) covers all 20 theorem environments and
-distinguishes direct formalizations from alternative proofs and scope limits.
+Use the commands in [README.md](README.md#reproduce-the-verification).
+The full gate checks source, manuscript references, regression tests,
+numerics, the Lean build, the public import, and actual axiom output.
+LaTeX is a separate check.
 
-The bundled PDF was produced with MiKTeX and retained unchanged. A separate
-TeX Live 2025 build produced the same page count and normalized extracted
-text. PDF bytes and exact rendering can differ across TeX distributions.
-Four underfull-box warnings remain; the LaTeX build has no overfull boxes.
-LaTeX also reports four duplicate PDF-destination warnings for `equation.18`.
-Source labels and theorem numbers are unique and resolved; the duplicate
-destination may affect the PDF equation hyperlink. Details are recorded in
-`validation/manuscript-build.txt`; the manuscript source and PDF were preserved.
-
-## Reproduction and records
-
-Run `lake exe cache get`, then `scripts/check.ps1` on Windows or
-`bash scripts/check.sh` on Linux/macOS. The gate checks source, manuscript
-references, regression tests, numerics, the full Lean build, the public
-import, and the actual axiom output. It does not invoke LaTeX automatically.
-Typesetting instructions are in [README.md](README.md).
-
-- [CHECK_OUTPUT.txt](CHECK_OUTPUT.txt): compact gate summary.
-- [Manuscript audit](validation/manuscript-audit.txt): source and reference checks.
-- [Reference audit](validation/lean-reference-audit.txt): concordance details.
+- [CHECK_OUTPUT.txt](CHECK_OUTPUT.txt): combined verification summary, identifying retained and refreshed checks.
+- [Kernel verification](validation/kernel-gate-passed.txt): the full Lean build and dependency audit.
+- [Manuscript audit](validation/manuscript-audit.txt): current source and reference checks.
+- [Reference audit](validation/lean-reference-audit.txt): statement comparison and documentation checks.
 - [Manuscript build](validation/manuscript-build.txt): typesetting and PDF comparison.
-- [Compiled labels](validation/manuscript-labels.json): label numbers and page locations.
+- [Compiled labels](validation/manuscript-labels.json): label numbers, page locations, and source hash.
 
-Full local logs are `validation/local/restored-source-gate.log` and
-`validation/local/axioms.log`; generated files are excluded from distribution.
-Earlier records under `validation/historical/` document their own snapshots.
-Static and numerical audits are supporting checks, distinct from Lean kernel
-verification. The axiom audit covers a selected set of declarations; the
-source audit and library build cover the complete development.
+Full local logs include `validation/local/mixing-corollary-gate.log`,
+`validation/local/axioms.log`, and `validation/local/reader-guide-review.log`.
+Generated files are excluded from distribution. Earlier records under
+`validation/historical/` document their own snapshots.

@@ -4,7 +4,8 @@
 This is the compact reviewer-facing import.  It exposes the certificate-free
 MALA local-overlap theorem under the stated first-order potential assumptions,
 weak-limit stability, Gaussian Bobkov and
-Bakry--Ledoux results, and the final concrete spectral-gap theorem for Qian
+Bakry--Ledoux results, aggregation, and the concrete spectral-gap and
+mixing-time corollaries for Qian
 Qin's *A global spectral gap for Metropolis-adjusted Langevin algorithm with
 a uniformly randomized step size*.
 
@@ -14,6 +15,8 @@ this module.
 -/
 
 import UniformRandomMALA.Concrete.C1MainTheorem
+import UniformRandomMALA.Concrete.TunedSpectralGap
+import UniformRandomMALA.Concrete.MixingTime
 import UniformRandomMALA.MALAOverlap
 import UniformRandomMALA.WeakLimitStability
 import UniformRandomMALA.GaussianBobkov

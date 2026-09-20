@@ -85,13 +85,18 @@
 		\(L\)-Lipschitz gradient, \(0<m\leq L<\infty\), and \(\kappa=L/m\).
 		It is known that, under warm-start assumptions, fixed-step Metropolis-adjusted Langevin algorithm (MALA) with properly tuned step size has mixing time of order $\kappa \sqrt{d}$ up to logarithmic factors.
 		By contrast, when the condition number is bounded away from one, no single fixed step size yields a matching spectral-gap lower bound of order $(\kappa \sqrt{d})^{-1}$ uniformly over this target class.
-		We show that MALA with a uniformly randomized step size admits a spectral-gap lower bound of this size.
-		At each iteration, the randomized-step MALA considered here draws \(h\) uniformly from
-		\((0,H)\) and performs one ordinary MALA transition with step size \(h\).
-		We show that, when \(H\) is of order \((L\sqrt{d})^{-1}\), the right spectral gap of randomized-step MALA admits a lower bound of order
-		\[
-		\frac{1}{\kappa\sqrt{d}\,[1+\log(d+1)+\log\kappa]}.
-		\]
+		We establish a global spectral-gap lower bound for MALA with
+			a uniformly randomized step size. At each iteration, the algorithm draws
+			\(h\) uniformly from \((0,H)\) and performs one ordinary MALA transition.
+			Choosing \(H\) of order
+			\[
+			\frac{1}{L\sqrt{d[1+\log(d+1)+\log\kappa]}}
+			\]
+			yields a right spectral-gap lower bound of order
+			\[
+			\frac{1}{\kappa\sqrt{d[1+\log(d+1)+\log\kappa]}},
+			\]
+			uniformly over the target class.
 		A key ingredient in the proof is a
 		Cheeger-type inequality for aggregating estimates of the one-step flow
 		of MALA out of measurable sets at various step-size scales.  It allows
@@ -120,7 +125,7 @@
 	
 	For an \(m\)-strongly convex and \(L\)-smooth potential $U(\cdot)$, \citet{WuSchmidlerChen2022}, strengthening results in \cite{ChewiEtAl2021}, show that the mixing time of (lazy) MALA from a warm start has the
 	minimax \(\kappa\sqrt{d}\) dependence, up to logarithmic factors, where $\kappa = L/m$ is the condition number.
-	This rate is achieved with a MALA step size~$h$ of order \((L\sqrt{d})^{-1}\) up to logarithmic factors.
+	This rate is achieved with a MALA step size~$h$ of order \((L\sqrt{d})^{-1}\) up to logarithmic factors that depend on the desired accuracy.
 	The proofs in \cite{ChewiEtAl2021} and \cite{WuSchmidlerChen2022} control acceptance on a high-probability region and then use an $s$-conductance argument \citep{LovaszSimonovits1993}.  
 	They therefore do not lower-bound the ordinary conductance over sets of every positive stationary mass, and their arguments do not yield a matching global Poincar\'e bound of the form 
 	\begin{equation} \label{eq:gap-ideal}
@@ -130,8 +135,10 @@
 	universal constants and the logarithmic factors.
 	(Recall that, for a lazy reversible Markov chain, the mixing time is roughly inversely proportional to the right spectral gap, so a gap of order $(\kappa \sqrt{d})^{-1}$ implies mixing time of order $\kappa \sqrt{d}$.)
 	Under only strong convexity and gradient Lipschitzness, a fixed-step global Poincaré bound at the $d^{-1/2}$
-	scale is impossible uniformly over the target class. Indeed, following arguments from \cite{ChewiEtAl2021,WuSchmidlerChen2022}, we show that a bound of the form \eqref{eq:gap-ideal} cannot hold uniformly over all $m$-strongly convex and $L$-smooth potentials if $\kappa - 1$ is greater than a positive constant.
-	In fact, in Proposition \ref{prop:minimax-fixed-step-ceiling}, it is shown that, when $\kappa \geq \kappa_0 > 1$ for some constant $\kappa_0$, for any $h > 0$, there exists an $m$-strongly convex and $L$-smooth potential~$U$ such that $\Gap(P_h)$ is upper bounded by a $\kappa_0$-dependent multiple of the maximum of $\log(\kappa d)/(\kappa d)$ and $e^{-cd}$, where $c > 0$ is universal.
+	scale is impossible uniformly over the target class.Related fixed-step spectral-gap obstructions were established by
+	\citet{ChewiEtAl2021,LeeShenTian2021,WuSchmidlerChen2022}.
+	In particular, \citet[Theorem~2]{LeeShenTian2021} give a spectral gap upper bound of order \(\log d /(\kappa d)\) when $\kappa = O(d^4)$.
+	In Proposition \ref{prop:minimax-fixed-step-ceiling}, it is shown that, when $\kappa \geq \kappa_0 > 1$ for some constant $\kappa_0$, for any $h > 0$, there exists an $m$-strongly convex and $L$-smooth potential~$U$ such that $\Gap(P_h)$ is upper bounded by a $\kappa_0$-dependent multiple of the maximum of $\log(\kappa d)/(\kappa d)$ and $e^{-cd}$, where $c > 0$ is universal.
 	
 	A global spectral-gap bound is useful for more than deriving a mixing-time estimate. 
 	Let \(P\) be a lazy (or positive semi-definite), \(\pi\)-reversible Markov kernel. 
@@ -143,7 +150,7 @@
 		[1-\Gap(P)]^n.
 	\end{equation}
 	Thus a spectral gap certifies convergence all the way to stationarity, rather than only for a prescribed accuracy \citep{KontoyiannisMeyn2012,RobertsRosenthal1997Hybrid,Rudolf2012}. 
-	More importantly for Monte Carlo, for a stationary reversible chain and a centered function in $L^2(\pi)$, a positive right spectral gap implies a central limit theorem for Markov-chain averages and controls their asymptotic variance \citep{KipnisVaradhan1986}. 
+	More importantly for Monte Carlo, for a stationary reversible chain and a function in $L^2(\pi)$, a positive right spectral gap implies a central limit theorem for Markov-chain averages and controls their asymptotic variance \citep{KipnisVaradhan1986}. 
 	Related spectral arguments also yield finite-sample variance, mean-square error, and concentration bounds for Markov-chain averages \citep{Rudolf2012,Paulin2015}. 
 	By contrast, a favorable warm-start mixing bound can coexist with very high autocorrelation for certain $L^2(\pi)$ test functions.
 	
@@ -170,12 +177,24 @@
 	step.  It uses one proposal and has essentially the same computational cost
 	as fixed-step MALA.  
 	By linearity of detailed balance, it is exactly \(\pi\)-reversible.
-	In \cref{thm:main}, we show that if $U$ is continuously differentiable, $m$-strongly convex, and has an $L$-Lipschitz gradient, and $H$ is of order
-	$(L\sqrt{d})^{-1}$, then $\Gap(\overline P_H)$ has a lower bound of order
-	$(\kappa\sqrt{d})^{-1}$, up to logarithmic factors, matching the minimax
-	mixing-time bound for fixed-step MALA.
+	Under the stated strong-convexity and gradient-Lipschitz
+		assumptions, \cref{thm:main} gives a global spectral-gap lower bound for
+		every \(H>0\). In particular, \cref{cor:sqrt-d-endpoint} shows that choosing
+		\(H\) of order \(1/[L\sqrt{d[1+\log(d+1)+\log\kappa]}]\) gives a
+		gap lower bound of order
+		\begin{equation} \nonumber
+		\frac{1}{\kappa\sqrt{d[1+\log(d+1)+\log\kappa]}}.
+		\end{equation}
+		Thus the \((\kappa\sqrt d)^{-1}\) dependence is achieved with only a
+		square-root logarithmic loss. The same corollary retains the bound for
+		the larger endpoint \(H\) of order \((L\sqrt d)^{-1}\), with a full
+		logarithmic loss.
 	
-	
+	With the smaller endpoint~$H$, the resulting mixing-time upper
+		bound for the half-lazy kernel \((I+\overline P_H)/2\) has
+		\(\kappa\sqrt{d[1+\log(d+1)+\log\kappa]} \log(M/\epsilon)\) dependence, where $\epsilon$ is the desired accuracy and $M$ is a warmness parameter for the initial distribution.
+	The scale parameter $H$ does not need to depend on~$\epsilon$.
+	This contrasts the mixing time bounds for fixed-step MALA in \cite{ChewiEtAl2021,WuSchmidlerChen2022}, where the step size~$h$ is dependent on a prescribed~$\epsilon$.
 	
 	
 	Randomization of Metropolis tuning parameters has been advocated as a
@@ -202,7 +221,7 @@
 	\phi(P_h) := \inf_{S: \, 0 < \pi(S) \leq 1/2} \frac{\mathcal{J}_{P_h}(S, S^c)}{\pi(S)}, \quad \mathcal{J}_{P_h}(S, S^c)=  \int_S P_h(x, S^c) \, \pi(\df x).
 	\]
 	To apply Cheeger's inequality, we want a lower bound on $\phi(P_h)$ that is of order $(\kappa \sqrt{d})^{-1/2}$ for a sufficiently large set of $h \in [0,H]$.
-	More precisely, \citet{LiuTong2026} obtain a lower bound on $\phi(P_h)$ of
+	\citet{LiuTong2026} obtain a lower bound on $\phi(P_h)$ of
 	order $(\kappa^2d)^{-1/2}$ for $h\lesssim(\kappa Ld)^{-1}$.  For $h$ of
 	order $(L\sqrt{d})^{-1}$, \citet{WuSchmidlerChen2022} obtain a lower bound of
 	order $(\kappa\sqrt{d})^{-1/2}$ on $\mathcal{J}_{P_h}(S,S^c)/\pi(S)$ when $\pi(S)$
@@ -214,7 +233,7 @@
 	When $\pi(S)$ is not too small, comparatively larger steps can be used: the Metropolis acceptance rate is lower bounded by a positive constant over~$S$, outside an exceptional set with small stationary mass \citep{ChewiEtAl2021,WuSchmidlerChen2022}.
 	Writing $\cK_t=(2/t)\int_{t/2}^tP_h\,\df h$ for the kernel averaged over the upper dyadic half of $(0,t)$, one can then lower-bound the one-step flow $\mathcal{J}_{\cK_t}(S,S^c)$ by a suitable multiple of $\pi(S)$.
 	For smaller sets, the exceptional region in the preceding argument can no longer be ignored, and we instead use a smaller, globally safe step size which leads to a constant uniform lower bound on the acceptance rate over the whole space.
-	Gaussian isoperimetry then supplies the corresponding lower bound on the flow out of~$S$.
+	Gaussian isoperimetry for strongly log-concave distributions then supplies the corresponding lower bound on the flow out of~$S$.
 	
 	Finally, we combine the flow estimates obtained at the different scales
 	using a Cheeger-type aggregation lemma (\cref{lem:fractional}) for mixtures of reversible Markov
@@ -233,6 +252,15 @@
 	\cref{thm:main,prop:minimax-fixed-step-ceiling,lem:fractional,thm:aggregation}.
 	The scope of these scripts and the verification status of the revised
 	first-order interface are described in \cref{sec:lean-verification}.
+	
+	The rest of the article is organized as follows.
+	The main result is stated in \cref{sec:main}.
+	\cref{sec:ingredients} lays out the ingredients of the proof of the main theorem.
+	The proof is completed in \cref{sec:main-proof}.
+	The description for Lean 4 formalization in \cref{sec:lean-verification} is followed by a simulation experiment comparing fixed- and randomized-step MALA in \cref{sec:simulations}.
+	The Appendices contain technical proofs and lemmas.
+	
+	
 	
 	%\subsection*{Contributions}
 	%
@@ -277,6 +305,13 @@
 	characterization of Metropolis adjustment and compare the Euler proposal
 	with exact Langevin diffusion.  \citet{WuSchmidlerChen2022} instead compare
 	one leapfrog step with continuous Hamiltonian dynamics.
+	Earlier quantitative rejection estimates and Wasserstein convergence
+	bounds for Langevin-based Metropolis algorithms targeting perturbations
+	of Gaussian measures were obtained by \citet{Eberle2014} under
+	higher-order regularity assumptions.
+	\citet{MangoubiVishnoi2019} analyze MALA acceptance through
+	Hamiltonian energy-conservation error under third- and fourth-order
+	regularity conditions, including for nonconvex targets.
 	%\citet{ChenGatmiry2023} develop a finite-dimensional
 	%integration-by-parts calculation.  No acceptance estimate from that paper is
 	%used here.  
@@ -321,12 +356,28 @@
 	step-size ranges.  We use this idea to combine flow estimates over a
 	geometric sequence of step-size ranges for randomized-step MALA.
 	
+	A complementary line of research develops alternative gradient-based
+	samplers and studies the number of oracle queries needed to reach a
+	prescribed distributional accuracy. Examples include randomized-midpoint
+	discretizations of underdamped Langevin dynamics
+	\citep{ShenLee2019} and the path-space rejection methods of
+	\citet{ChenChewiRakhlinZhang2026}.
+	Under their regularity and initialization assumptions, the latter
+	achieve expected gradient-query complexity with the more favorable
+	\(\kappa^{2/3}d^{1/3}\) dependence, up to logarithmic factors, for sampling in
+	R\'enyi divergence.
+	Like the mixing time bounds in \cite{ChewiEtAl2021,WuSchmidlerChen2022}, these results concern a prescribed level of accuracy, on which the parameters in the sampling algorithm depend.
+	As mentioned earlier, the global spectral-gap bound herein supplies more than a prescribed-accuracy
+	sampling guarantee.
+	It provides guarantees for both convergence and long-run
+	Monte Carlo estimation, and it does so in a way that the Markov kernel can stay fixed for all levels of accuracy.
+	
 	\subsection*{Generative AI disclosure}
 	
 	This project began when the author asked ChatGPT 5.6 Sol (OpenAI) whether MALA admits a useful global spectral-gap bound at the $d^{-1/2}$ step-size scale. ChatGPT suggested studying a uniformly randomized-step version of MALA—an algorithmic variant that had previously appeared in the literature—and developed the principal proof strategy and initial versions of the major mathematical arguments in this article. It also assisted in drafting and revising the manuscript and generated all code used for the numerical experiments and the Lean 4 formal verification. The human author checked the relevant literature, scrutinized and revised the AI-generated arguments, verified the mathematical claims and computations, inspected the simulation methodology and results, and confirmed that the Lean development was kernel-checked without proof placeholders or problem-specific axioms. The human author takes full responsibility for the content and correctness of the article.
 	
 	
-	\section{Setup and Main Result}
+	\section{Setup and Main Result} \label{sec:main}
 	
 	Assume throughout, except where explicitly stated otherwise, that \(d\) is a
 	positive integer and that \(U:\R^d\to\R\) is continuously differentiable,
@@ -445,11 +496,11 @@
 	
 	\begin{theorem} \label{thm:main}
 		There are universal constants $A_0 \in [1,\infty)$, $b_0 \in (0,1/2]$, and
-		\(c_0 > 0\) such that the following holds.  Define
+		\(c_0 \in (0,\infty)\) such that the following holds.  Define
 		\begin{equation*}
 			p_\star=A_0[1+\log(d+1)+\log\kappa].
 		\end{equation*}
-		Then, for every \(H>0\),
+		Then, for every \(H \in (0,\infty)\),
 		\begin{equation}\label{eq:master-gap}
 			\Gap(\overline P_H)
 			\geq
@@ -468,8 +519,8 @@
 	\end{theorem}
 	
 	\begin{corollary}\label{cor:sqrt-d-endpoint}
-		Under the assumptions and notations of Theorem~\ref{thm:main}, let
-		$H=c/(L\sqrt{d})$ for some $c>0$.
+		Under the notations of Theorem~\ref{thm:main},
+		let \(c \in (0,\infty)\), and let \(H=c/(L\sqrt d)\).
 		Then
 		\[
 		\Gap(\overline P_H) \geq \frac{c_0}{\kappa\sqrt{d}}
@@ -481,14 +532,22 @@
 		\Gap(\overline P_H) \geq \frac{c_0}{\kappa\sqrt{d}}
 		\min\left\{ c, \frac{b_0^2}{2cp_\star} \right\}.
 		\]
+		Choosing \(c=c'/\sqrt{p_{\star}}\) for some $c' \in (0,\infty)$ gives
+		\[
+		\Gap(\overline P_H)
+		\geq
+		\frac{c_0}{\kappa\sqrt{d\,p_\star}}
+		\min\left\{c',\frac{b_0^2}{2c'}\right\}.
+		\]
 	\end{corollary}
 	
-	The spectral gap lower bound of order $(\kappa \sqrt{d})^{-1}$, up to logarithmic factors, for randomized-step MALA is in sharp contrast with the following upper bound on the spectral gap of fixed-step MALA, which is proved in \cref{app:fixed-step-obstruction}.
+	
+	This spectral gap bound for randomized-step MALA is in sharp contrast with the following upper bound on the spectral gap of fixed-step MALA, which is proved in \cref{app:fixed-step-obstruction}.
 	
 	\begin{proposition}
 		\label{prop:minimax-fixed-step-ceiling}
-		Fix $\kappa_0>1$.  There are a universal constant $c>0$ and a
-		constant $C>0$ depending only on $\kappa_0$ such that the
+		Fix $\kappa_0>1$.  There are a universal constant $c \in (0,\infty)$ and a
+		constant $C \in (0,\infty)$ depending only on $\kappa_0$ such that the
 		following holds.  Let $d\geq2$, $0<m<L$, and
 		$\kappa=L/m\geq\kappa_0$.  Then
 		\begin{equation}
@@ -507,162 +566,61 @@
 		target density proportional to $e^{-U}$.
 	\end{proposition}
 	
-	The proof of \cref{prop:minimax-fixed-step-ceiling} utilizes constructions from \cite{ChewiEtAl2021} and \cite{WuSchmidlerChen2022}.
-	Both of these works construct a hard target distribution and use it to bound the spectral gap of fixed-step MALA from above.
+	The proof of \cref{prop:minimax-fixed-step-ceiling} utilizes constructions from \cite{ChewiEtAl2021,LeeShenTian2021,WuSchmidlerChen2022}.
+	These works construct a hard target distribution and use it to bound the spectral gap of fixed-step MALA from above.
 	Their results do not readily yield the upper bound herein.
 	We use a modified version of the construction in \cite{WuSchmidlerChen2022} to obtain the bound.
 	
 	
-		A mixing-time bound follows from \cref{cor:sqrt-d-endpoint}.
-		Let \(\mu\ll\pi\) be a probability distribution on \(\R^d\) with
-		\(\df\mu/\df\pi\in L^2(\pi)\). For a Markov kernel \(P\) with
-		stationary distribution \(\pi\) and \(\epsilon>0\), define
-		\[
-		n_{\mathrm{mix}}(P,\mu,\epsilon)
-		=\inf\left\{n\in\{0,1,\ldots\}:
-		\norm{\mu P^n-\pi}_{\mathrm{TV}}\leq\epsilon\right\},
-		\qquad \inf\varnothing=\infty.
-		\]
-		Let \(H=c/(L\sqrt d)\), where \(c>0\), and put
+	A mixing-time bound follows from \cref{cor:sqrt-d-endpoint}.
+	Let \(\mu\ll\pi\) be a probability distribution on \(\R^d\) with
+	\(\df\mu/\df\pi\in L^2(\pi)\). For a Markov kernel \(P\) with
+	stationary distribution \(\pi\) and \(\epsilon>0\), define
+	\[
+	n_{\mathrm{mix}}(P,\mu,\epsilon)
+	=\inf\left\{n\in\{0,1,\ldots\}:
+	\norm{\mu P^n-\pi}_{\mathrm{TV}}\leq\epsilon\right\},
+	\qquad \inf\varnothing=\infty.
+	\]
+	Then the following holds.
+	
+	\begin{corollary} \label{cor:mixing}
+		Under the notations of Theorem~\ref{thm:main}, let \(H=c/(L\sqrt{d\,p_\star})\), where \(c>0\), and put
 		\[
 		\ell_{\mu,\epsilon}
 		=\log\max\left\{1,
 		\frac{1}{2\epsilon}
 		\norm{\frac{\df\mu}{\df\pi}-1}_{L^2(\pi)}\right\}.
 		\]
-		Since \(0<\Gap(\overline P_H)/2\leq1\), the inequality
-		\(1-x\leq e^{-x}\) for \(x\in[0,1]\), together with
-		\eqref{eq:TVbound} and \cref{cor:sqrt-d-endpoint}, gives
+		Then
 		\[
 		\begin{aligned}
 			n_{\mathrm{mix}}\left(\frac{I+\overline P_H}{2},\mu,\epsilon\right)
 			&\leq
 			\left\lceil\frac{2\ell_{\mu,\epsilon}}
-			{\Gap(\overline P_H)}\right\rceil\\
-			&\leq
+			{\Gap(\overline P_H)}\right\rceil
+			\leq
 			\left\lceil
-			C\ell_{\mu,\epsilon}\,\kappa\sqrt d\,
-			\max\left\{\frac1c,
-			c[1+\log(d+1)+\log\kappa]\right\}
-			\right\rceil,
+			C\ell_{\mu,\epsilon}\,\kappa\sqrt {d p_{\star} } \right\rceil,
 		\end{aligned}
 		\]
-		where \(C>0\) is universal. The logarithm defining
+		where \(C \in (0,\infty)\) depends only on~$c$. 
+	\end{corollary}
+	\begin{proof}
+		Since \(0<\Gap(\overline P_H)/2\leq1\), the inequality
+		\(1-x\leq e^{-x}\) for \(x\in[0,1]\), together with
+		\eqref{eq:TVbound} and \cref{cor:sqrt-d-endpoint} gives the desired mixing time bound.
+		The logarithm defining
 		\(\ell_{\mu,\epsilon}\) is finite and nonnegative, including when
 		\(\mu=\pi\). If \(\ell_{\mu,\epsilon}=0\), the initial total-variation
 		error is already at most \(\epsilon\), so the mixing time is zero.
-		At the endpoint \(\Gap(\overline P_H)/2=1\),
+		In the edge case \(\Gap(\overline P_H)/2=1\),
 		\eqref{eq:TVbound} shows that the chain has law \(\pi\) after one step
 		from \(\mu\); the same bound remains valid.
+	\end{proof}
 	
 	
-	%\begin{corollary} \label{cor:endpoints}
-	%In the context of Theorem~\ref{thm:main}, let
-	%\[
-	%M_{d,\kappa}
-	%=
-	%\max\left\{
-	%\frac{1}{\sqrt{p_\star(d+p_\star)}},
-	%\frac1d
-	%\right\}.
-	%\]
-	%For every \(c>0\), if \(H=cM_{d,\kappa}/L\), then
-	%\begin{equation}\label{eq:adapted-endpoint}
-	%\Gap(\overline P_H)
-	%\geq
-	%\frac{c_0}{\kappa}
-	%\frac{\min\{c,b_0\}^{2}}{c}
-	%M_{d,\kappa}.
-	%\end{equation}
-	%If instead \(H=c/(L\sqrt{d})\), then
-	%\begin{equation}\label{eq:sqrtd-endpoint-general}
-	%\Gap(\overline P_H)
-	%\geq
-	%\frac{c_0\sqrt{d}}{c\kappa}
-	%\min\left\{
-	%\frac{c}{\sqrt{d}},
-	%b_0M_{d,\kappa}
-	%\right\}^{2}.
-	%\end{equation}
-	%In particular, whenever \(p_\star\leq d\),
-	%\begin{equation}\label{eq:sqrtd-endpoint}
-	%\Gap(\overline P_H)
-	%\geq
-	%\frac{c_0}{\kappa\sqrt{d}}
-	%\frac{\min\{c,b_0/\sqrt{2p_\star}\}^{2}}{c}.
-	%\end{equation}
-	%Thus for every fixed \(c>0\), in the regime \(p_\star\leq d\), the
-	%right-hand side has order
-	%\[
-	%\frac{1}{\kappa\sqrt{d}\,\{1+\log(d+1)+\log\kappa\}}.
-	%\]
-	%\end{corollary}
 	
-	%\begin{proof}
-	%Put \(M=M_{d,\kappa}\) for the duration of this proof.  If
-	%\(H=cM/L\), then the right-hand side of \eqref{eq:master-gap} is
-	%\[
-	% c_0\frac{mL}{cM}
-	% \left(\frac{M}{L}\min\{c,b_0\}\right)^2
-	% =\frac{c_0}{\kappa}
-	%   \frac{\min\{c,b_0\}^2}{c}M,
-	%\]
-	%which is \eqref{eq:adapted-endpoint}.  If
-	%\(H=c/(L\sqrt{d})\), the same substitution gives
-	%\[
-	% c_0\frac{mL\sqrt{d}}{c}
-	% \left[
-	%   \frac1L\min\left\{\frac c{\sqrt{d}},b_0M\right\}
-	% \right]^2
-	% =\frac{c_0\sqrt{d}}{c\kappa}
-	% \min\left\{\frac c{\sqrt{d}},b_0M\right\}^2,
-	%\]
-	%which is \eqref{eq:sqrtd-endpoint-general}.
-	%
-	%Suppose finally that \(p_\star\leq d\).  Then
-	%\[
-	%M
-	%\geq\frac{1}{\sqrt{p_\star(d+p_\star)}}
-	%\geq\frac{1}{\sqrt{2p_\star d}}.
-	%\]
-	%Consequently,
-	%\[
-	% \min\left\{\frac c{\sqrt{d}},b_0M\right\}
-	% \geq
-	% \frac1{\sqrt{d}}
-	% \min\left\{c,\frac{b_0}{\sqrt{2p_\star}}\right\}.
-	%\]
-	%Substitution in \eqref{eq:sqrtd-endpoint-general} proves
-	%\eqref{eq:sqrtd-endpoint}.
-	%\end{proof}
-	
-	%\begin{remark}[Interpretation of \(H\)]
-	%The theorem imposes no upper bound on the endpoint.  If \(H\) is smaller
-	%than the certified scale, the proof uses the upper half of \((0,H)\), and
-	%the lower bound is proportional to \(mH\).  If \(H\) is larger, the
-	%proof ignores the excess range and uses a fixed collection of certified
-	%subintervals.  Their total selection probabilities are proportional to
-	%\(1/H\), which explains the over-tuning deterioration.  This is a
-	%robustness statement, not a claim that the proof-optimal endpoint is
-	%practically optimal.
-	%\end{remark}
-	%
-	%\begin{remark}[Origin of the logarithmic loss]\label{rem:log-loss}
-	%A moment order \(p\) yields a useful step of order
-	%\(\{L\sqrt{p(d+p)}\}^{-1}\).  The first moment order must be at least a
-	%constant multiple of
-	%\(1+\log(d+1)+\log\kappa\) so that the exceptional set is smaller than
-	%the Gaussian boundary layer for sets of moderate mass.  The additional
-	%factor \(\sqrt{p}\) in the rejection estimate therefore becomes a factor
-	%\(p_\star\) in the spectral-gap denominator.  A sharper conditional
-	%estimate of order
-	%\(Lh\sqrt{d+p}+L^2h^2(d+p)\) would remove this loss and recover the
-	%\((\kappa\sqrt{d})^{-1}\) scale in the same framework.
-	%\end{remark}
-	
-	The smooth subclass in \cref{prop:minimax-fixed-step-ceiling} is intentional:
-	an upper bound on the infimum over this subclass also bounds the infimum
-	over the larger class in \eqref{eq:first-order-assumptions}.
 	
 	\section{Ingredients of the Proof} \label{sec:ingredients}
 	
@@ -862,10 +820,8 @@
 	
 	
 	
-	The following lemma carries out this aggregation for a generic mixture of reversible Markov kernels.  Roughly speaking, it
-	allows the kernel that supplies the useful one-step flow bound to depend on
-	the set under consideration, while keeping track of how often each kernel
-	is selected in the mixture.  The lemma can also be derived from the general
+	The following lemma carries out this aggregation for a generic mixture of reversible Markov kernels.   
+	It is possible to derive the lemma from the general
 	Cheeger inequality of \citet{ChenWang2000}.  We give a direct proof in
 	\cref{app:fractional}.
 	
@@ -911,9 +867,13 @@
 		\]
 	\end{lemma}
 	
-	The above lemma gives the following convenient harmonic-sum
+	The above lemma gives the following convenient hard-assignment
 	formulation, which we use to combine the flow bounds in
 	\cref{prop:flow}.
+	Roughly speaking, \cref{thm:aggregation}
+	allows the kernel that supplies the useful one-step flow bound to depend on
+	the set under consideration, while keeping track of how often each kernel
+	is selected in the mixture. 
 	
 	\begin{theorem}
 		\label{thm:aggregation}
@@ -1187,16 +1147,16 @@
 			\geq
 			\sum_{j=0}^J\frac{t_j}{2H}\cE_{\cK_{t_j}}(f,f).
 		\end{equation}
-		This allows us to apply \cref{thm:aggregation}.
+		This prompts us to apply \cref{thm:aggregation}.
 		
 		Let \(S\) be measurable with \(0<\pi(S)\leq1/2\).
 		We assign $S$ to a component $\cK_{t_j}$.
 		That is, we identify the index $j(S)$ in \cref{thm:aggregation}.
 		Since \(A_0\geq1\), \(d\geq1\), and \(\kappa\geq1\),
-			\[
-			\frac{p_0}{2}=\frac{p_\star}{2}
-			\geq\frac{1+\log2}{2}>\log2.
-			\]
+		\[
+		\frac{p_0}{2}=\frac{p_\star}{2}
+		\geq\frac{1+\log2}{2}>\log2.
+		\]
 		The intervals
 		\([\log 2,p_0/2]\), \((p_{j-1}/2,p_j/2]\) for \(1\leq j\leq J\), and
 		\((p_J/2,\infty)\) are disjoint and cover \([\log 2,\infty)\).  Thus the
@@ -1402,7 +1362,8 @@
 	
 	\section{Lean verification}\label{sec:lean-verification}
 	
-	The accompanying Lean~4 development provides proof scripts for the
+	The accompanying development in Lean~4
+	\citep{deMouraUllrich2021} provides proof scripts for the
 	principal results of this article. Its first-order input consists of a
 	continuously differentiable potential, the strong-convexity inequality in
 	\eqref{eq:first-order-assumptions}, and a Lipschitz bound on the actual
@@ -1410,14 +1371,13 @@
 	
 	The supplied scripts connect this input to both the non-lazy and half-lazy
 	conclusions of \cref{thm:main}, with the same universal constants in the two
-	conclusions, and to both bounds in \cref{cor:sqrt-d-endpoint}. The
+	conclusions, and to \pRevision{the first two} bounds in \cref{cor:sqrt-d-endpoint}. The
 	smooth hard-target construction and the fixed-step minimax statement in
 	\cref{prop:generic-fixed-step-obstruction,prop:minimax-fixed-step-ceiling}
 	are retained. The randomized-step proof uses the mixture comparison in
 	\cref{lem:Kt}, the overlap and separation bounds in
 	\cref{prop:overlap,prop:separated}, both flow bounds in \cref{prop:flow},
-	and the aggregation results in \cref{lem:fractional,thm:aggregation},
-	with the stated $L^2$ energy-domination assumption.
+	and the aggregation results in \cref{lem:fractional,thm:aggregation}.
 	
 	The stationary-rejection and overlap conclusions (\cref{prop:stationary-rejection,prop:overlap}) are obtained through an
 	alternative discrete-time proof, using finite-dimensional Gaussian
@@ -1438,8 +1398,9 @@
 	reversibility and Dirichlet forms of kernel mixtures, lazification,
 	flow aggregation, spectral-gap upper bounds, and weak-limit stability.
 	
-	The sole direct external Lean library is mathlib; its standard dependencies
-	and Lean's logical foundations are retained. The revised source contains
+	The sole direct external Lean library is mathlib
+	\citep{Mathlib2020}; its standard dependencies and Lean's logical
+	foundations are retained. The revised source contains
 	no proof placeholders or paper-specific axiom declarations.
 	
 	The complete development was kernel-checked with Lean~4.33.0 and
@@ -1467,7 +1428,7 @@
 	As shown in \cref{prop:generic-fixed-step-obstruction},
 	\(mI_d\preceq\nabla^2U_{d,h_0}(x)\preceq LI_d\) for every \(x\).
 	Throughout, \(m=0.1\) and \(L=1\), so \(\kappa=10\).
-	This type of construction appears in \cite{ChewiEtAl2021} and \cite{WuSchmidlerChen2022}, and it serves as a hard target for fixed-step MALA.
+	This type of construction appears in \citep{ChewiEtAl2021,LeeShenTian2021,WuSchmidlerChen2022}, and it serves as a hard target for fixed-step MALA.
 	
 	For an endpoint \(H>0\), we compare a fixed-step MALA $P_h$ with \(h=H\) and the randomized-step $\bar{P}_H$.  We report the mean
 	acceptance probability $\E\left[
@@ -1643,13 +1604,15 @@
 	\label{app:fixed-step-obstruction}
 	
 	
-	We follow an
-	existing line of research concerning the mixing properties of fixed-step MALA for hard target distributions.
-	A perturbed-Gaussian target constructed in
-	\cite[Theorems~8, 9, and~36]{ChewiEtAl2021} forms the basis of our analysis.  Subsequently,
-	\citet[Equation~(28) and Lemma~8]{WuSchmidlerChen2022} combined a perturbed Gaussian block with a Gaussian coordinate, refining the construction.
-	The two works do not readily yield the spectral gap upper bound in \cref{prop:minimax-fixed-step-ceiling}.
-	Below, we use a modified version of the construction in \cite{WuSchmidlerChen2022} to derive the upper bound.
+	We follow an existing line of research on hard targets for fixed-step
+	MALA. Perturbed-Gaussian constructions appear in
+	\citet[Theorems~8, 9, and~36]{ChewiEtAl2021}.
+	The product structure combining a Gaussian coordinate with
+	cosine-perturbed Gaussian coordinates appears in
+	\citet[Supplement, equation~(20)]{LeeShenTian2021} and
+	\citet[Equation~(28) and Lemma~8]{WuSchmidlerChen2022}.
+	Below, we use a modified version of the latter construction to obtain
+	the explicit bound in \cref{prop:minimax-fixed-step-ceiling}.
 	
 	
 	\begin{proposition}
@@ -1751,8 +1714,10 @@
 		\[
 		Y=\sqrt{2h}\,Z.
 		\]
-		For a general differentiable potential~$U$, the log Hastings ratio
-		for a proposal from $x$ to~$y$ is
+		For a general differentiable potential~\(U\), the log Hastings ratio
+		for a proposal from \(x\) to \(y\) has the following standard
+		representation; see also
+		\citet[Proposition~1.3, equation~(1.33)]{Eberle2014}.
 		\begin{align}
 			R_h(x,y)
 			&:=\log
@@ -2476,7 +2441,7 @@
 	\end{equation*}
 	The process \(\theta_t\) is continuous and adapted, hence predictable.  Since
 	\(X\) has continuous paths, \(\int_0^h\norm{\theta_s}^2\,\df s<\infty\) almost
-	surely on every finite interval, so the It\^o integral is well defined as a
+	surely on every finite interval, so the It\^o integral $M_t$ is well defined as a
 	continuous local \(\mathbb P\)-martingale.  Its quadratic variation is
 	\([M]_t=V_t\).  The Lipschitz property of \(\nabla U\) and
 	\cref{lem:integrated-increments} give
@@ -2700,7 +2665,7 @@
 		e^{(4p^2-p)V_{h\wedge\tau_n}}.
 		\]
 		Cauchy--Schwarz, \eqref{eq:Lambda-mean-one}, and the inequalities
-			\(V_{h\wedge\tau_n}\leq V_h\) and \(8p^2-2p\geq0\), valid for \(p\geq1\), yield
+		\(V_{h\wedge\tau_n}\leq V_h\) and \(8p^2-2p\geq0\), valid for \(p\geq1\), yield
 		\begin{align*}
 			\E\left[D_{h\wedge\tau_n}^{2p}\right]
 			&\leq
@@ -2847,9 +2812,9 @@
 		\(s\leq\sigma_n\) is immaterial for the Lebesgue and It\^o integrals.
 		
 		Apply the upper inequality in
-			\citet[Theorem~2, equation~(23)]{Ren2008}, valid for every real \(p\geq1\),
-			to the stopped continuous martingale \(R^{(n)}\) at time \(h\).
-			This yields
+		\citet[Theorem~2, equation~(23)]{Ren2008}, valid for every real \(p\geq1\),
+		to the stopped continuous martingale \(R^{(n)}\) at time \(h\).
+		This yields
 		\begin{equation}\label{eq:BDG-stopped}
 			\norm{R_h^{(n)}}_{L^p(\mathbb P)}
 			\leq
@@ -2885,16 +2850,16 @@
 		=\norm{D_h}_{L^{2p}(\mathbb P)}.
 		\]
 		Since \(2p > 1\), Doob's maximal inequality
-			\citep[Chapter~II, Theorem~1.7]{RevuzYor1999} gives
-			\begin{align*}
-				\norm{\sup_{0\leq s\leq h}D_s}_{L^{2p}(\mathbb P)}
-				&\leq\frac{2p}{2p-1}
-				\sup_{0\leq s\leq h}\norm{D_s}_{L^{2p}(\mathbb P)}\\
-				&=\frac{2p}{2p-1}\norm{D_h}_{L^{2p}(\mathbb P)}
-				\leq2e^{4c^2},
-			\end{align*}
-			where the last inequality uses \eqref{eq:D-2p-uniform} and
-			\(2p/(2p-1)\leq2\) for \(p\geq1\). Moreover,
+		\citep[Chapter~II, Theorem~1.7]{RevuzYor1999} gives
+		\begin{align*}
+			\norm{\sup_{0\leq s\leq h}D_s}_{L^{2p}(\mathbb P)}
+			&\leq\frac{2p}{2p-1}
+			\sup_{0\leq s\leq h}\norm{D_s}_{L^{2p}(\mathbb P)}\\
+			&=\frac{2p}{2p-1}\norm{D_h}_{L^{2p}(\mathbb P)}
+			\leq2e^{4c^2},
+		\end{align*}
+		where the last inequality uses \eqref{eq:D-2p-uniform} and
+		\(2p/(2p-1)\leq2\) for \(p\geq1\). Moreover,
 		\eqref{eq:V-J} gives
 		\[
 		\norm{V_h}_{L^p(\mathbb P)}^{1/2}
@@ -3119,14 +3084,14 @@
 		\overline r_t(x)=\frac2t\int_{t/2}^t r_h(x)\,\df h.
 		\]
 		Minkowski's integral inequality and \cref{prop:stationary-rejection} give
-			\[
-			\begin{aligned}
-				\norm{\overline r_t}_{L^p(\pi)}
-				&\leq\frac2t\int_{t/2}^t\norm{r_h}_{L^p(\pi)}\,\df h\\
-				&\leq CL\sqrt{p(d+p)}\,\frac2t\int_{t/2}^t h\,\df h
-				=\frac{3C}{4}Lt\sqrt{p(d+p)}.
-			\end{aligned}
-			\]
+		\[
+		\begin{aligned}
+			\norm{\overline r_t}_{L^p(\pi)}
+			&\leq\frac2t\int_{t/2}^t\norm{r_h}_{L^p(\pi)}\,\df h\\
+			&\leq CL\sqrt{p(d+p)}\,\frac2t\int_{t/2}^t h\,\df h
+			=\frac{3C}{4}Lt\sqrt{p(d+p)}.
+		\end{aligned}
+		\]
 		Set
 		\[
 		G_{t,p}=\{x:\overline r_t(x)\leq1/3\}.
@@ -3578,8 +3543,8 @@
 		where $A_0$ satisfies
 		\begin{equation}\label{eq:explicit-A0-choice}
 			A_0\geq
-				\frac{13\log 2+\frac12\log(2/b_0)}
-				{\log 16-\frac12}.
+			\frac{13\log 2+\frac12\log(2/b_0)}
+			{\log 16-\frac12}.
 		\end{equation}
 		Then, for every \(u\in[\log 2,p/2]\),
 		\begin{equation}\label{eq:exceptional-budget-appendix}
@@ -3592,12 +3557,12 @@
 	
 	\begin{proof}
 		Since \(b_0\leq1/2\), the bound
-			\eqref{eq:explicit-A0-choice} implies \(A_0\geq1\).
-			Consequently,
-			\[
-			p\geq p_\star\geq1+\log2>2\log2>1,
-			\]
-			so \([\log2,p/2]\) is nonempty.
+		\eqref{eq:explicit-A0-choice} implies \(A_0\geq1\).
+		Consequently,
+		\[
+		p\geq p_\star\geq1+\log2>2\log2>1,
+		\]
+		so \([\log2,p/2]\) is nonempty.
 		The last assertion follows directly from \(m/L=1/\kappa\):
 		\[
 		mtu
@@ -3637,21 +3602,21 @@
 		+\frac12\log\kappa+\frac14\log(d+1).
 		\]
 		By \eqref{eq:explicit-A0-choice} and \(b_0\leq1/2\),
-			\[
-			A_0\left(\log16-\frac12\right)
-			\geq13\log2+\frac12\log(2/b_0)
-			\geq14\log2>\frac12.
-			\]
-			Since \(\log(d+1)\) and \(\log\kappa\) are nonnegative, these
-			bounds and \(p\geq p_\star\) give
-			\begin{align*}
-				p\left(\log16-\frac12\right)
-				&\geq A_0\left(\log16-\frac12\right)
-				[1+\log(d+1)+\log\kappa]\\
-				&\geq13\log2+\frac12\log(2/b_0)
-				+\frac14\log(d+1)+\frac12\log\kappa.
-			\end{align*}
-			This proves \eqref{eq:A0-sufficient}, uniformly in all parameters.
+		\[
+		A_0\left(\log16-\frac12\right)
+		\geq13\log2+\frac12\log(2/b_0)
+		\geq14\log2>\frac12.
+		\]
+		Since \(\log(d+1)\) and \(\log\kappa\) are nonnegative, these
+		bounds and \(p\geq p_\star\) give
+		\begin{align*}
+			p\left(\log16-\frac12\right)
+			&\geq A_0\left(\log16-\frac12\right)
+			[1+\log(d+1)+\log\kappa]\\
+			&\geq13\log2+\frac12\log(2/b_0)
+			+\frac14\log(d+1)+\frac12\log\kappa.
+		\end{align*}
+		This proves \eqref{eq:A0-sufficient}, uniformly in all parameters.
 	\end{proof}
 	
 	\subsection{Proving Proposition~\ref{prop:flow}}
@@ -3749,8 +3714,8 @@
 		for a nonnegative function \(g\in L^2(\varpi)\)
 		such that
 		$\varpi(g>0)\leq 1/2$.
-%		If $\sum_{j=1}^N\gamma_j\cE_{K_j}(g,g)=\infty$, the desired inequality
-%		is immediate, so assume this sum is finite.
+		%		If $\sum_{j=1}^N\gamma_j\cE_{K_j}(g,g)=\infty$, the desired inequality
+		%		is immediate, so assume this sum is finite.
 		For \(t\geq0\), let
 		\[
 		A_t=\{x:g(x)^2>t\}.
@@ -4016,7 +3981,7 @@
 		p_{\star}(d+p_{\star}) + \sum_{j=1}^J (d+p_j) \leq C p_{\star}(d+p_{\star})
 		\]
 		for a universal~$C$.
-		  Because \(p_\star<d\), one
+		Because \(p_\star<d\), one
 		has \(J\geq1\).  Minimality of \(J\) gives
 		\(4^{J-1}p_\star<d\), and hence
 		\[
@@ -4031,12 +3996,12 @@
 		<\frac{16d}{3}.
 		\]
 		Moreover, \(p_\star\geq A_0[1+\log(d+1)]\),
-			\(A_0\geq1\), and \(p_\star\geq1\) imply
-			\[
-			1+\log_4 d
-			\leq1+\frac{p_\star}{A_0\log4}
-			\leq\left(1+\frac1{\log4}\right)p_\star.
-			\]
+		\(A_0\geq1\), and \(p_\star\geq1\) imply
+		\[
+		1+\log_4 d
+		\leq1+\frac{p_\star}{A_0\log4}
+		\leq\left(1+\frac1{\log4}\right)p_\star.
+		\]
 		Therefore
 		\[
 		\sum_{j=1}^J(d+p_j)

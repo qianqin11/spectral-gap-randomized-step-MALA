@@ -1,50 +1,14 @@
-FORMALIZATION VERIFICATION PASSED — 2026-09-16
-Completed: 2026-09-16T21:45:00-05:00
+LEAN KERNEL VERIFICATION PASSED — 2026-09-19
 
-Summary of validation/local/restored-source-gate.log.
+Full-gate log: validation/local/mixing-corollary-gate.log
 Toolchain: Lean 4.33.0; Lake 5.0.0; mathlib 4.33.0.
-
-STATIC AUDIT PASSED
-Lean files: 155
-Declarations: 2069
-Explicit `by` proof blocks: 5808
-Placeholders (`sorry`, `admit`, project `axiom`): none
-Local imports: resolved
-Comments, strings, and (), [], {} delimiters: balanced
-NOTE: this is not a Lean kernel check; run `lake build`.
-
-FIRST-ORDER SOURCE AUDIT PASSED
-Local import graph: 155 modules; no cycles
-Direct external library: mathlib only (standard transitive dependencies retained)
-C1 input: actual gradient; no Hessian or upper-Taylor certificate field
-No detected native_decide, unsafe, implemented_by, sorryAx, or ofReduceBool
-This is a source check, NOT Lean elaboration or kernel verification.
-
-MANUSCRIPT AUDIT PASSED
-PDF SHA-256: a6baa1d1131e7c9f3b73022b1c2a46d73fb115e372af96eb476bc4f6894740be
-Bundled manuscript: main.tex, main.pdf, bibliography, and referenced figures
-TeX labels: 108; references: 252 uses over 104 labels
-Citations: 117 key uses over 48 keys; bibliography: 58 entries
-Figures: 3 includes
-Lean manuscript labels: 122 uses; numbered theorem/label pairs: 78
-Source checks only; LaTeX compilation and Lean kernel verification are separate checks.
-
-Manuscript regression tests: 21 passed.
-
-NUMERIC SANITY PASSED
-Seed: 20260815
-Random trials: 2000
-Checked: min/max gluing, theta identities, reciprocal constants,
-safe/ladder coefficients, both endpoint substitutions, and
-the current assumption-free Corollary 2.2 simplification.
-NOTE: this is not a proof and not a Lean kernel check.
-
-Build completed successfully (3439 jobs).
+Build completed successfully (3976 jobs).
 Public import: lake env lean UniformRandomMALA/AllResults.lean passed.
-AXIOM AUDIT PASSED: 266 declarations; only ['Classical.choice', 'Quot.sound', 'propext']
-FULL SOURCE BUILD AND AXIOM AUDIT PASSED
-PowerShell wrapper exit status: 0
+AXIOM AUDIT PASSED: 281 declarations; only Classical.choice, Quot.sound, propext.
+Full-gate PowerShell wrapper exit status: 0.
 
-Separate manuscript build: PASS; 47 pages; no unresolved references/citations.
-Bundled and rebuilt PDF text: equal on all pages after normalization.
-Lean declaration and proof terms were unchanged by the reference edits.
+All 165 Lean source files and three dependency-configuration files match the
+checksums of that verified version. The later manuscript wording and documentation
+changes required no Lean proof changes and no repeat of the complete build.
+The current manuscript and documentation checks are recorded separately in
+CHECK_OUTPUT.txt and validation/lean-reference-audit.txt.

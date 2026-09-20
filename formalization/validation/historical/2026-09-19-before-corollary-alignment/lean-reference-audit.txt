@@ -1,0 +1,22 @@
+PAPER-TO-LEAN REFERENCE AUDIT PASSED — 2026-09-19
+
+All 110 active source labels match the freshly compiled LaTeX auxiliary file.
+All 20 theorem-level labels have matching printed numbers.
+The map also covers the unlabeled Mills Lemma C.1 through eq:mills-two-sided
+and eq:log-tail-simple, for 21 theorem environments in total.
+
+Lean comments: 134 manuscript-label uses and 90 numbered theorem/label pairs checked.
+All numbered manuscript mentions require an adjacent stable TeX label.
+The explicitly external Nesterov Theorem 2.1.5 citation is handled separately.
+All 56 named declarations in THEOREM_MAP.md compile through AllResults.
+242 local links and 17 Markdown anchors resolve across 18 current documents.
+
+The tuned third gap bound and Corollary 2.4 are formalized end-to-end.
+The arbitrary-tuning prefactor is C(c); a separate fixed-tuning theorem
+provides a universal prefactor. This manuscript qualification is documented.
+The continuous-time Appendix B statements and their discrete replacements
+remain distinguished explicitly in THEOREM_MAP.md.
+
+TeX SHA-256: fc8bd757f5e26b1c1dea80b55ff1738d9add023d17435b1fa8130ee2660b5296
+Compiled label data: validation/manuscript-labels.json
+Scratch declaration check: .lake/DocDeclarationAudit.lean

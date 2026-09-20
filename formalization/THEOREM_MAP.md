@@ -8,7 +8,7 @@ the source.
 
 Start with [the reader guide](PAPER_READER_GUIDE.md) to compare assumptions,
 algorithm and quantity definitions, and the complete proof route. Its
-[definition map](PAPER_READER_GUIDE.md#2-compare-the-algorithm-and-quantity-definitions)
+[definition map](PAPER_READER_GUIDE.md#3-compare-definitions-with-the-paper)
 locates the target, proposal, acceptance rule, mixtures, energy, gap, and
 rejection quantities used by the statements below. See
 [the build status](BUILD_STATUS.md) for verification evidence. The public
@@ -24,15 +24,30 @@ full below, declaration names have the prefix `UniformRandomMALA.Concrete.`.
 | Theorem 2.1 (`thm:main`), both clauses with the same universal constants | `C1Potential.exists_universal_paperMasterRHS_bounds` | [C1MainTheorem.lean](UniformRandomMALA/Concrete/C1MainTheorem.lean) |
 | Corollary 2.2 (`cor:sqrt-d-endpoint`), first display | `C1Potential.sqrtDimensionCorollary_rayleighSpectralGap_lower` | [C1MainTheorem.lean](UniformRandomMALA/Concrete/C1MainTheorem.lean) |
 | Corollary 2.2 (`cor:sqrt-d-endpoint`), simplified display | `C1Potential.sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower` | [C1MainTheorem.lean](UniformRandomMALA/Concrete/C1MainTheorem.lean) |
+| Corollary 2.2 (`cor:sqrt-d-endpoint`), tuned third display | `C1Potential.tunedSqrtDimensionCorollary_rayleighSpectralGap_lower` | [TunedSpectralGap.lean](UniformRandomMALA/Concrete/TunedSpectralGap.lean) |
 | Proposition 2.3 (`prop:minimax-fixed-step-ceiling`), fixed-step minimax upper bound | `exists_universal_fixedStepMinimaxGap_paper_upper` | [FixedStepMinimax.lean](UniformRandomMALA/Concrete/FixedStepMinimax.lean) |
+| Corollary 2.4 (`cor:mixing`), both ceiling bounds with explicit tuning dependence | `C1Potential.mixingTimeCorollary` | [MixingTime.lean](UniformRandomMALA/Concrete/MixingTime.lean) |
+| Optional specialization of Corollary 2.4, universal prefactor at fixed universal tuning | `C1Potential.exists_universal_mixingTimeCorollary` | [MixingTime.lean](UniformRandomMALA/Concrete/MixingTime.lean) |
+| TV convergence estimate `eq:TVbound`, for half-lazy reversible kernels | `setwiseTV_iterate_halfLazy_le` | [L2MixingTV.lean](UniformRandomMALA/Concrete/L2MixingTV.lean) |
 
 The main theorem chooses its universal constants before the dimension,
 potential, and endpoint. The definitions `C1Potential.paperMomentThreshold`
 and `C1Potential.paperMasterRHS` spell out `p⋆` and the right-hand side of
 `eq:master-gap`.
 
-Both corollary declarations use `H = c/(L√d)`. The simplified bound does not
-require `p⋆ ≤ d`. The fixed-step upper bound ranges over the smooth,
+The first two gap-corollary declarations use `H = c/(L√d)`. The simplified
+bound does not require `p⋆ ≤ d`; the third substitutes `c/√p⋆`, yielding
+the endpoint `H = c/(L√(d p⋆))` used by the mixing corollary.
+
+For arbitrary `c`, the mixing prefactor is
+`paperMixingConstant c = 2/[c₀ min{c, b₀²/(2c)}]`, which depends only on
+`c`, as stated in the manuscript. The optional universal-constant theorem
+fixes `c = b₀` before the dimension, potential, initial law, and accuracy.
+The [definition map in the reader guide](PAPER_READER_GUIDE.md#3-compare-definitions-with-the-paper)
+locates the initial-density norm, logarithm, kernel iterates, and mixing-time
+definition and explains the proved spectral-gap-to-TV connection.
+
+The fixed-step upper bound ranges over the smooth,
 Hessian-bounded class specified in Proposition 2.3; this smoothness requirement
 belongs to the obstruction result, not to the lower bound in Theorem 2.1.
 The definitions `smoothHessianPotentialGapValues`,

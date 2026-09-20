@@ -1,28 +1,19 @@
 # Lean proof-strategy ledger
 
-> **2026-09-12 first-order revision:** the public input is `C1Potential`
-> (actual gradient, strong convexity, and gradient Lipschitzness), and the
-> rejection/overlap exports include `p >= 1`. The complete source was
-> kernel-checked with Lean/mathlib 4.33.0; the 266-entry axiom gate permits only
-> `propext`, `Classical.choice`, and `Quot.sound`. Earlier Hessian endpoints are
-> retained as compatibility special cases.
+This ledger traces the proofs of the randomized MALA gap and mixing-time
+bounds, the fixed-step obstruction, and the general aggregation results.
+Each table identifies the mathematical input, the implementation modules,
+and the argument that connects them. Start with the
+[reader guide](PAPER_READER_GUIDE.md) for a shorter route, or use
+[THEOREM_MAP.md](THEOREM_MAP.md) to find a particular paper statement.
+[BUILD_STATUS.md](BUILD_STATUS.md) records verification evidence.
 
-## Added first-order entry route
-
-`C1Potential` -> proved descent lemma -> `FirstOrderPotential` -> existing
-concrete proof. No target Hessian is required. The p >= 1 rejection/overlap
-exports use second-moment interpolation; the old p >= 2 estimates and Gaussian
-OU/Euler–RWM core are unchanged. See `FIRST_ORDER_REVISION.md` for exact names
-and the Appendix B scope qualification.
-
-This ledger gives a reviewer-oriented path through the completed formalization
-of the main lower-bound theorem in Qian Qin's **A global spectral gap for Metropolis-adjusted Langevin algorithm
-with a uniformly randomized step size**. Each row records the mathematical result, its public
-Lean entry point, the principal implementation modules, and the proof
-mechanism. Paper labels are cross-referenced in `THEOREM_MAP.md`; mathematical
-content, rather than provisional numbering, is used here.
-
-Current verification evidence is recorded in `BUILD_STATUS.md`.
+The main lower-bound route starts from `C1Potential`, whose drift is the
+actual gradient of the potential. The calculus adapter proves the descent
+inequality and supplies `FirstOrderPotential`; the later assembly supplies
+the required isoperimetry and rejection estimates. The aggregation and
+lazy-kernel convergence results also have general statements independent
+of this target model.
 
 ## Result dependency graph
 
@@ -45,6 +36,12 @@ FirstOrderPotential -> finite Euler Gaussian images --+
 target Bakry--Ledoux + MALA local overlap
   -> separated sets -> defective conductance -> component aggregation
   -> universal spectral-gap lower bound -> paper Rayleigh and lazy endpoints
+  -> tuned H = c/(L sqrt(d pStar)) -> tuned spectral-gap lower bound
+
+reversible kernel + half-lazification + Rayleigh lower bound
+  -> positive quadratic form -> bounded-observable L2 contraction
+  -> actual kernel iterates + centered RN density -> total-variation decay
+  -> logarithmic ceiling estimate + tuned gap -> mixing-time corollary
 ```
 
 ## Foundations and target model
@@ -142,7 +139,7 @@ UniformRandomMALA.Concrete.FirstOrderPotential.
   universal_masterRHS_spectralGap_lower
 ```
 
-The manuscript-facing endpoint starts from the revised `C¹` first-order
+The manuscript-facing endpoint starts from the `C¹` first-order
 assumptions and uses the paper's `L²` Rayleigh definition:
 
 ```lean
@@ -153,12 +150,13 @@ UniformRandomMALA.Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
 
 | Mathematical content | Implementation | Strategy and output | Status |
 |---|---|---|---|
-| Revised first-order bridge | `Concrete/C1ToFirstOrder.lean` | Record `ContDiff ℝ 1 U`, the lower supporting inequality, and Lipschitzness of `∇ U`; derive the descent inequality along affine lines; build `FirstOrderPotential` with `gradU = ∇ U`. | **Checked** |
-| Optional smooth adapter | `Concrete/HessianToFirstOrder.lean` | Derive the first-order interface from actual Hessian quadratic bounds. This is a reusable special case, not a revised-paper hypothesis. | **Checked** |
+| First-order bridge | `Concrete/C1ToFirstOrder.lean` | Record `ContDiff ℝ 1 U`, the lower supporting inequality, and Lipschitzness of `∇ U`; derive the descent inequality along affine lines; build `FirstOrderPotential` with `gradU = ∇ U`. | **Checked** |
+| Optional smooth adapter | `Concrete/HessianToFirstOrder.lean` | Derive the first-order interface from actual Hessian quadratic bounds. This supplies a reusable smooth special case. | **Checked** |
 | Paper Rayleigh gap | `Concrete/RayleighSpectralGap.lean` | Define measurable `L²` tests and extended-valued quotients; prove equivalence between quotient infimum and the `L²` Poincaré-lower-bound supremum, treating zero variance, infinite energy, and an empty test family. | **Checked** |
 | Main paper theorem | `Concrete/C1MainTheorem.lean` | Compose the first-order bridge, certificate-free lower-bound chain, Poincaré-to-Rayleigh implication, and concrete half-lazification; choose shared universal constants before target parameters. | **Checked** |
 | Concrete half-lazification | `Concrete/LazyKernel.lean` | Realize `(I+K)/2` as a fair Boolean parameter mixture; preserve Markovness and reversibility; compute exact half energy and half Rayleigh gap; specialize to randomized MALA. | **Checked** |
 | Square-root-dimension corollary | `Concrete/SqrtDimensionCorollary.lean` | Substitute `H=c/(L sqrt d)` and prove `min{pStar(d+pStar)/d,d} ≤ 2 pStar` without a `pStar ≤ d` assumption. | **Checked** |
+| Tuned third spectral-gap bound | `Concrete/TunedSpectralGap.lean` | Substitute `c/sqrt pStar` into the second bound and identify `H=c/(L sqrt(d pStar))`; retain the same universal constants and concrete MALA kernel. | **Checked** |
 | Fractional aggregation | `Concrete/FractionalAggregation.lean` | Add weighted extended-valued Cauchy--Schwarz; use coarea, layer cake, median splitting, bounded `L²` truncations, and monotone convergence; allow zero `β_j`; specialize to hard assignment. | **Checked** |
 | Full-parameter one-step flow | `Concrete/AllParameterMALAFlow.lean` | Generalize the already checked safe and ladder instances to every admissible real `p,θ,t`; retain the exact mass range, logarithmic condition, and small-step clause. | **Checked** |
 
@@ -170,9 +168,50 @@ Concrete.C1Potential.toFirstOrderPotential
 Concrete.l2SpectralGap_eq_rayleighSpectralGap
 Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
 Concrete.C1Potential.sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower
+Concrete.C1Potential.tunedSqrtDimensionCorollary_rayleighSpectralGap_lower
 Concrete.fractionalAggregation_poincareLower
 Concrete.C1Potential.allParameterMALAFlowBounds
 ```
+
+## From the spectral gap to actual mixing time
+
+The tuned bound in Corollary 2.2 (`cor:sqrt-d-endpoint`) and
+Corollary 2.4 (`cor:mixing`) use the same step endpoint. Inspect
+[`paperTunedStep` and `paperTunedGapRHS`](UniformRandomMALA/Concrete/TunedSpectralGap.lean)
+to compare their literal formulas with the manuscript:
+
+```text
+H = c / (L sqrt(d pStar)),
+Gap(P̄_H) ≥ c0 / (κ sqrt(d pStar)) * min(c, b0²/(2c)).
+```
+
+The mixing argument is also proved. Its reusable kernel statements accept
+ordinary Markovness, reversibility, and a Rayleigh-gap lower bound; the
+concrete corollary supplies all three internally.
+
+| Mathematical content | Implementation | Strategy and output |
+|---|---|---|
+| Centered initial density and exact TV factor | [`Concrete/L2DensityTV.lean`](UniformRandomMALA/Concrete/L2DensityTV.lean) | Define `centeredDensityL2Norm` as `sqrt ∫ (dμ/dπ - 1)² dπ`; pair the density with centered event indicators and use their variance bound `1/4`. |
+| Kernel action and stationary energy | [`Concrete/L2MixingBase.lean`](UniformRandomMALA/Concrete/L2MixingBase.lean), [`L2MixingEnergy.lean`](UniformRandomMALA/Concrete/L2MixingEnergy.lean) | Build bounded measurable observables and their actual kernel averages; prove stationarity, symmetry, and `E(f,f) = ‖f‖² - ⟨f,Kf⟩`. |
+| Exact lazy contraction | [`Concrete/PositiveContraction.lean`](UniformRandomMALA/Concrete/PositiveContraction.lean), [`L2Mixing.lean`](UniformRandomMALA/Concrete/L2Mixing.lean) | Derive positivity of the half-lazy form and its Cauchy--Schwarz inequality; obtain squared-norm decay `(1-g)^(2n)` from the Rayleigh lower bound `g`. |
+| Actual transition-law convergence | [`Concrete/L2MixingTV.lean`](UniformRandomMALA/Concrete/L2MixingTV.lean) | Identify backward observable iteration with `finiteKernelIterate`; pair iterated centered indicators with the initial density to prove `TV(μK_lazy^n,π) ≤ (‖dμ/dπ-1‖₂/2)(1-g)^n`. |
+| Finite gap on the target | [`Concrete/TargetGapRange.lean`](UniformRandomMALA/Concrete/TargetGapRange.lean) | Reuse a positive-mass target cut below one half to prove `Gap(K) ≤ 2`; this justifies the finite real gap in the denominator. |
+| First hitting time and ceiling | [`Concrete/MixingTimeArithmetic.lean`](UniformRandomMALA/Concrete/MixingTimeArithmetic.lean), [`MixingTime.lean`](UniformRandomMALA/Concrete/MixingTime.lean) | Define the infimum over all natural times, including zero; use `(1-g)^n ≤ exp(-gn)` and exact gap halving to derive both ceiling bounds. |
+
+The paper-facing declarations are
+`Concrete.C1Potential.mixingTimeCorollary` and
+`Concrete.C1Potential.exists_universal_mixingTimeCorollary` in
+[`Concrete/MixingTime.lean`](UniformRandomMALA/Concrete/MixingTime.lean).
+Their inputs are the first-order potential, a probability initial law
+absolutely continuous with respect to the target with an `L²` density, and
+positive tuning and accuracy. No convergence certificate is an input.
+The definitions and proof include initial accuracy (zero mixing time) and
+the endpoint lazy gap equal to one.
+
+The mixing prefactor depends only on `c`, as in the manuscript; its formula
+is recorded in [THEOREM_MAP.md](THEOREM_MAP.md#main-results). The second
+declaration is an optional specialization that fixes `c = b0` before the
+target, initial law, and accuracy, giving a universal prefactor.
 
 ## Fixed-step minimax obstruction
 
@@ -198,8 +237,8 @@ UniformRandomMALA.Concrete.exists_universal_fixedStepMinimaxGap_paper_upper
 | Check | Command | Expected result |
 |---|---|---|
 | Public API | `lake env lean UniformRandomMALA/AllResults.lean` | exit code 0 |
-| Full kernel build | `lake build` | passed: 3,439 jobs |
-| Axiom report | `lake env lean UniformRandomMALA/DependencyAudit.lean` | passed: 266 results, only `propext`, `Classical.choice`, `Quot.sound` |
+| Full kernel build | `lake build` | exit code 0 |
+| Axiom report | `lake env lean UniformRandomMALA/DependencyAudit.lean` | only `propext`, `Classical.choice`, `Quot.sound` |
 | Placeholder/import audit | `python3 scripts/static_audit.py` | no placeholders and all local imports resolve |
 | Numerical transcription audit | `python3 scripts/numeric_sanity.py` | 2,000 deterministic trials pass |
 | Complete Unix check | `./scripts/check.sh` | exit code 0 |

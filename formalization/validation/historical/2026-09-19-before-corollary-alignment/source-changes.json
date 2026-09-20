@@ -1,0 +1,36 @@
+{
+  "validation_date": "2026-09-19",
+  "status": "KERNEL_VERIFIED",
+  "lean_version": "4.33.0",
+  "mathlib_version": "4.33.0",
+  "change_scope": "New tuned spectral-gap and mixing-time proofs, public imports, dependency audit, documentation, and refreshed manuscript validation. Manuscript assets were supplied by the user and preserved.",
+  "lean_statements_and_proofs": "Ten new proof modules; existing theorem statements preserved.",
+  "new_results": [
+    "Corollary 2.2 third display",
+    "Corollary 2.4 exact gap ceiling and explicit C(c) ceiling",
+    "Universal mixing prefactor at fixed universal tuning",
+    "Generic reversible half-lazy L2-to-TV decay for actual finite kernel iterates"
+  ],
+  "paper_pdf_sha256": "d3a9953ebaa7c4cc79a740676eb05d3178a9c3061afb308e3d7b8c77edc6c77a",
+  "paper_tex_sha256": "fc8bd757f5e26b1c1dea80b55ff1738d9add023d17435b1fa8130ee2660b5296",
+  "paper_inventory": [
+    "hard_target_first_coordinate_trace.pdf",
+    "hard_target_origin_acceptance.pdf",
+    "hard_target_stationary_comparison.pdf",
+    "main.pdf",
+    "main.tex",
+    "uniform_random_mala.bib"
+  ],
+  "lean_reference_label_uses": 134,
+  "lean_number_label_pairs": 90,
+  "theorem_environments": 21,
+  "theorem_labels_checked_against_latex": 20,
+  "theorem_map_declarations_compiled": 56,
+  "manuscript_audit_tests": 21,
+  "manuscript_pages": 48,
+  "source_pdf_correspondence": "Equal normalized extracted text on all 48 pages; not byte/pixel equivalence.",
+  "kernel_build": "PASS; 3976 jobs",
+  "public_import": "PASS",
+  "axiom_audit": "PASS; 281 declarations; propext, Classical.choice, Quot.sound only",
+  "remaining_scope_qualification": "For arbitrary tuning c, the mixing prefactor is C(c); the universal version fixes c. Appendix B nonconvex extension and its continuous-time derivation are not formalized."
+}

@@ -4,9 +4,10 @@ import UniformRandomMALA.EndpointCorollaries
 /-!
 # The square-root-dimension endpoint corollary
 
-This file formalizes both displays of Corollary 2.2 (`cor:sqrt-d-endpoint`) at
+This file formalizes the first two displays of Corollary 2.2 (`cor:sqrt-d-endpoint`) at
 `H = c / (L * sqrt d)`.  In particular, the simplified display is proved for
-the full parameter range: no assumption `pStar ≤ d` is used.
+the full parameter range: no assumption `pStar ≤ d` is used. The tuned third
+display is proved in `Concrete/TunedSpectralGap.lean`.
 -/
 
 namespace UniformRandomMALA

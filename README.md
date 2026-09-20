@@ -1,7 +1,17 @@
-This repository contains simulation code and a Lean verification package for the paper *A global spectral gap for Metropolis-adjusted Langevin algorithm with a uniformly randomized step size*.
+# Uniform-random MALA
 
-The [simulation package](simulation/README.md) contains the code for reproducing the results in Section 6 of the paper.
+This repository accompanies the paper *A global spectral gap for
+Metropolis-adjusted Langevin algorithm with a uniformly randomized step size*.
 
-The [Lean package](formalization/README.md) provides instructions for checking the proofs. Its [reader guide](formalization/PAPER_READER_GUIDE.md) identifies the source files to compare with the paper's assumptions, algorithms, quantities, and theorem statements, and explains how to trace the complete proof dependencies.
+- The [simulation package](simulation/README.md) contains the code and data
+  for reproducing the numerical results in Section 6.
+- The [Lean package](formalization/README.md) contains formal proofs of the
+  randomized-step spectral-gap and mixing-time bounds, the fixed-step
+  minimax obstruction, and the general aggregation lemma and theorem.
 
-Alongside the MALA spectral-gap results, the package formalizes the general fractional aggregation lemma (Lemma 3.5) and component-aggregation theorem (Theorem 3.6). These results combine one-step flow estimates into spectral-gap bounds and can be used independently of the MALA application; see the [aggregation guide](formalization/PAPER_READER_GUIDE.md#aggregation-lemma-35-and-theorem-36).
+Start with the [paper reader guide](formalization/PAPER_READER_GUIDE.md)
+for an introduction to the formalization, a map from the paper to the source
+files, and instructions for checking definitions and complete proof
+dependencies. The [theorem map](formalization/THEOREM_MAP.md) indexes individual
+results, and [verification evidence](formalization/BUILD_STATUS.md) records
+the build and dependency checks.

@@ -3,7 +3,9 @@
 This document describes the mathematical scope of the accompanying Lean
 source. [BUILD_STATUS.md](BUILD_STATUS.md) records the latest kernel check
 and manuscript validation. The paper, TeX source, bibliography, and figure
-PDFs are bundled in `paper/`.
+PDFs are bundled in `paper/`. Use the [reader guide](PAPER_READER_GUIDE.md)
+for a reading route and [the theorem map](THEOREM_MAP.md) to locate individual
+statements and their definitions.
 
 ## Main result
 
@@ -23,11 +25,8 @@ C1Potential
   -> Rayleigh-gap and half-lazy statements
 ```
 
-The public existential statement has universal constants with `A₀ ≥ 1`,
-matching Theorem 2.1 and Proposition 3.4 (`prop:flow`). The internal witness
-satisfies `A₀ ≥ 2`, which also supplies the stronger bounds used in the
-moment estimates. This is an existential choice; the theorem does not assert
-the bound for every `A₀ ≥ 1` or specifically for `A₀ = 1`.
+The public statement chooses its universal constants before the dimension,
+potential, and step endpoint, and uses the same constants for both clauses.
 
 ## General aggregation results
 
@@ -48,7 +47,7 @@ All four declarations are exported by
 [AllResults.lean](UniformRandomMALA/AllResults.lean) and included in
 [DependencyAudit.lean](UniformRandomMALA/DependencyAudit.lean). The
 [reader guide](PAPER_READER_GUIDE.md#aggregation-lemma-35-and-theorem-36)
-compares their assumptions, cost definitions, and conclusions with the paper.
+locates their statements and explains how they connect to the paper.
 
 ## Coverage of paper results
 
@@ -66,6 +65,10 @@ Declaration names have prefix `UniformRandomMALA.`.
 | Theorem 2.1, both clauses with shared constants | Formalized | `Concrete.C1Potential.exists_universal_paperMasterRHS_bounds` |
 | Corollary 2.2 (`cor:sqrt-d-endpoint`), first bound | Formalized | `Concrete.C1Potential.sqrtDimensionCorollary_rayleighSpectralGap_lower` |
 | Corollary 2.2, simplified bound | Formalized | `Concrete.C1Potential.sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower` |
+| Corollary 2.2, tuned third bound | Formalized | `Concrete.C1Potential.tunedSqrtDimensionCorollary_rayleighSpectralGap_lower` |
+| TV decay `eq:TVbound`, half-lazy reversible kernels | Formalized | `Concrete.setwiseTV_iterate_halfLazy_le` |
+| Corollary 2.4 (`cor:mixing`), both ceiling inequalities | Formalized | `Concrete.C1Potential.mixingTimeCorollary` |
+| Corollary 2.4, optional fixed-tuning specialization | Formalized | `Concrete.C1Potential.exists_universal_mixingTimeCorollary` |
 | Lemma 3.1 (`lem:Kt`), mixture-energy comparison | Formalized | `Dirichlet.sum_energy_parameterMixture_restrict_le`; `Concrete.FirstOrderPotential.energy_restricted_uniformStep_eq_weight_dyadic` |
 | Proposition 3.2 (`prop:overlap`), `p ≥ 1` | Formalized | `Concrete.C1Potential.mala_overlap_bounds` |
 | Proposition 3.3 (`prop:separated`) | Formalized | `Concrete.C1Potential.separatedSets` |
@@ -78,6 +81,22 @@ Declaration names have prefix `UniformRandomMALA.`.
 | Appendix B's additional nonconvex `C¹` scope | Not formalized | See below |
 
 [THEOREM_MAP.md](THEOREM_MAP.md) supplies the more detailed component map.
+
+## Mixing-time corollary
+
+The mixing-time proof starts from the actual half-lazy uniform MALA kernel
+and its proved Rayleigh gap. It establishes exact `L²` contraction of
+bounded centered observables, pairs their iterates with the initial
+Radon–Nikodym density, and obtains total-variation decay with the paper's
+factor `1/2`. The initial law is absolutely continuous with square-integrable
+density, as in the manuscript. The proof covers zero mixing time and the
+maximal lazy-gap case.
+
+The mixing prefactor depends only on the positive tuning constant `c`,
+matching the manuscript. An optional specialization fixes a universal
+tuning and obtains a universal prefactor. See the
+[reader guide](PAPER_READER_GUIDE.md#main-results) for the declarations and
+[the theorem map](THEOREM_MAP.md#main-results) for the explicit constant.
 
 ## Analytic route and scope qualifications
 

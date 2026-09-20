@@ -1,0 +1,17 @@
+PACKAGE INTEGRITY AND SCOPE — 2026-09-19
+
+Manuscript assets: main.tex, main.pdf, bibliography, and all three figure PDFs present.
+PDF SHA-256: d3a9953ebaa7c4cc79a740676eb05d3178a9c3061afb308e3d7b8c77edc6c77a
+TeX SHA-256: fc8bd757f5e26b1c1dea80b55ff1738d9add023d17435b1fa8130ee2660b5296
+The supplied manuscript files were preserved.
+All 110 active labels agree with compiled source; all 20 theorem labels match numbers.
+Supplied and rebuilt manuscript text agrees on all 48 pages after normalization.
+New proofs formalize the tuned gap and actual-kernel mixing-time corollary.
+Full library build, public import, and 281-declaration axiom audit passed.
+Reader documentation describes mathematical scope, navigation, and reproduction.
+The general mixing prefactor depends on c; a universal fixed-tuning version is proved.
+The independent nonconvex Appendix B extension remains outside formalized scope.
+
+SHA256SUMS.txt covers the distributed formalization/ files except itself,
+excluding .lake/, tmp/, validation/local/, Git metadata, and compiled artifacts.
+Historical evidence is retained under validation/historical/.
