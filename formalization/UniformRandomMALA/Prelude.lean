@@ -11,7 +11,7 @@ import Mathlib.Tactic.Ring
 # Uniform-random MALA: common imports
 
 This project formalizes the main results of Qian Qin's
-*A global spectral gap for Metropolis-adjusted Langevin algorithm with a
+*A spectral gap for Metropolis-adjusted Langevin algorithm with a
 uniformly randomized step size*.  The checked public route constructs its
 stochastic-analysis and geometric inputs in Lean; older typed interfaces are
 retained as modular compatibility APIs.

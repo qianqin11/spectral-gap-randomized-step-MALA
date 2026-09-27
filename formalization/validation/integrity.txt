@@ -1,18 +1,15 @@
-PACKAGE INTEGRITY AND SCOPE — 2026-09-19
+PACKAGE INTEGRITY AND SCOPE — 2026-09-26
 
-Manuscript assets: main.tex, main.pdf, bibliography, and all three figure PDFs present.
-PDF SHA-256: feee07c1d78444bab3d4eea25807840935bd116c7c5888decb71587055cfa66b
-TeX SHA-256: 8ac5cbdac07ece71a04a0370ddb98566bc891ad329ad8e85b4e6a9de4757978f
-The supplied manuscript files were preserved.
-All 110 active labels agree with compiled source; all 20 theorem labels match numbers.
-Supplied and rebuilt manuscript text agrees on all 48 pages after normalization.
-Corollary 2.4 matches the existing Lean statement with a prefactor depending only on c.
-All 165 Lean files and three dependency configurations match the verified proof version.
-That version passed the full library build, public import, and 281-declaration axiom audit.
-The reader-guide example compiles and current local documentation links resolve.
-Documentation introduces the entire package, its results, definitions, proofs, and checks.
-The independent nonconvex Appendix B extension remains outside formalized scope.
+Current requested mathematical scope: every paper result except Lemmas B.2–B.5.
+Full gate passed: 275 Lean files, 4131 build jobs, 318 audited declarations.
+Proof placeholders: none. Selected axioms: propext, Classical.choice, Quot.sound only.
+Lean/configuration snapshot digest (278 files): d6d6a0f21afae1ab8dcd5a40490585c19c96f72f35f865402f00def9b1b93b5e
+PDF SHA-256: 11ab696a4591e8ccc76521ea5f6fe2f33923d6041c6145dee69b4ee2e614be66
+TeX SHA-256: ac625c25805f85226fad68eff4b769815de166f67d8acaf2b9768dc66cca7d65
+Current source labels, compiled result numbers, and supplied PDF text agree.
+The supplied manuscript assets were preserved; its old verification narrative is flagged in the documentation.
+Reader-guide commands compile and documented links resolve.
 
-SHA256SUMS.txt covers the distributed formalization/ files except itself,
-excluding .lake/, tmp/, validation/local/, Git metadata, and compiled artifacts.
-Historical evidence is retained under validation/historical/.
+SHA256SUMS.txt covers distributed formalization/ files except itself, excluding
+ignored caches, tmp/, validation/local/, Git metadata, and compiled artifacts.
+Earlier verification records are preserved under validation/historical/.

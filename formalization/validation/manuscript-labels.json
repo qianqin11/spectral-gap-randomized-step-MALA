@@ -1,447 +1,495 @@
 {
   "source": "paper/main.tex",
-  "source_sha256": "8ac5cbdac07ece71a04a0370ddb98566bc891ad329ad8e85b4e6a9de4757978f",
-  "validation_date": "2026-09-19",
+  "source_sha256": "ac625c25805f85226fad68eff4b769815de166f67d8acaf2b9768dc66cca7d65",
+  "validation_date": "2026-09-26",
   "labels": {
     "app:defective": {
       "number": "D",
-      "page": "38"
+      "page": "43"
     },
     "app:fixed-step-obstruction": {
       "number": "A",
-      "page": "17"
+      "page": "22"
     },
     "app:fractional": {
       "number": "E",
-      "page": "41"
+      "page": "46"
     },
     "app:gaussian": {
       "number": "C",
-      "page": "36"
+      "page": "41"
+    },
+    "app:overlap": {
+      "number": "B.4",
+      "page": "39"
     },
     "app:rejection-overlap": {
       "number": "B",
-      "page": "21"
+      "page": "26"
+    },
+    "app:small-fixed-step-gap": {
+      "number": "G",
+      "page": "50"
+    },
+    "cor:asymptotic-variance": {
+      "number": "2.6",
+      "page": "9"
     },
     "cor:mixing": {
-      "number": "2.4",
-      "page": "7"
+      "number": "2.5",
+      "page": "8"
+    },
+    "cor:nonstationary-variance": {
+      "number": "2.8",
+      "page": "11"
     },
     "cor:sqrt-d-endpoint": {
       "number": "2.2",
       "page": "7"
     },
+    "cor:variance-separation": {
+      "number": "2.7",
+      "page": "10"
+    },
     "eq:A0-sufficient": {
-      "number": "73",
-      "page": "40"
+      "number": "78",
+      "page": "45"
     },
     "eq:BDG-holder-details": {
-      "number": "51",
-      "page": "31"
-    },
-    "eq:BDG-stopped": {
-      "number": "50",
-      "page": "31"
-    },
-    "eq:D-2p-uniform": {
-      "number": "48",
-      "page": "30"
-    },
-    "eq:D-conditional-martingale": {
-      "number": "41",
-      "page": "28"
-    },
-    "eq:D-minus-one-martingale": {
-      "number": "49",
-      "page": "30"
-    },
-    "eq:D-minus-one-stopped": {
-      "number": "52",
-      "page": "32"
-    },
-    "eq:D-moment-condition": {
-      "number": "42",
-      "page": "28"
-    },
-    "eq:D-moments": {
-      "number": "43",
-      "page": "28"
-    },
-    "eq:D-stopped-uniform": {
-      "number": "47",
-      "page": "30"
-    },
-    "eq:F-contraction": {
-      "number": "54",
-      "page": "33"
-    },
-    "eq:Jh-mgf": {
-      "number": "35",
-      "page": "25"
-    },
-    "eq:Jh-moment": {
-      "number": "36",
-      "page": "25"
-    },
-    "eq:Lambda-mean-one": {
-      "number": "46",
-      "page": "29"
-    },
-    "eq:MH-ratio-expansion": {
-      "number": "60",
+      "number": "56",
       "page": "36"
     },
+    "eq:BDG-stopped": {
+      "number": "55",
+      "page": "36"
+    },
+    "eq:D-2p-uniform": {
+      "number": "53",
+      "page": "35"
+    },
+    "eq:D-conditional-martingale": {
+      "number": "46",
+      "page": "33"
+    },
+    "eq:D-minus-one-martingale": {
+      "number": "54",
+      "page": "35"
+    },
+    "eq:D-minus-one-stopped": {
+      "number": "57",
+      "page": "37"
+    },
+    "eq:D-moment-condition": {
+      "number": "47",
+      "page": "33"
+    },
+    "eq:D-moments": {
+      "number": "48",
+      "page": "33"
+    },
+    "eq:D-stopped-uniform": {
+      "number": "52",
+      "page": "35"
+    },
+    "eq:F-contraction": {
+      "number": "59",
+      "page": "38"
+    },
+    "eq:Jh-mgf": {
+      "number": "40",
+      "page": "30"
+    },
+    "eq:Jh-moment": {
+      "number": "41",
+      "page": "30"
+    },
+    "eq:Lambda-mean-one": {
+      "number": "51",
+      "page": "34"
+    },
+    "eq:MH-ratio-expansion": {
+      "number": "65",
+      "page": "41"
+    },
     "eq:S1S2-distance": {
-      "number": "66",
-      "page": "39"
+      "number": "71",
+      "page": "44"
     },
     "eq:S1S2-masses": {
-      "number": "68",
-      "page": "39"
+      "number": "73",
+      "page": "44"
     },
     "eq:TVbound": {
       "number": "2",
-      "page": "2"
+      "page": "3"
     },
     "eq:V-J": {
-      "number": "37",
-      "page": "27"
-    },
-    "eq:b0-choice": {
-      "number": "70",
-      "page": "39"
-    },
-    "eq:bakry-ledoux-enlargement": {
-      "number": "8",
-      "page": "9"
-    },
-    "eq:conditional-F": {
-      "number": "56",
-      "page": "33"
-    },
-    "eq:defective-budget": {
-      "number": "63",
-      "page": "38"
-    },
-    "eq:defective-flow": {
-      "number": "64",
-      "page": "38"
-    },
-    "eq:defective-lower-complement": {
-      "number": "69",
-      "page": "39"
-    },
-    "eq:endpoint-conditioning": {
-      "number": "53",
+      "number": "42",
       "page": "32"
     },
+    "eq:asymptotic-variance": {
+      "number": "7",
+      "page": "9"
+    },
+    "eq:b0-choice": {
+      "number": "75",
+      "page": "44"
+    },
+    "eq:bakry-ledoux-enlargement": {
+      "number": "13",
+      "page": "13"
+    },
+    "eq:conditional-F": {
+      "number": "61",
+      "page": "38"
+    },
+    "eq:defective-budget": {
+      "number": "68",
+      "page": "43"
+    },
+    "eq:defective-flow": {
+      "number": "69",
+      "page": "43"
+    },
+    "eq:defective-lower-complement": {
+      "number": "74",
+      "page": "44"
+    },
+    "eq:endpoint-conditioning": {
+      "number": "58",
+      "page": "37"
+    },
     "eq:exceptional-budget-appendix": {
-      "number": "72",
-      "page": "40"
+      "number": "77",
+      "page": "45"
     },
     "eq:explicit-A0-choice": {
-      "number": "71",
-      "page": "40"
+      "number": "76",
+      "page": "45"
     },
     "eq:first-order-assumptions": {
       "number": "3",
-      "page": "5"
+      "page": "6"
     },
     "eq:flow-safe": {
-      "number": "15",
-      "page": "13"
+      "number": "20",
+      "page": "18"
     },
     "eq:frozen-endpoint-law": {
-      "number": "40",
-      "page": "27"
+      "number": "45",
+      "page": "32"
     },
     "eq:frozen-measure-definition": {
-      "number": "38",
-      "page": "27"
+      "number": "43",
+      "page": "32"
     },
     "eq:frozen-path": {
-      "number": "39",
-      "page": "27"
+      "number": "44",
+      "page": "32"
+    },
+    "eq:gap": {
+      "number": "4",
+      "page": "7"
     },
     "eq:gap-fractional-pre": {
-      "number": "74",
-      "page": "42"
+      "number": "79",
+      "page": "47"
     },
     "eq:gap-ideal": {
       "number": "1",
       "page": "2"
     },
     "eq:generic-fixed-step-gap-upper": {
-      "number": "20",
-      "page": "18"
+      "number": "25",
+      "page": "23"
     },
     "eq:generic-fixed-step-gap-upper-kappa": {
+      "number": "26",
+      "page": "23"
+    },
+    "eq:generic-hard-concentration": {
+      "number": "30",
+      "page": "24"
+    },
+    "eq:generic-hard-curvature": {
+      "number": "24",
+      "page": "23"
+    },
+    "eq:generic-hard-log-ratio": {
+      "number": "29",
+      "page": "24"
+    },
+    "eq:generic-hard-potential": {
+      "number": "23",
+      "page": "23"
+    },
+    "eq:generic-hard-sticky-gap": {
+      "number": "31",
+      "page": "25"
+    },
+    "eq:generic-local-upper": {
+      "number": "27",
+      "page": "23"
+    },
+    "eq:generic-log-Hastings-ratio": {
+      "number": "28",
+      "page": "24"
+    },
+    "eq:ladder-dirichlet": {
+      "number": "18",
+      "page": "16"
+    },
+    "eq:ladder-gap-bound": {
+      "number": "19",
+      "page": "17"
+    },
+    "eq:langevin": {
+      "number": "35",
+      "page": "27"
+    },
+    "eq:langevin-integral": {
+      "number": "37",
+      "page": "29"
+    },
+    "eq:langevin-sde": {
+      "number": "36",
+      "page": "29"
+    },
+    "eq:linear-increment-mgf": {
+      "number": "38",
+      "page": "29"
+    },
+    "eq:log-tail-simple": {
+      "number": "67",
+      "page": "41"
+    },
+    "eq:mala-proposal-tv-exact": {
+      "number": "64",
+      "page": "40"
+    },
+    "eq:master-gap": {
+      "number": "5",
+      "page": "7"
+    },
+    "eq:mills-two-sided": {
+      "number": "66",
+      "page": "41"
+    },
+    "eq:minimax-F-upper": {
+      "number": "33",
+      "page": "26"
+    },
+    "eq:minimax-fixed-step-ceiling": {
+      "number": "6",
+      "page": "8"
+    },
+    "eq:minimax-two-branches": {
+      "number": "32",
+      "page": "26"
+    },
+    "eq:nonstationary-mse": {
+      "number": "9",
+      "page": "11"
+    },
+    "eq:overlap-exceptional": {
+      "number": "12",
+      "page": "13"
+    },
+    "eq:overlap-step-condition": {
+      "number": "11",
+      "page": "13"
+    },
+    "eq:pJ-range": {
+      "number": "16",
+      "page": "16"
+    },
+    "eq:pj": {
+      "number": "15",
+      "page": "16"
+    },
+    "eq:proposal-TV": {
+      "number": "63",
+      "page": "40"
+    },
+    "eq:quadratic-increment-mgf": {
+      "number": "39",
+      "page": "30"
+    },
+    "eq:quadratic-stop": {
+      "number": "49",
+      "page": "33"
+    },
+    "eq:rectangle-disintegration": {
+      "number": "60",
+      "page": "38"
+    },
+    "eq:rejection-F": {
+      "number": "62",
+      "page": "39"
+    },
+    "eq:safe-gap-bound": {
       "number": "21",
       "page": "18"
     },
-    "eq:generic-hard-concentration": {
-      "number": "25",
-      "page": "19"
-    },
-    "eq:generic-hard-curvature": {
-      "number": "19",
-      "page": "18"
-    },
-    "eq:generic-hard-log-ratio": {
-      "number": "24",
-      "page": "19"
-    },
-    "eq:generic-hard-potential": {
-      "number": "18",
-      "page": "18"
-    },
-    "eq:generic-hard-sticky-gap": {
-      "number": "26",
-      "page": "20"
-    },
-    "eq:generic-local-upper": {
-      "number": "22",
-      "page": "18"
-    },
-    "eq:generic-log-Hastings-ratio": {
-      "number": "23",
-      "page": "19"
-    },
-    "eq:ladder-dirichlet": {
-      "number": "13",
-      "page": "12"
-    },
-    "eq:ladder-gap-bound": {
-      "number": "14",
-      "page": "13"
-    },
-    "eq:langevin": {
-      "number": "30",
-      "page": "22"
-    },
-    "eq:langevin-integral": {
-      "number": "32",
-      "page": "24"
-    },
-    "eq:langevin-sde": {
-      "number": "31",
-      "page": "24"
-    },
-    "eq:linear-increment-mgf": {
-      "number": "33",
-      "page": "24"
-    },
-    "eq:log-tail-simple": {
-      "number": "62",
-      "page": "36"
-    },
-    "eq:mala-proposal-tv-exact": {
-      "number": "59",
-      "page": "35"
-    },
-    "eq:master-gap": {
-      "number": "4",
-      "page": "6"
-    },
-    "eq:mills-two-sided": {
-      "number": "61",
-      "page": "36"
-    },
-    "eq:minimax-F-upper": {
-      "number": "28",
-      "page": "21"
-    },
-    "eq:minimax-fixed-step-ceiling": {
-      "number": "5",
-      "page": "7"
-    },
-    "eq:minimax-two-branches": {
-      "number": "27",
-      "page": "21"
-    },
-    "eq:overlap-exceptional": {
-      "number": "7",
-      "page": "8"
-    },
-    "eq:overlap-step-condition": {
-      "number": "6",
-      "page": "8"
-    },
-    "eq:pJ-range": {
-      "number": "11",
-      "page": "11"
-    },
-    "eq:pj": {
-      "number": "10",
-      "page": "11"
-    },
-    "eq:proposal-TV": {
-      "number": "58",
-      "page": "35"
-    },
-    "eq:quadratic-increment-mgf": {
-      "number": "34",
-      "page": "25"
-    },
-    "eq:quadratic-stop": {
-      "number": "44",
-      "page": "28"
-    },
-    "eq:rectangle-disintegration": {
-      "number": "55",
-      "page": "33"
-    },
-    "eq:rejection-F": {
-      "number": "57",
-      "page": "34"
-    },
-    "eq:safe-gap-bound": {
-      "number": "16",
-      "page": "13"
-    },
     "eq:separated": {
-      "number": "9",
-      "page": "9"
-    },
-    "eq:simulation-hard-target": {
-      "number": "17",
+      "number": "14",
       "page": "14"
     },
+    "eq:simulation-hard-target": {
+      "number": "22",
+      "page": "19"
+    },
     "eq:stationary-rejection": {
-      "number": "29",
-      "page": "22"
+      "number": "34",
+      "page": "27"
     },
     "eq:stopped-stochastic-integral": {
-      "number": "45",
-      "page": "29"
+      "number": "50",
+      "page": "34"
     },
     "eq:theta-tj": {
-      "number": "12",
-      "page": "11"
+      "number": "17",
+      "page": "16"
+    },
+    "eq:worst-case-variance-gap": {
+      "number": "8",
+      "page": "10"
     },
     "fig:hard-target-first-coordinate-trace": {
       "number": "2",
-      "page": "16"
+      "page": "21"
     },
     "fig:hard-target-origin-acceptance": {
       "number": "1",
-      "page": "15"
+      "page": "20"
     },
     "fig:hard-target-stationary": {
       "number": "3",
-      "page": "17"
+      "page": "22"
     },
     "ine:Markov": {
-      "number": "67",
-      "page": "39"
+      "number": "72",
+      "page": "44"
     },
     "ine:assumed_J": {
-      "number": "65",
-      "page": "38"
+      "number": "70",
+      "page": "43"
+    },
+    "ine:rudolf": {
+      "number": "10",
+      "page": "12"
     },
     "lem:Kt": {
       "number": "3.1",
-      "page": "8"
+      "page": "12"
     },
     "lem:defective": {
       "number": "D.1",
-      "page": "38"
+      "page": "43"
     },
     "lem:exceptional-budget": {
       "number": "D.2",
-      "page": "39"
+      "page": "44"
     },
     "lem:fractional": {
       "number": "3.5",
-      "page": "10"
+      "page": "15"
     },
     "lem:frozen-endpoint-law": {
       "number": "B.4",
-      "page": "27"
+      "page": "32"
     },
     "lem:gaussian-shift": {
       "number": "C.2",
-      "page": "37"
+      "page": "42"
     },
     "lem:integrated-increments": {
       "number": "B.3",
-      "page": "25"
+      "page": "30"
     },
     "lem:ladder-sum": {
       "number": "F.1",
-      "page": "44"
+      "page": "49"
     },
     "lem:linear-increment": {
       "number": "B.2",
-      "page": "24"
+      "page": "29"
     },
     "lem:path-likelihood": {
       "number": "B.5",
-      "page": "28"
+      "page": "33"
     },
     "prop:flow": {
       "number": "3.4",
-      "page": "9"
+      "page": "14"
     },
     "prop:generic-fixed-step-obstruction": {
       "number": "A.1",
-      "page": "18"
+      "page": "23"
     },
     "prop:minimax-fixed-step-ceiling": {
       "number": "2.3",
-      "page": "7"
+      "page": "8"
     },
     "prop:overlap": {
       "number": "3.2",
-      "page": "8"
+      "page": "13"
     },
     "prop:separated": {
       "number": "3.3",
-      "page": "9"
+      "page": "14"
+    },
+    "prop:small-fixed-step-gap": {
+      "number": "G.1",
+      "page": "50"
     },
     "prop:stationary-rejection": {
       "number": "B.1",
-      "page": "22"
+      "page": "27"
+    },
+    "rem:minimax-fixed-step-ceiling": {
+      "number": "2.4",
+      "page": "8"
     },
     "sec:ingredients": {
       "number": "3",
-      "page": "8"
+      "page": "12"
     },
     "sec:lean-verification": {
       "number": "5",
-      "page": "14"
+      "page": "19"
     },
     "sec:main": {
       "number": "2",
-      "page": "5"
+      "page": "6"
     },
     "sec:main-proof": {
       "number": "4",
-      "page": "11"
+      "page": "16"
     },
     "sec:simulations": {
       "number": "6",
-      "page": "14"
+      "page": "19"
     },
     "ssec:aggregation": {
       "number": "3.4",
-      "page": "10"
+      "page": "14"
     },
     "ssec:girsanov-frozen": {
       "number": "B.2",
-      "page": "26"
+      "page": "31"
     },
     "ssec:isoperimetry": {
       "number": "3.2",
-      "page": "9"
+      "page": "13"
     },
     "thm:aggregation": {
       "number": "3.6",
-      "page": "11"
+      "page": "15"
     },
     "thm:main": {
       "number": "2.1",
-      "page": "6"
+      "page": "7"
     }
   }
 }

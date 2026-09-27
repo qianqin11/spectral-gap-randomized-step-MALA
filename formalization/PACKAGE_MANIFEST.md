@@ -12,9 +12,25 @@ and audit results are recorded in [BUILD_STATUS.md](BUILD_STATUS.md).
 | `UniformRandomMALA.lean` | Aggregate library root |
 | `UniformRandomMALA/AllResults.lean` | Public import surface |
 | `UniformRandomMALA/Concrete/C1ToFirstOrder.lean` | First-order assumptions and derived upper Taylor inequality |
-| `UniformRandomMALA/Concrete/C1MainTheorem.lean` | Paper-facing theorem, corollary, isoperimetry, rejection/overlap, and flow endpoints |
-| `UniformRandomMALA/Concrete/TunedSpectralGap.lean` | Tuned third display of the spectral-gap corollary |
-| `UniformRandomMALA/Concrete/MixingTime.lean` | Mixing-time definition, both ceiling bounds, and fixed-tuning universal corollary |
+| `UniformRandomMALA/Concrete/C1MainTheorem.lean` | First-order analytic endpoints and original constant convention |
+| `UniformRandomMALA/Concrete/PaperNormalizedGap.lean` | Current main theorem and all three gap-corollary bounds |
+| `UniformRandomMALA/Concrete/PaperNormalizedMixing.lean` | Current mixing-time corollary and explicit tuning dependence |
+| `UniformRandomMALA/Concrete/PaperAsymptoticVariance.lean` | Actual stationary variance limits and bounds for randomized MALA |
+| `UniformRandomMALA/Concrete/PaperCentralLimit.lean` | Nonlazy and half-lazy CLTs for measurable L² observables from every initial distribution |
+| `UniformRandomMALA/Concrete/PaperNonstationaryMSE.lean` | Both nonstationary mean-square error bounds of Corollary 2.8 |
+| `UniformRandomMALA/Concrete/StationaryPath*.lean`, `StationaryVariance*.lean` | Finite-path moments, centered kernel operator, Poisson equation, and stationary variance limits |
+| `UniformRandomMALA/Concrete/KernelLp*.lean`, `L2DensityEvolution.lean` | Actual Lp kernel integration, L²/L⁴ contraction, and Radon–Nikodym density evolution |
+| `UniformRandomMALA/Concrete/NonstationaryMSE*.lean` | Actual sample-average MSE, pair bounds, and covariance summation |
+| `UniformRandomMALA/Concrete/VarianceSeparation*.lean` | Extended variance, observable witnesses, and both assertions of the variance comparison |
+| `UniformRandomMALA/Concrete/MarkovInfinite*.lean`, `MarkovFiniteExtension.lean` | Actual infinite trajectory kernel, finite-prefix correspondence, time shifts, conditional expectations, and initial-law domination |
+| `UniformRandomMALA/Concrete/MartingaleCLT*.lean`, `MarkovErgodic*.lean` | Proved triangular martingale CLT and the L¹ ergodic estimates used to discharge its hypotheses |
+| `UniformRandomMALA/Concrete/MarkovCLT*.lean`, `MarkovBounded*.lean`, `MarkovGaussianCLT.lean` | Poisson boundary, normalized rows, Gaussian convergence, and bounded-density, absolutely continuous, and arbitrary-start transfer |
+| `UniformRandomMALA/Concrete/SmallFixedStepGap.lean` | Fixed-step lower bound and its dimension endpoint |
+| `UniformRandomMALA/Concrete/NonconvexPotential.lean`, `NonconvexGradientMoments.lean` | Nonconvex Boltzmann interface and proved Gaussian-convolution gradient moments |
+| `UniformRandomMALA/Concrete/NonconvexGradientMGF.lean`, `NonconvexMALA.lean` | Subcritical gradient moments and actual reversible MALA in the nonconvex setting |
+| `UniformRandomMALA/Nonconvex/` | Full Proposition B.1 through finite likelihoods, Lipschitz Euler/RWM comparison, weak limits, and real-moment interpolation |
+| `UniformRandomMALA/Concrete/FractionalAggregation.lean` | General fractional aggregation lemma and component-aggregation theorem, independently reusable from MALA |
+| `UniformRandomMALA/Concrete/TunedSpectralGap.lean`, `MixingTime.lean` | Compatibility constant convention, mixing-time definition, and general ceiling arguments |
 | `UniformRandomMALA/Concrete/L2Mixing*.lean`, `L2DensityTV.lean`, `PositiveContraction.lean` | Proved gap-to-TV connection for the actual iterated half-lazy kernel |
 | `UniformRandomMALA/Concrete/MixingTimeArithmetic.lean`, `TargetGapRange.lean` | Logarithm/ceiling estimates and the concrete finite-gap range |
 | `UniformRandomMALA/DependencyAudit.lean` | Selected declarations for the actual axiom dependency audit |

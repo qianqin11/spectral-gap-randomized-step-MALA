@@ -1,104 +1,61 @@
 # Coverage and verification report
 
-The Lean development formalizes Theorem 2.1 (`thm:main`) from the paper's
-first-order assumptions (`eq:first-order-assumptions`), with both non-lazy
-and half-lazy conclusions and a common choice of universal constants
-satisfying the paper's bounds. It also includes all three inequalities of
-Corollary 2.2 (`cor:sqrt-d-endpoint`), the mixing-time result of Corollary 2.4
-(`cor:mixing`), and the smooth fixed-step minimax obstruction in
-Proposition 2.3 (`prop:minimax-fixed-step-ceiling`). The fractional aggregation
-lemma (Lemma 3.5) and component-aggregation theorem (Theorem 3.6) are also
-available as general results independent of MALA.
+The package contains the paper-facing gap and mixing theorems, stationary
+variance limits and bounds, both variance-separation assertions, the
+nonstationary MSE corollary, the full nonconvex rejection theorem, and the
+general aggregation lemma and theorem. The nonlazy and half-lazy CLTs are
+also proved from every initial distribution. Every requested result has a
+formalized endpoint; Lemmas B.2–B.5 are the explicit scope exclusion.
 
-The mixing prefactor depends only on the tuning constant, matching the
-manuscript; a fixed universal tuning gives an optional specialization.
-The [reader guide](PAPER_READER_GUIDE.md) connects the paper's statements and
-definitions to the full proofs.
+For the current statement-by-statement status, use
+[FORMALIZATION_STATUS.md](FORMALIZATION_STATUS.md). For the latest full
+build and audit result, use [BUILD_STATUS.md](BUILD_STATUS.md). This report
+explains how to review coverage without conflating it with build evidence.
 
-The current kernel-build and audit results are maintained in
-[BUILD_STATUS.md](BUILD_STATUS.md). This report explains the coverage and
-how to interpret that evidence.
+## Review the mathematical endpoints
 
-## Reading the endpoints
+1. Find the paper number and TeX label in [THEOREM_MAP.md](THEOREM_MAP.md).
+2. Read the linked declaration's assumptions and conclusion. The public
+   main theorem takes `C1Potential`, whose drift is the actual gradient;
+   Proposition B.1 instead takes the weaker `NonconvexPotential` interface.
+3. Compare the target, proposal, acceptance rule, kernel mixture, gap,
+   density norm, and sample-law definitions using the
+   [definition map](PAPER_READER_GUIDE.md#3-compare-definitions-with-the-paper).
+4. Follow the [proof paths](PAPER_READER_GUIDE.md#4-follow-the-complete-proofs)
+   to the results supplying each analytic input.
 
-The principal declaration is
-`UniformRandomMALA.Concrete.C1Potential.exists_universal_paperMasterRHS_bounds`.
-Its input `C1Potential` records continuous differentiability, the
-first-order strong-convexity inequality, and Lipschitz continuity of the
-actual Riesz gradient. The upper Taylor bound is proved, and the internal
-MALA drift is definitionally that gradient. No separate analytic certificate
-is an argument to the main theorem.
+`PaperNormalizedGap.lean` contains the current main theorem and all three
+gap-corollary bounds. `PaperNormalizedMixing.lean` contains both mixing-time
+ceilings with the stated tuning dependence. `PaperAsymptoticVariance.lean`,
+`VarianceSeparationCorollary.lean`, `VarianceSeparationFixedStep.lean`, and
+`PaperNonstationaryMSE.lean` connect the sample-average claims to actual
+Markov path laws, including the extended variance needed at zero gap.
+`PaperCentralLimit.lean` proves Gaussian convergence for the actual infinite
+trajectory from every initial probability measure, with the same stationary
+variance as the variance-limit theorem.
 
-[THEOREM_MAP.md](THEOREM_MAP.md) pairs each covered result with its paper
-number, TeX label, and exact Lean declarations.
-[FORMALIZATION_STATUS.md](FORMALIZATION_STATUS.md) gives the coverage table;
-[PAPER_READER_GUIDE.md](PAPER_READER_GUIDE.md) provides a reading order.
+`FractionalAggregation.lean` proves Lemma 3.5 and Theorem 3.6 for general
+finite kernel families, independently of MALA. The MALA application supplies
+their flow and energy hypotheses internally. `Nonconvex/StationaryRejection.lean`
+proves Proposition B.1 under its full appendix assumptions.
 
-## Supporting mathematics
+## Review proof dependencies
 
-The randomized-step proof combines the disjoint mixture-energy comparison
-(Lemma 3.1, `lem:Kt`), overlap (Proposition 3.2, `prop:overlap`), separation
-(Proposition 3.3, `prop:separated`), both flow bounds (Proposition 3.4,
-`prop:flow`), and fractional/hard-assignment aggregation (Lemma 3.5,
-`lem:fractional`; Theorem 3.6, `thm:aggregation`). The aggregation theorems
-retain the stated `L²` energy-domination hypothesis.
+The public import is `UniformRandomMALA.AllResults`. The full gate builds
+the source, checks that import, and executes the selected `#print axioms`
+requests in `DependencyAudit.lean`. It permits only `propext`,
+`Classical.choice`, and `Quot.sound`; missing declarations, Lean errors, and
+additional axioms fail the check. Source and numerical audits are separate
+checks and do not replace kernel verification.
 
-The development also contains the following reusable results:
+The alternative finite-chain rejection proof proves the endpoint without
+the continuous-time Lemmas B.2–B.5. The isoperimetry proof likewise derives
+the needed enlargement inequality internally. The optional Hessian adapter
+provides smooth special cases and the fixed-step hard witness, without
+changing the first-order assumptions of the lower-bound theorem.
 
-- equivalence of the `L²` Poincaré and Rayleigh-infimum spectral gaps,
-  including zero-variance and infinite-energy cases;
-- Markov, reversibility, Dirichlet-energy, and Rayleigh-gap identities for
-  the half-lazy kernel;
-- exact `L²` contraction and total-variation decay for iterated reversible
-  half-lazy kernels, including the initial-density factor and mixing-time ceiling;
-- real-exponent moment interpolation for the public `p ≥ 1` rejection range;
-- fractional aggregation with extended-valued energies and truncation limits;
-- Gaussian OU/Bobkov interpolation, finite-Euler transport, and weak-limit
-  stability for target enlargement;
-- Rayleigh test-function and indicator-cut upper bounds;
-- the smooth hard potential, Gaussian trigonometric identities, and product
-  concentration used in Proposition A.1 (`prop:generic-fixed-step-obstruction`).
-
-[PROOF_STRATEGY_LEDGER.md](PROOF_STRATEGY_LEDGER.md) explains how these
-arguments fit together. [REUSABLE_RESULTS.md](REUSABLE_RESULTS.md) gives
-names and imports for reuse.
-
-## Scope boundary
-
-The manuscript's continuous-time rejection derivation is not transcribed.
-Lean obtains the standing strongly convex case of Proposition B.1
-(`prop:stationary-rejection`) from finite Gaussian likelihoods, finite-Euler
-energy bounds, Euler/RWM comparison, and weak-limit closure. Appendix B's
-additional nonconvex `C¹` generalization is not formalized. This limitation
-does not leave an unproved rejection premise in the main theorem.
-
-The optional Hessian adapter supplies smooth special cases and the
-fixed-step hard witness. It is not an assumption of the first-order
-lower-bound endpoint. [TRUST_BOUNDARY.md](TRUST_BOUNDARY.md) details the
-logical assumptions and dependencies.
-
-## Reproducing and interpreting validation
-
-Run `scripts/check.ps1` on Windows or `bash scripts/check.sh` on Linux or
-macOS after retrieving the pinned dependencies with `lake exe cache get`.
-Complete prerequisites and commands are in [README.md](README.md).
-
-The gate builds the Lean source, checks the public `AllResults` import,
-and executes the `#print axioms` requests in `DependencyAudit.lean`.
-The dependency checker permits only `propext`, `Classical.choice`, and
-`Quot.sound`, and fails on missing requests, Lean errors, or additional
-axioms. The source checks and numerical trials are separate parts of the
-gate; a successful source or numerical audit alone is not a kernel check.
-
-The manuscript source, bibliography, three figure PDFs, and typeset paper
-are included in `paper/`. The manuscript audit checks the supplied PDF
-against [its recorded digest](validation/manuscript-pdf.sha256), inspects
-source labels, references, citations, and figure dependencies, and checks
-paper references in Lean. Mathematical correspondence still requires the
-statement-level map and scope qualifications above. A source audit does not
-replace typesetting; `BUILD_STATUS.md` records LaTeX validation separately.
-
-Historical records in `validation/historical/` document earlier versions.
-The historical first-order transition is described in
-[FIRST_ORDER_REVISION.md](FIRST_ORDER_REVISION.md). Neither historical build
-logs nor their counts should be read as current validation results.
+Run the commands in [README.md](README.md#reproduce-the-verification).
+[TRUST_BOUNDARY.md](TRUST_BOUNDARY.md) explains the checks and their limits.
+Manuscript typesetting and source/PDF correspondence evidence are reported
+separately in `BUILD_STATUS.md`. Records under `validation/historical/`
+remain historical evidence.

@@ -1,43 +1,35 @@
 {
-  "validation_date": "2026-09-19",
+  "validation_date": "2026-09-26",
   "status": "KERNEL_VERIFIED",
   "lean_version": "4.33.0",
   "mathlib_version": "4.33.0",
-  "change_scope": "Manuscript comparison and package-wide documentation reorganization; no Lean statement or proof changes.",
-  "lean_statements_and_proofs": "Unchanged from the full verified proof version; all 165 Lean files and three dependency-configuration files matched the recorded checksums.",
-  "paper_pdf_sha256": "feee07c1d78444bab3d4eea25807840935bd116c7c5888decb71587055cfa66b",
-  "paper_tex_sha256": "8ac5cbdac07ece71a04a0370ddb98566bc891ad329ad8e85b4e6a9de4757978f",
-  "paper_inventory": [
-    "hard_target_first_coordinate_trace.pdf",
-    "hard_target_origin_acceptance.pdf",
-    "hard_target_stationary_comparison.pdf",
-    "main.pdf",
-    "main.tex",
-    "uniform_random_mala.bib"
+  "change_scope": "Complete formalization of the updated paper except Lemmas B.2–B.5; package-wide documentation and verification refresh.",
+  "lean_files": 275,
+  "source_declarations": 3234,
+  "build_jobs": 4131,
+  "audited_declarations": 318,
+  "allowed_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
   ],
-  "lean_reference_label_uses": 134,
-  "lean_number_label_pairs": 90,
-  "theorem_environments": 21,
-  "theorem_labels_checked_against_latex": 20,
-  "theorem_map_declarations_compiled": 56,
-  "manuscript_audit_tests": 21,
-  "manuscript_pages": 48,
-  "source_pdf_correspondence": "Equal normalized extracted text on all 48 pages; not byte/pixel equivalence.",
-  "kernel_build": "Retained PASS; 3976 jobs; Lean source and dependency configuration unchanged.",
-  "public_import": "PASS",
-  "axiom_audit": "Retained PASS; 281 declarations; propext, Classical.choice, Quot.sound only.",
-  "remaining_scope_qualification": "Appendix B nonconvex extension and its continuous-time derivation are not formalized.",
-  "formalized_results": [
-    "Randomized MALA spectral-gap theorem and corollary",
-    "Fixed-step minimax obstruction",
-    "Mixing-time corollary",
-    "General fractional and component aggregation results"
+  "lean_source_and_config_digest": "d6d6a0f21afae1ab8dcd5a40490585c19c96f72f35f865402f00def9b1b93b5e",
+  "paper_pdf_sha256": "11ab696a4591e8ccc76521ea5f6fe2f33923d6041c6145dee69b4ee2e614be66",
+  "paper_tex_sha256": "ac625c25805f85226fad68eff4b769815de166f67d8acaf2b9768dc66cca7d65",
+  "paper_assets_preserved": true,
+  "manuscript_pages": 55,
+  "source_pdf_correspondence": "Equal NFKC/whitespace-normalized extracted text on all 55 pages.",
+  "paper_numbered_statements_in_scope": 21,
+  "excluded_results": [
+    "Lemma B.2",
+    "Lemma B.3",
+    "Lemma B.4",
+    "Lemma B.5"
   ],
-  "corollary_2_4_comparison": "MATCH: the positive mixing prefactor depends only on c, as stated in the supplied source and PDF.",
-  "reader_guide_example": "PASS; checked against AllResults after documentation rewrite.",
-  "documentation_link_audit": {
-    "files": 19,
-    "local_links": 245,
-    "anchors": 23
-  }
+  "additional_result": "Remark 2.4",
+  "theorem_map_names_located": 69,
+  "documentation_lean_commands": 83,
+  "reader_guide_commands": 22,
+  "documentation_links_and_anchors": 284,
+  "manuscript_note": "The paper's verification narrative retains historical coverage and audit counts; current package docs identify the difference."
 }

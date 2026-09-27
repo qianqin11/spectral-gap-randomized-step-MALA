@@ -1,12 +1,13 @@
 import UniformRandomMALA.Concrete.C1MainTheorem
 
 /-!
-# The tuned square-root-logarithmic spectral-gap bound
+# The original tuned spectral-gap constant convention
 
-The third display of Corollary 2.2 (`cor:sqrt-d-endpoint`) follows from its
-already formalized second display by choosing `c = c' / sqrt pStar`.
-The concrete endpoint below uses the same universal constants and the same
-normalized target and randomized MALA kernel as Theorem 2.1 (`thm:main`).
+This compatibility module proves the tuning substitution in the original
+constant convention. `PaperNormalizedGap.lean` supplies the current
+Corollary 2.2 (`cor:sqrt-d-endpoint`), with the revised logarithmic threshold
+and absorbed universal constants. Both developments concern the same
+normalized target and randomized MALA kernel.
 -/
 
 namespace UniformRandomMALA
@@ -80,7 +81,7 @@ lemma paperMomentThreshold_concrete_pos (V : C1Potential d) :
   (V.toFirstOrderPotential.universalParameters 1 (by norm_num)).hpStar_pos
 
 /-- The smaller endpoint in Corollary 2.2 (`cor:sqrt-d-endpoint`) and
-Corollary 2.4 (`cor:mixing`):
+Corollary 2.5 (`cor:mixing`):
 `H = c / (L * sqrt (d * pStar))`. It does not depend on mixing accuracy. -/
 def paperTunedStep (V : C1Potential d) (c : ℝ) : ℝ :=
   c / (V.L * Real.sqrt

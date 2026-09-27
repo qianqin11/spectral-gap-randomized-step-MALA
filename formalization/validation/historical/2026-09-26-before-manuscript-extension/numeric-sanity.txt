@@ -1,0 +1,7 @@
+NUMERIC SANITY PASSED
+Seed: 20260815
+Random trials: 2000
+Checked: min/max gluing, theta identities, reciprocal constants,
+safe/ladder coefficients, both endpoint substitutions, and
+the current assumption-free Corollary 2.2 simplification.
+NOTE: this is not a proof and not a Lean kernel check.

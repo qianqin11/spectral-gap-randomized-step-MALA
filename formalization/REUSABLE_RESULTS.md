@@ -1,8 +1,9 @@
 # Reusable mathematical results
 
 This guide describes results that can be imported independently of the final
-uniform-random-MALA theorem, including general aggregation, kernel mixing,
-Gaussian isoperimetry, and variational gap bounds. For the connection to
+uniform-random-MALA theorem, including general aggregation, `Lp` kernel
+integration, mixing, variance and MSE estimates, Markov path laws, martingale
+CLTs, Gaussian isoperimetry, and variational gap bounds. For the connection to
 the paper and the full proof, start with
 [PAPER_READER_GUIDE.md](PAPER_READER_GUIDE.md).
 
@@ -11,6 +12,11 @@ the paper and the full proof, start with
 | Potential assumptions and actual-gradient calculus | [First-order bridge](#first-order-actual-gradient-bridge) |
 | Gap definitions and lazification | [Rayleigh and Poincaré formulations](#rayleigh-and-poincaré-formulations-of-spectral-gap) and [fair lazification](#fair-lazification-of-arbitrary-markov-kernels) |
 | Spectral gap to total variation and mixing time | [Generic lazy-kernel convergence](#generic-lazy-kernel-convergence-and-mixing-time) |
+| Full `Lp` kernel integration and density evolution | [Kernel integration and norm decay](#kernel-integration-and-norm-decay) |
+| Actual finite and infinite Markov paths | [Markov path laws](#actual-markov-path-laws) |
+| Stationary variance, zero-gap limits, and nonstationary MSE | [Sample-average estimates](#stationary-variance-and-nonstationary-mse) |
+| Martingale CLT and arbitrary-start transfer | [Central limit foundations](#martingale-and-markov-central-limit-theorems) |
+| Nonconvex rejection moments | [Nonconvex target tools](#nonconvex-targets-and-rejection-moments) |
 | Lemma 3.5 and Theorem 3.6 for general kernel families | [Fractional aggregation](#fractional-aggregation-for-finite-reversible-families) |
 | Gaussian enlargement and transport | [Finite-dimensional isoperimetry](#finite-dimensional-gaussian-isoperimetry) and [weak-limit stability](#weak-limit-stability-of-enlargement-inequalities) |
 | Test-function upper bounds and fixed-step obstructions | [Spectral-gap upper bounds](#spectral-gap-upper-bounds-from-tests-and-cuts) and [the smooth hard potential](#explicit-smooth-hard-potential-for-fixed-step-mala) |
@@ -228,6 +234,7 @@ Import:
 
 ```lean
 import UniformRandomMALA.Concrete.TunedSpectralGap
+import UniformRandomMALA.Concrete.PaperNormalizedGap
 ```
 
 The third display of Corollary 2.2 (`cor:sqrt-d-endpoint`) specializes the
@@ -240,24 +247,21 @@ already proved second display by replacing its tuning constant with
 #check Parameters.tunedSqrtDimensionCorollaryRHS_le_gap
 ```
 
-For the actual target and randomized MALA kernel, inspect:
+For the current manuscript normalization, actual target, and randomized
+MALA kernel, inspect:
 
 ```lean
-#check Concrete.C1Potential.paperTunedStep
-#check Concrete.C1Potential.paperTunedGapRHS
-#check Concrete.C1Potential.tunedSqrtDimensionCorollary_rayleighSpectralGap_lower
+#check Concrete.C1Potential.normalizedTunedStep
+#check Concrete.C1Potential.normalizedTunedGapRHS
+#check Concrete.C1Potential.normalizedTunedCorollary_rayleighSpectralGap_lower
 ```
 
-These give, for every `c > 0`,
-
-```text
-H = c / (L sqrt(d pStar)),
-Gap(P̄_H) ≥ c0 / (κ sqrt(d pStar)) * min(c, b0²/(2c)).
-```
-
-The universal constants are the same fixed witnesses used by the master
-theorem. The concrete endpoint assumes only `C1Potential` and `c > 0`;
-it proves the master-gap input internally, with no `pStar ≤ d` condition.
+The endpoint is `H = c / (L sqrt(d pStar))` with the manuscript's normalized
+threshold. The concrete theorem assumes only `C1Potential` and `c > 0`
+and supplies the master-gap input internally, with no `pStar ≤ d` condition.
+The older `paperTunedStep`, `paperTunedGapRHS`, and
+`tunedSqrtDimensionCorollary_rayleighSpectralGap_lower` remain available
+under their compatibility constant convention.
 
 The separate import
 
@@ -345,22 +349,24 @@ scalar results in [`Concrete/MixingTimeArithmetic.lean`](UniformRandomMALA/Concr
 include time zero and the endpoint `g = 1`, so no strict upper bound on the
 lazy gap or positive-logarithm assumption is required.
 
-The concrete paper endpoints discharge all kernel and gap inputs:
+The current paper endpoints discharge all kernel and gap inputs:
 
 ```lean
-#check Concrete.paperMixingConstant
-#check Concrete.C1Potential.paperMixingScale
-#check Concrete.C1Potential.mixingTimeCorollary
-#check Concrete.C1Potential.exists_universal_mixingTimeCorollary
+import UniformRandomMALA.Concrete.PaperNormalizedMixing
+
+#check Concrete.normalizedMixingConstant
+#check Concrete.C1Potential.normalizedMixingScale
+#check Concrete.C1Potential.normalizedMixingTimeCorollary
+#check Concrete.C1Potential.exists_universal_normalizedMixingTimeCorollary
 ```
 
-For Corollary 2.4 (`cor:mixing`), `mixingTimeCorollary` proves both ceilings
-with scale `κ sqrt(d pStar)` and the explicit prefactor
-`C(c) = 2 / (c0 * min(c, b0²/(2c)))`, which depends only on the positive
-tuning constant, as stated in the manuscript. The optional specialization
-`exists_universal_mixingTimeCorollary` chooses `c = b0` and its prefactor
-before quantifying over the dimension, potential, initial law, and accuracy.
-The step endpoint is independent of the requested accuracy.
+For Corollary 2.5 (`cor:mixing`), `normalizedMixingTimeCorollary` proves both
+ceilings with scale `κ sqrt(d pStar)` and a prefactor depending only on the
+positive tuning constant. `exists_universal_normalizedMixingTimeCorollary`
+chooses its universal coefficient before the tuning parameter and all chain
+inputs. The step endpoint is independent of the requested accuracy. The
+earlier `mixingTimeCorollary` and fixed-tuning specialization remain
+compatibility APIs.
 
 ## Fractional aggregation for finite reversible families
 
@@ -998,6 +1004,166 @@ The rate `c` is universal. Once that rate is fixed, the multiplicative
 constant `C` depends only on the cutoff `κ₀`, not on the dimension,
 curvatures, potential, or step size.
 
+## Kernel integration and norm decay
+
+`Concrete/KernelLpBasic.lean` defines `KernelLp.average K f x` as the actual
+Bochner integral of `f` under `K x`. Invariance and Jensen's inequality give
+contraction for every finite `Lp` with exponent at least one. The input can
+be an almost-everywhere measurable `MemLp` function; boundedness is not
+required.
+
+```lean
+import UniformRandomMALA.Concrete.KernelLpContraction
+import UniformRandomMALA.Concrete.KernelLpIterateContraction
+import UniformRandomMALA.Concrete.L2DensityEvolution
+
+open UniformRandomMALA
+
+#check Concrete.KernelLp.average_memLp
+#check Concrete.KernelLp.lpNorm_average_le
+#check Concrete.KernelLp.operator
+#check Concrete.KernelLp.integral_mul_average_symm
+#check Concrete.KernelLp.integral_sq_average_le_of_positive
+#check Concrete.KernelLp.integral_sq_average_halfLazy_le
+#check Concrete.KernelLp.lpNorm_average_iterate_le
+#check Concrete.densityTV_iterate_of_positive_actualGap
+#check Concrete.densityTV_iterate_halfLazy_actualGap
+```
+
+`KernelLpL2.lean` proves the reversible pairing and connects actual kernel
+energy to the `L²` operator. `KernelLpContraction.lean` uses a genuine
+quadratic-positivity hypothesis for general positive kernels and proves it
+for half-lazy kernels. `KernelLpInterpolation.lean` proves the truncation and
+layer-cake argument transferring `L²` decay and the infinity bound to `L⁴`
+decay; no interpolation theorem is assumed as an application premise.
+
+`L2DensityEvolution.lean` identifies the density of the actual iterated law
+and proves both the density and TV estimates in `eq:TVbound`. These general
+APIs coexist with the bounded-observable route described earlier.
+
+## Actual Markov path laws
+
+```lean
+import UniformRandomMALA.Concrete.MarkovInfiniteInitial
+import UniformRandomMALA.Concrete.MarkovInfiniteMartingale
+
+open UniformRandomMALA
+
+#check Concrete.finiteMarkovPathLaw
+#check Concrete.finiteMarkovPathLaw_map_pair
+#check Concrete.infiniteMarkovPathKernel
+#check Concrete.infiniteMarkovPathLaw_eq_comp
+#check Concrete.infiniteMarkovPathLaw_map_prefix
+#check Concrete.infiniteMarkovPathLaw_shift
+#check Concrete.infiniteMarkovPathLaw_le_smul
+#check Concrete.infiniteMarkovPath_condExp_edge
+```
+
+The finite law records `X₀,…,Xₙ₋₁` and is defined by actual kernel
+composition. Its coordinate and pair-law theorems support direct moment
+computations from arbitrary initial probabilities. The infinite law uses
+mathlib's Ionescu–Tulcea trajectory construction. The prefix theorem proves
+equality with the existing finite law, and the time-shift theorem identifies
+the law after discarding any fixed number of observations.
+
+The path kernel preserves initial-law addition, scaling, domination, and
+finite mass. Conditional expectations of successive-coordinate observables
+are proved with respect to the natural filtration. These identities are
+useful when constructing martingales for other Markov-chain applications.
+
+## Stationary variance and nonstationary MSE
+
+```lean
+import UniformRandomMALA.Concrete.StationaryVarianceGeneral
+import UniformRandomMALA.Concrete.VarianceSeparationExtended
+import UniformRandomMALA.Concrete.NonstationaryMSE
+
+open UniformRandomMALA
+
+#check Concrete.stationaryAsymptoticVariance
+#check Concrete.stationaryAsymptoticVariance_spec
+#check Concrete.asymptoticVarianceExtended_tendsto
+#check Concrete.asymptoticVarianceExtended_eq_of_gap
+#check Concrete.finiteMarkovMSE_le_of_positive
+#check Concrete.finiteMarkovMSE_halfLazy_le
+```
+
+The stationary result proves the limit of the actual scaled sample
+variance and its Poisson representation, with the nonlazy coefficient
+`2/g - 1`. The extended version takes values in `[0,∞]`, proves convergence
+for reversible chains even at zero gap, and agrees with the real variance
+when the gap is positive. The variance-separation modules use this same
+quantity to turn a small-energy test into a large-variance observable.
+
+The general MSE theorem applies to a positive reversible kernel, an initial
+probability with `L²` density, and an `L⁴` observable. Its expectation is the
+actual finite-path squared error. The proof derives density pairing, `L⁴`
+decay, pair moments, and a finite covariance sum; the half-lazy wrapper
+supplies positivity. There is no assumed sample-error sequence or external
+MSE theorem.
+
+## Martingale and Markov central limit theorems
+
+```lean
+import UniformRandomMALA.Concrete.MartingaleCLTLimit
+import UniformRandomMALA.Concrete.MarkovInfiniteCLTInputs
+import UniformRandomMALA.Concrete.MarkovGaussianCLT
+import UniformRandomMALA.Concrete.PaperCentralLimit
+
+open UniformRandomMALA
+
+#check Concrete.MartingaleDifferenceRow
+#check Concrete.martingale_characteristicFunction_tendsto
+#check Concrete.normalizedPoissonRow_expectedTailSum_tendsto_zero
+#check Concrete.normalizedPoissonRow_varianceError_tendsto_zero
+#check Concrete.boundedInitial_markovCLT
+#check Concrete.markovCLT_of_gap_and_acceptance
+```
+
+`MartingaleDifferenceRow` records an actual filtration, adapted `L²`
+increments, and zero conditional means. The triangular-array theorem
+derives the Gaussian characteristic-function limit from expected Lindeberg
+tails and `L¹` convergence of the actual conditional-variance sum. It does
+not require independence, and its rows may live on different probability
+spaces.
+
+The Markov application constructs the Poisson increments on the actual
+infinite trajectory. An `L¹` ergodic theorem proves the variance-clock
+limit, and stationarity plus square integrability proves the tail limit.
+The Poisson boundary vanishes in mean square. The bounded-initial theorem
+then gives genuine convergence in distribution to the Gaussian with the
+actual stationary variance, including the zero-variance case.
+
+`markovCLT_of_gap_and_acceptance` is a reusable arbitrary-start endpoint:
+it takes an invariant Markov kernel with a positive right gap and a
+decomposition into an absolutely continuous accepted part and a rejection
+atom with probability strictly below one at every state. The proof derives
+the extension from bounded-density approximation, the actual path-law
+shift, and a negligible finite prefix. The MALA wrappers prove these
+acceptance and gap hypotheses internally.
+
+## Nonconvex targets and rejection moments
+
+```lean
+import UniformRandomMALA.Nonconvex.StationaryRejection
+
+open UniformRandomMALA
+
+#check Concrete.NonconvexPotential
+#check Concrete.NonconvexPotential.integrable_exp_mul_gradU_norm_sq
+#check Concrete.NonconvexPotential.integral_exp_mul_gradU_norm_sq_le
+#check Concrete.NonconvexPotential.stationary_rejection_moments
+#check Concrete.NonconvexPotential.exists_universal_stationary_rejection_moments
+```
+
+The input is a `C¹` potential with a globally Lipschitz actual gradient and
+an integrable Boltzmann weight. Gaussian convolution supplies the gradient
+moments without a target position-moment assumption. The finite Euler/RWM
+comparison tolerates Lipschitz growth and yields the full rejection bound
+for every real `p ≥ 1`. These tools prove Proposition B.1 independently of
+the strongly convex gap application and without the excluded continuous-time
+Lemmas B.2–B.5.
+
 ## Other probability infrastructure
 
 The following declarations may also be useful independently:
@@ -1023,12 +1189,16 @@ open UniformRandomMALA
 
 #check Concrete.C1Potential.upperTaylor
 #check Concrete.C1Potential.toFirstOrderPotential
-#check Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
-#check Concrete.C1Potential.sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower
-#check Concrete.C1Potential.tunedSqrtDimensionCorollary_rayleighSpectralGap_lower
+#check Concrete.C1Potential.exists_universal_normalizedMasterRHS_bounds
+#check Concrete.C1Potential.normalizedSimplifiedCorollary_rayleighSpectralGap_lower
+#check Concrete.C1Potential.normalizedTunedCorollary_rayleighSpectralGap_lower
 #check Concrete.setwiseTV_iterate_halfLazy_le
-#check Concrete.C1Potential.mixingTimeCorollary
-#check Concrete.C1Potential.exists_universal_mixingTimeCorollary
+#check Concrete.C1Potential.normalizedMixingTimeCorollary
+#check Concrete.C1Potential.exists_universal_normalizedMixingTimeCorollary
+#check Concrete.C1Potential.central_limit_nonlazy
+#check Concrete.C1Potential.central_limit_lazy
+#check Concrete.C1Potential.nonstationaryMSE_corollary
+#check Concrete.NonconvexPotential.exists_universal_stationary_rejection_moments
 #check Concrete.l2SpectralGap_eq_rayleighSpectralGap
 #check Concrete.rayleighSpectralGap_halfLazyKernel
 #check Concrete.fractionalAggregation_poincareLower
@@ -1036,10 +1206,14 @@ open UniformRandomMALA
 #check DiscreteTime.target_bakryLedoux
 #check Concrete.exists_universal_fixedStepMinimaxGap_paper_upper
 
-#print axioms Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
-#print axioms Concrete.C1Potential.tunedSqrtDimensionCorollary_rayleighSpectralGap_lower
+#print axioms Concrete.C1Potential.exists_universal_normalizedMasterRHS_bounds
+#print axioms Concrete.C1Potential.normalizedTunedCorollary_rayleighSpectralGap_lower
 #print axioms Concrete.setwiseTV_iterate_halfLazy_le
-#print axioms Concrete.C1Potential.mixingTimeCorollary
+#print axioms Concrete.C1Potential.normalizedMixingTimeCorollary
+#print axioms Concrete.C1Potential.central_limit_nonlazy
+#print axioms Concrete.C1Potential.central_limit_lazy
+#print axioms Concrete.C1Potential.nonstationaryMSE_corollary
+#print axioms Concrete.NonconvexPotential.exists_universal_stationary_rejection_moments
 #print axioms Concrete.fractionalAggregation_poincareLower
 #print axioms DiscreteTime.target_bakryLedoux
 #print axioms Concrete.exists_universal_fixedStepMinimaxGap_paper_upper

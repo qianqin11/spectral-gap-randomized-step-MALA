@@ -6,10 +6,11 @@ import UniformRandomMALA.Concrete.TunedSpectralGap
 /-!
 # Mixing time of half-lazy randomized MALA
 
-Corollary 2.4 (`cor:mixing`) is derived from the actual kernel iterates,
-the proved total-variation contraction, and the tuned spectral-gap bound.
-The general tuning statement exposes the prefactor's dependence on `c`.
-Fixing a universal tuning constant gives a universal mixing prefactor.
+The generic ceiling argument and an earlier threshold convention are
+derived from actual kernel iterates and proved total-variation contraction.
+The current paper-facing Corollary 2.5 (`cor:mixing`), including its
+normalized threshold and explicit tuning dependence, is exported by
+`PaperNormalizedMixing.lean`.
 -/
 
 namespace UniformRandomMALA.Concrete
@@ -103,8 +104,8 @@ theorem two_div_paperTunedGapRHS (V : C1Potential d) (c : ℝ) :
   simp only [div_eq_mul_inv, mul_inv_rev, inv_inv]
   ring
 
-/-- Corollary 2.4 (`cor:mixing`), both ceiling bounds for arbitrary positive
-tuning. The prefactor is displayed as `paperMixingConstant c`; all analytic
+/-- Both ceiling bounds in the earlier threshold convention, retained as a
+compatibility API. The prefactor is `paperMixingConstant c`; all analytic
 and spectral-gap inputs are proved from the potential and initial law. -/
 theorem mixingTimeCorollary
     (V : C1Potential d) (c : ℝ) (hc : 0 < c)
@@ -155,7 +156,7 @@ theorem mixingTimeCorollary
         rw [mul_div_right_comm, V.two_div_paperTunedGapRHS c]
         ring
 
-/-- A universal tuning choice gives a universal prefactor in Corollary 2.4
+/-- A universal tuning choice gives a universal prefactor in Corollary 2.5
 (`cor:mixing`). Neither constant depends on the target, initial law, or
 accuracy. -/
 theorem exists_universal_mixingTimeCorollary :

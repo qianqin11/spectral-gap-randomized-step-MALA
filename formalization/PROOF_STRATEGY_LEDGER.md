@@ -1,7 +1,8 @@
 # Lean proof-strategy ledger
 
-This ledger traces the proofs of the randomized MALA gap and mixing-time
-bounds, the fixed-step obstruction, and the general aggregation results.
+This ledger traces the gap, mixing, CLT, variance, and finite-sample MSE
+proofs, the fixed-step obstruction, and the general aggregation results.
+It also records the full nonconvex stationary-rejection argument.
 Each table identifies the mathematical input, the implementation modules,
 and the argument that connects them. Start with the
 [reader guide](PAPER_READER_GUIDE.md) for a shorter route, or use
@@ -39,9 +40,20 @@ target Bakry--Ledoux + MALA local overlap
   -> tuned H = c/(L sqrt(d pStar)) -> tuned spectral-gap lower bound
 
 reversible kernel + half-lazification + Rayleigh lower bound
-  -> positive quadratic form -> bounded-observable L2 contraction
-  -> actual kernel iterates + centered RN density -> total-variation decay
+  -> positive quadratic form -> full L2 kernel contraction
+  -> actual RN density evolution -> density and total-variation decay
   -> logarithmic ceiling estimate + tuned gap -> mixing-time corollary
+
+centered kernel + positive gap -> Poisson resolvent
+  -> actual path covariances -> stationary variance limit and bounds
+  -> actual martingale increments -> Lindeberg + conditional variance LLN
+  -> Gaussian CLT -> density approximation + acceptance -> every initial law
+
+L2 decay + truncation/layer-cake interpolation -> L4 decay
+  -> initial-density pairing + actual pair laws -> finite-sample MSE
+
+small fixed-step Rayleigh energy -> extended asymptotic-variance lower bound
+  -> actual observable witness -> randomized/fixed-step variance separation
 ```
 
 ## Foundations and target model
@@ -77,6 +89,26 @@ cr = 1/(32e),       Cr = 12288 e^3,
 and proves both a high-probability local statement and a global sufficiently
 small-step statement for `p ≥ 1`. The sharper constants `1/(16e)` and
 `6144 e^3` remain available in the checked `p ≥ 2` core.
+
+## Full nonconvex stationary rejection
+
+[Nonconvex/StationaryRejection.lean](UniformRandomMALA/Nonconvex/StationaryRejection.lean)
+proves Proposition B.1 under its actual `C¹`, Lipschitz-gradient, and
+normalizable Boltzmann assumptions. The proof reuses the potential-free
+parts of the finite-chain route above and supplies the following weaker-input
+specializations:
+
+| Stage | Files | Proof difference |
+|---|---|---|
+| Potential and target | `Concrete/NonconvexPotential.lean`, `NonconvexMALA.lean` | Construct the actual Gaussian Metropolis kernel and reversible Boltzmann law without strong convexity. |
+| Gradient moments | `Concrete/NonconvexGradientMoments.lean`, `NonconvexGradientMGF.lean` | Use Gaussian convolution and normalization to derive gradient moments; no target position moments are assumed. |
+| Finite likelihood bounds | `Nonconvex/FiniteGaussianLikelihood.lean`, `FiniteEulerEnergyMGF.lean`, `FiniteEulerRealMoments.lean` | Supply the gradient moment bound to the finite-product likelihood argument. |
+| Drift and coupling | `Concrete/NonconvexTaylor.lean`, `NonconvexEulerStability.lean`, `Nonconvex/EulerRWM*.lean` | Bound the absolute Taylor remainder and finite-horizon Lipschitz growth, then prove the actual pair-chain discrepancy vanishes. |
+| Endpoint and rejection assembly | `Nonconvex/FiniteEulerEndpointContraction.lean`, `MALAWeakLimitAssembly.lean`, `MALAFullPathAssembly.lean`, `StationaryRejection.lean` | Identify the endpoint density and Metropolis meet, pass to the weak limit, and interpolate to every real `p ≥ 1`. |
+
+This proves the full endpoint while bypassing the explicitly excluded
+continuous-time Lemmas B.2–B.5. It does not use those statements as axioms
+or hypotheses.
 
 ## Gaussian Bobkov inequality
 
@@ -143,7 +175,7 @@ The manuscript-facing endpoint starts from the `C¹` first-order
 assumptions and uses the paper's `L²` Rayleigh definition:
 
 ```lean
-UniformRandomMALA.Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
+UniformRandomMALA.Concrete.C1Potential.exists_universal_normalizedMasterRHS_bounds
 ```
 
 ## Manuscript-facing calculus, gap, lazification, and aggregation
@@ -153,10 +185,10 @@ UniformRandomMALA.Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
 | First-order bridge | `Concrete/C1ToFirstOrder.lean` | Record `ContDiff ℝ 1 U`, the lower supporting inequality, and Lipschitzness of `∇ U`; derive the descent inequality along affine lines; build `FirstOrderPotential` with `gradU = ∇ U`. | **Checked** |
 | Optional smooth adapter | `Concrete/HessianToFirstOrder.lean` | Derive the first-order interface from actual Hessian quadratic bounds. This supplies a reusable smooth special case. | **Checked** |
 | Paper Rayleigh gap | `Concrete/RayleighSpectralGap.lean` | Define measurable `L²` tests and extended-valued quotients; prove equivalence between quotient infimum and the `L²` Poincaré-lower-bound supremum, treating zero variance, infinite energy, and an empty test family. | **Checked** |
-| Main paper theorem | `Concrete/C1MainTheorem.lean` | Compose the first-order bridge, certificate-free lower-bound chain, Poincaré-to-Rayleigh implication, and concrete half-lazification; choose shared universal constants before target parameters. | **Checked** |
+| Main paper theorem | `Concrete/C1MainTheorem.lean`, `PaperNormalizedGap.lean` | Compose the first-order bridge, proved lower-bound chain, Poincaré-to-Rayleigh implication, and concrete half-lazification; convert the internal constants to the current manuscript normalization with universal choices before target parameters. | **Checked** |
 | Concrete half-lazification | `Concrete/LazyKernel.lean` | Realize `(I+K)/2` as a fair Boolean parameter mixture; preserve Markovness and reversibility; compute exact half energy and half Rayleigh gap; specialize to randomized MALA. | **Checked** |
-| Square-root-dimension corollary | `Concrete/SqrtDimensionCorollary.lean` | Substitute `H=c/(L sqrt d)` and prove `min{pStar(d+pStar)/d,d} ≤ 2 pStar` without a `pStar ≤ d` assumption. | **Checked** |
-| Tuned third spectral-gap bound | `Concrete/TunedSpectralGap.lean` | Substitute `c/sqrt pStar` into the second bound and identify `H=c/(L sqrt(d pStar))`; retain the same universal constants and concrete MALA kernel. | **Checked** |
+| Square-root-dimension corollary | `Concrete/PaperNormalizedGap.lean`, with scalar bounds from `SqrtDimensionCorollary.lean` | Substitute `H=c/(L sqrt d)` and prove the first and simplified bounds with the normalized threshold, without a `pStar ≤ d` assumption. | **Checked** |
+| Tuned third spectral-gap bound | `Concrete/PaperNormalizedGap.lean`, with scalar identities from `TunedSpectralGap.lean` | Substitute `c/sqrt pStar` into the normalized second bound and identify the actual kernel at `H=c/(L sqrt(d pStar))`. | **Checked** |
 | Fractional aggregation | `Concrete/FractionalAggregation.lean` | Add weighted extended-valued Cauchy--Schwarz; use coarea, layer cake, median splitting, bounded `L²` truncations, and monotone convergence; allow zero `β_j`; specialize to hard assignment. | **Checked** |
 | Full-parameter one-step flow | `Concrete/AllParameterMALAFlow.lean` | Generalize the already checked safe and ladder instances to every admissible real `p,θ,t`; retain the exact mass range, logarithmic condition, and small-step clause. | **Checked** |
 
@@ -166,52 +198,60 @@ The principal declarations are:
 Concrete.C1Potential.upperTaylor
 Concrete.C1Potential.toFirstOrderPotential
 Concrete.l2SpectralGap_eq_rayleighSpectralGap
-Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
-Concrete.C1Potential.sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower
-Concrete.C1Potential.tunedSqrtDimensionCorollary_rayleighSpectralGap_lower
+Concrete.C1Potential.exists_universal_normalizedMasterRHS_bounds
+Concrete.C1Potential.normalizedSimplifiedCorollary_rayleighSpectralGap_lower
+Concrete.C1Potential.normalizedTunedCorollary_rayleighSpectralGap_lower
 Concrete.fractionalAggregation_poincareLower
 Concrete.C1Potential.allParameterMALAFlowBounds
 ```
 
 ## From the spectral gap to actual mixing time
 
-The tuned bound in Corollary 2.2 (`cor:sqrt-d-endpoint`) and
-Corollary 2.4 (`cor:mixing`) use the same step endpoint. Inspect
-[`paperTunedStep` and `paperTunedGapRHS`](UniformRandomMALA/Concrete/TunedSpectralGap.lean)
-to compare their literal formulas with the manuscript:
+The gap and mixing corollaries share the tuned endpoint defined in
+[PaperNormalizedGap.lean](UniformRandomMALA/Concrete/PaperNormalizedGap.lean).
+[PaperNormalizedMixing.lean](UniformRandomMALA/Concrete/PaperNormalizedMixing.lean)
+uses the proved gap in both ceiling bounds, with its prefactor depending
+only on the positive tuning parameter.
 
-```text
-H = c / (L sqrt(d pStar)),
-Gap(P̄_H) ≥ c0 / (κ sqrt(d pStar)) * min(c, b0²/(2c)).
-```
-
-The mixing argument is also proved. Its reusable kernel statements accept
-ordinary Markovness, reversibility, and a Rayleigh-gap lower bound; the
-concrete corollary supplies all three internally.
-
-| Mathematical content | Implementation | Strategy and output |
+| Stage | Implementation | What to inspect |
 |---|---|---|
-| Centered initial density and exact TV factor | [`Concrete/L2DensityTV.lean`](UniformRandomMALA/Concrete/L2DensityTV.lean) | Define `centeredDensityL2Norm` as `sqrt ∫ (dμ/dπ - 1)² dπ`; pair the density with centered event indicators and use their variance bound `1/4`. |
-| Kernel action and stationary energy | [`Concrete/L2MixingBase.lean`](UniformRandomMALA/Concrete/L2MixingBase.lean), [`L2MixingEnergy.lean`](UniformRandomMALA/Concrete/L2MixingEnergy.lean) | Build bounded measurable observables and their actual kernel averages; prove stationarity, symmetry, and `E(f,f) = ‖f‖² - ⟨f,Kf⟩`. |
-| Exact lazy contraction | [`Concrete/PositiveContraction.lean`](UniformRandomMALA/Concrete/PositiveContraction.lean), [`L2Mixing.lean`](UniformRandomMALA/Concrete/L2Mixing.lean) | Derive positivity of the half-lazy form and its Cauchy--Schwarz inequality; obtain squared-norm decay `(1-g)^(2n)` from the Rayleigh lower bound `g`. |
-| Actual transition-law convergence | [`Concrete/L2MixingTV.lean`](UniformRandomMALA/Concrete/L2MixingTV.lean) | Identify backward observable iteration with `finiteKernelIterate`; pair iterated centered indicators with the initial density to prove `TV(μK_lazy^n,π) ≤ (‖dμ/dπ-1‖₂/2)(1-g)^n`. |
-| Finite gap on the target | [`Concrete/TargetGapRange.lean`](UniformRandomMALA/Concrete/TargetGapRange.lean) | Reuse a positive-mass target cut below one half to prove `Gap(K) ≤ 2`; this justifies the finite real gap in the denominator. |
-| First hitting time and ceiling | [`Concrete/MixingTimeArithmetic.lean`](UniformRandomMALA/Concrete/MixingTimeArithmetic.lean), [`MixingTime.lean`](UniformRandomMALA/Concrete/MixingTime.lean) | Define the infimum over all natural times, including zero; use `(1-g)^n ≤ exp(-gn)` and exact gap halving to derive both ceiling bounds. |
+| Actual kernel action | `KernelLpBasic.lean`, `KernelLpOperator.lean` | The operator is Bochner integration against the transition kernel; Jensen and invariance prove `Lp` contraction. |
+| Energy, symmetry, and positivity | `KernelLpL2.lean`, `KernelLpContraction.lean` | Reversibility yields the symmetric pairing; Dirichlet energy gives the quadratic gap bound; positivity yields exact `L²` norm decay. Half-lazy positivity is proved. |
+| Actual density evolution | `L2DensityEvolution.lean` | Identify the Radon–Nikodym density of the iterated law and prove both inequalities in `eq:TVbound`, including the exact TV factor. |
+| Finite gap and mixing time | `TargetGapRange.lean`, `TargetGapOne.lean`, `MixingTimeArithmetic.lean`, `MixingTime.lean` | Control the target's gap, include time zero, and derive the logarithmic ceiling from geometric decay. |
 
-The paper-facing declarations are
-`Concrete.C1Potential.mixingTimeCorollary` and
-`Concrete.C1Potential.exists_universal_mixingTimeCorollary` in
-[`Concrete/MixingTime.lean`](UniformRandomMALA/Concrete/MixingTime.lean).
-Their inputs are the first-order potential, a probability initial law
-absolutely continuous with respect to the target with an `L²` density, and
-positive tuning and accuracy. No convergence certificate is an input.
-The definitions and proof include initial accuracy (zero mixing time) and
-the endpoint lazy gap equal to one.
+The earlier bounded-observable proof remains available in `L2Mixing*.lean`.
+The current full-`L²` route also supports the density inequality and the
+sample-average results below. Neither route assumes a mixing certificate.
 
-The mixing prefactor depends only on `c`, as in the manuscript; its formula
-is recorded in [THEOREM_MAP.md](THEOREM_MAP.md#main-results). The second
-declaration is an optional specialization that fixes `c = b0` before the
-target, initial law, and accuracy, giving a universal prefactor.
+## Actual sample averages, variance, and finite-sample error
+
+| Stage | Implementation | Strategy and output |
+|---|---|---|
+| Finite Markov laws | `NonstationaryMSEPath.lean`, `StationaryPath.lean`, `StationaryPathMoments.lean` | Construct the joint law and prove coordinate and pair marginals. Expectations and covariances refer to actual observations. |
+| Poisson equation | `StationaryVarianceResolvent.lean`, `StationaryVarianceCentered.lean` | Work on centered `L²`; a lazy Neumann series inverts `I−P` while retaining the nonlazy variance constant. |
+| Stationary limit | `StationaryVariancePoisson.lean`, `StationaryVarianceLimit.lean`, `StationaryVarianceGeneral.lean` | Express the finite sample variance through covariances and prove the scaled limit, identified with the Poisson quadratic form. |
+| Variance comparison | `VarianceSeparationExtended.lean`, `VarianceSeparationCorollary.lean`, `VarianceSeparationFixedStep.lean` | Prove the extended variance limit for reversible chains, including zero gap; turn a small-energy test into an actual large-variance observable. |
+| `L⁴` decay | `KernelLpInterpolation.lean`, `KernelLpIterateContraction.lean` | Prove truncation and layer-cake interpolation from `L²` decay and the infinity bound, then apply it to actual kernel iterates. |
+| Nonstationary MSE | `NonstationaryMSEMoments.lean`, `NonstationaryMSEPairBounds.lean`, `NonstationaryMSEExpansion.lean`, `NonstationaryMSESum.lean`, `NonstationaryMSE.lean` | Pair actual evolved densities with pair observables, expand the squared sample mean, and bound its finite covariance sum. |
+| Paper specialization | `PaperAsymptoticVariance.lean`, `PaperNonstationaryMSE.lean` | Insert the actual randomized MALA gap and prove the paper's displayed bounds. |
+
+## Central limit theorem from every initial distribution
+
+| Stage | Implementation | Strategy and output |
+|---|---|---|
+| Infinite trajectory | `MarkovInfinitePath.lean`, `MarkovInfinitePrefix.lean`, `MarkovInfiniteInitial.lean` | Construct a trajectory kernel with Ionescu–Tulcea, prove finite-prefix correspondence and the exact shifted-law identity, and preserve initial-law domination. |
+| Genuine martingale | `MarkovInfiniteMartingale.lean`, `MarkovInfiniteRow.lean` | Use the natural filtration, prove conditional means and squares of Poisson increments, and normalize the actual rows. |
+| Conditional variance and Lindeberg | `MarkovErgodicL1Limit.lean`, `MarkovCLTVarianceLLN.lean`, `MarkovInfiniteCLTInputs.lean`, `MarkovBoundedCLTInputs.lean` | Derive the variance-clock `L¹` limit and tail estimates; transfer them to bounded initial densities. |
+| Martingale Gaussian limit | `MartingaleCLT*.lean`, `MarkovCLTDistribution.lean` | Prove characteristic-function convergence using Taylor, truncation, stopping, and removal of the stop; apply the characteristic-function criterion for convergence in distribution. |
+| Poisson boundary | `MarkovCLTBoundary.lean`, `MarkovGaussianCLT.lean` | Show the normalized boundary has vanishing second moment and identify the Gaussian variance with the actual stationary variance. |
+| Arbitrary initial law | `MarkovInitialDensityApproximation.lean`, `MarkovCLTAbsolutelyContinuous.lean`, `MarkovAcceptanceApproximation.lean`, `MarkovCLTArbitraryStart.lean` | Approximate absolutely continuous starts by bounded densities, remove the singular rejection remainder, and discard a fixed finite prefix using the proved shifted law and normalization. |
+| Paper endpoint | `PaperCentralLimit.lean` | Supply the actual MALA gap and acceptance facts for nonlazy and half-lazy kernels, with no restriction on the initial probability law. |
+
+The public CLT takes a measurable `L²(π)` observable. Its martingale,
+Lindeberg, conditional-variance, and acceptance inputs are all discharged
+internally. Its limiting variance is the same quantity as in the stationary
+variance corollary.
 
 ## Fixed-step minimax obstruction
 

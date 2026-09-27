@@ -1,30 +1,24 @@
-PACKAGE VERIFICATION RECORD — 2026-09-19
+PACKAGE VERIFICATION PASSED — 2026-09-26
 
-Retained checks from the successful full gate:
-  Lean source and interface audits: passed; 165 files; 2161 declarations.
-  Library build: passed; 3976 jobs.
-  Public AllResults import: passed.
-  Dependency audit: passed; 281 declarations; standard logical axioms only.
-  Supporting numerics: passed; 2000 deterministic trials.
-All 165 Lean files and three dependency-configuration files match the verified version.
-The full build was not repeated for the documentation-only revision.
-Full-gate log: validation/local/mixing-corollary-gate.log
-
-Refreshed manuscript and documentation checks:
-MANUSCRIPT AUDIT PASSED
-PDF SHA-256: feee07c1d78444bab3d4eea25807840935bd116c7c5888decb71587055cfa66b
-Bundled manuscript: main.tex, main.pdf, bibliography, and referenced figures
-TeX labels: 110; references: 257 uses over 105 labels
-Citations: 132 key uses over 55 keys; bibliography: 65 entries
-Figures: 3 includes
-Lean manuscript labels: 134 uses; numbered theorem/label pairs: 90
-Source checks only; LaTeX compilation and Lean kernel verification are separate checks.
-
+Requested coverage complete: all paper results except Lemmas B.2–B.5.
+The aggregation lemma/theorem, nonconvex B.1, and all new corollaries are included.
+Full scripts/check.ps1 gate: exit 0.
+Lean source audit: 275 files; 3234 declarations; no placeholders.
+Full library build: 4131 jobs, passed.
+Public AllResults import: passed.
+Dependency audit: 318 declarations; propext, Classical.choice, Quot.sound only.
 Manuscript regression tests: 21 passed.
-Corollary 2.4: matches the Lean theorem; C depends only on c.
-Reader-guide Lean example: compiled successfully.
-Documentation: 245 local links and 23 anchors across 19 documents passed.
-Typesetting: 48 pages; no unresolved references or citations.
-Supplied/rebuilt PDF text: equal after normalization on all 48 pages.
-Details of nonfatal typesetting warnings: validation/manuscript-build.txt.
-Supplied manuscript assets were preserved.
+Supporting numerical checks: 2000 deterministic trials passed.
+Documentation: 83 inspection commands and the 22-command reader example compile;
+284 local links/anchors checked, 69 theorem-map declaration names located.
+Manuscript: 122 labels, 299 references, 145 citation uses, 76 bibliography entries, 3 figures.
+Lean references: 185 label uses, 135 numbered pairs.
+Fresh LaTeX/BibTeX build: 55 pages; no unresolved references/citations.
+Supplied/rebuilt PDF normalized text matches on all 55 pages.
+Nonfatal Lean linter and typesetting warnings are recorded in the detailed logs.
+The manuscript's verification paragraph describes older coverage; paper assets were preserved.
+
+PDF SHA-256: 11ab696a4591e8ccc76521ea5f6fe2f33923d6041c6145dee69b4ee2e614be66
+TeX SHA-256: ac625c25805f85226fad68eff4b769815de166f67d8acaf2b9768dc66cca7d65
+Lean/configuration snapshot digest: d6d6a0f21afae1ab8dcd5a40490585c19c96f72f35f865402f00def9b1b93b5e
+Full gate log: validation/local/current-full-gate.log

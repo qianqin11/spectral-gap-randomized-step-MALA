@@ -27,7 +27,7 @@ theorem mixingTimeOfErrors_le {error : ℕ → ℝ} {ε : ℝ} {n : ℕ}
     (hn : error n ≤ ε) : mixingTimeOfErrors error ε ≤ (n : ℕ∞) :=
   iInf_le_of_le ⟨n, hn⟩ le_rfl
 
-/-- The logarithmic factor in Corollary 2.4 (`cor:mixing`), where `M` is
+/-- The logarithmic factor in Corollary 2.5 (`cor:mixing`), where `M` is
 the centered initial-density L² norm. -/
 def mixingLog (M ε : ℝ) : ℝ := Real.log (max 1 (M / (2 * ε)))
 

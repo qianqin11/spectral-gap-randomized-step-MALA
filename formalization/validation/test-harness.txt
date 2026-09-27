@@ -1,10 +1,24 @@
-VALIDATION HARNESS PASSED — 2026-09-16
+PACKAGE VERIFICATION PASSED — 2026-09-26
 
-Full PowerShell gate: PASS (exit 0).
-Library build: PASS (3439 jobs); public import: PASS.
-Axiom allow-list check: PASS (266 declarations; standard axioms only).
-Manuscript audit regression suite: PASS (21 tests).
-Source references and Lean label/number concordance: PASS.
-Numerical sanity checks: PASS (2000 deterministic trials).
-Separate LaTeX build: PASS (47 pages).
-Bundled/rebuilt PDF normalized text comparison: PASS (47 pages).
+Requested coverage complete: all paper results except Lemmas B.2–B.5.
+The aggregation lemma/theorem, nonconvex B.1, and all new corollaries are included.
+Full scripts/check.ps1 gate: exit 0.
+Lean source audit: 275 files; 3234 declarations; no placeholders.
+Full library build: 4131 jobs, passed.
+Public AllResults import: passed.
+Dependency audit: 318 declarations; propext, Classical.choice, Quot.sound only.
+Manuscript regression tests: 21 passed.
+Supporting numerical checks: 2000 deterministic trials passed.
+Documentation: 83 inspection commands and the 22-command reader example compile;
+284 local links/anchors checked, 69 theorem-map declaration names located.
+Manuscript: 122 labels, 299 references, 145 citation uses, 76 bibliography entries, 3 figures.
+Lean references: 185 label uses, 135 numbered pairs.
+Fresh LaTeX/BibTeX build: 55 pages; no unresolved references/citations.
+Supplied/rebuilt PDF normalized text matches on all 55 pages.
+Nonfatal Lean linter and typesetting warnings are recorded in the detailed logs.
+The manuscript's verification paragraph describes older coverage; paper assets were preserved.
+
+PDF SHA-256: 11ab696a4591e8ccc76521ea5f6fe2f33923d6041c6145dee69b4ee2e614be66
+TeX SHA-256: ac625c25805f85226fad68eff4b769815de166f67d8acaf2b9768dc66cca7d65
+Lean/configuration snapshot digest: d6d6a0f21afae1ab8dcd5a40490585c19c96f72f35f865402f00def9b1b93b5e
+Full gate log: validation/local/current-full-gate.log

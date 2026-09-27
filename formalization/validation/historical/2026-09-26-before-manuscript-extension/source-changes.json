@@ -1,0 +1,43 @@
+{
+  "validation_date": "2026-09-19",
+  "status": "KERNEL_VERIFIED",
+  "lean_version": "4.33.0",
+  "mathlib_version": "4.33.0",
+  "change_scope": "Manuscript comparison and package-wide documentation reorganization; no Lean statement or proof changes.",
+  "lean_statements_and_proofs": "Unchanged from the full verified proof version; all 165 Lean files and three dependency-configuration files matched the recorded checksums.",
+  "paper_pdf_sha256": "feee07c1d78444bab3d4eea25807840935bd116c7c5888decb71587055cfa66b",
+  "paper_tex_sha256": "8ac5cbdac07ece71a04a0370ddb98566bc891ad329ad8e85b4e6a9de4757978f",
+  "paper_inventory": [
+    "hard_target_first_coordinate_trace.pdf",
+    "hard_target_origin_acceptance.pdf",
+    "hard_target_stationary_comparison.pdf",
+    "main.pdf",
+    "main.tex",
+    "uniform_random_mala.bib"
+  ],
+  "lean_reference_label_uses": 134,
+  "lean_number_label_pairs": 90,
+  "theorem_environments": 21,
+  "theorem_labels_checked_against_latex": 20,
+  "theorem_map_declarations_compiled": 56,
+  "manuscript_audit_tests": 21,
+  "manuscript_pages": 48,
+  "source_pdf_correspondence": "Equal normalized extracted text on all 48 pages; not byte/pixel equivalence.",
+  "kernel_build": "Retained PASS; 3976 jobs; Lean source and dependency configuration unchanged.",
+  "public_import": "PASS",
+  "axiom_audit": "Retained PASS; 281 declarations; propext, Classical.choice, Quot.sound only.",
+  "remaining_scope_qualification": "Appendix B nonconvex extension and its continuous-time derivation are not formalized.",
+  "formalized_results": [
+    "Randomized MALA spectral-gap theorem and corollary",
+    "Fixed-step minimax obstruction",
+    "Mixing-time corollary",
+    "General fractional and component aggregation results"
+  ],
+  "corollary_2_4_comparison": "MATCH: the positive mixing prefactor depends only on c, as stated in the supplied source and PDF.",
+  "reader_guide_example": "PASS; checked against AllResults after documentation rewrite.",
+  "documentation_link_audit": {
+    "files": 19,
+    "local_links": 245,
+    "anchors": 23
+  }
+}

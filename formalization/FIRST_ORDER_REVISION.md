@@ -49,11 +49,12 @@ argument uses finite Gaussian likelihoods, Euler energy estimates,
 Euler/RWM comparison, and weak-limit closure. These constructions use the
 first-order interface; they do not require a Hessian bound on the potential.
 
-The scope qualification introduced with this interface remains relevant:
-Appendix B's additional nonconvex `C¹` generalization and continuous-time
-proof are not formalized. The Lean rejection theorem retains strong
-convexity and supplies the input required by the main theorem. The older
-`HessianBoundedPotential` adapter remains available for smooth special
+At this historical stage the rejection theorem retained strong convexity.
+The current package also proves full nonconvex Proposition B.1 through
+`NonconvexPotential` and `Nonconvex/StationaryRejection.lean`. The same
+finite-chain strategy now covers the appendix's weaker potential assumptions.
+Only the continuous-time Lemmas B.2–B.5 remain excluded. The older
+`HessianBoundedPotential` adapter is still available for smooth special
 cases and the fixed-step hard witness.
 
 ## Historical evidence and current distribution
@@ -65,9 +66,10 @@ records from the first-order transition are retained under
 checksums describe those historical versions.
 
 The current `paper/` directory includes `main.tex`, `main.pdf`,
-`uniform_random_mala.bib`, and the three figure PDFs. The current public
-existential theorem states the paper's `A₀ ≥ 1` range, with an internal
-witness satisfying `A₀ ≥ 2`. The authoritative current PDF digest is
+`uniform_random_mala.bib`, and the three figure PDFs. Current paper-facing
+gap and mixing statements are in `PaperNormalizedGap.lean` and
+`PaperNormalizedMixing.lean`; the original interfaces remain available for
+compatibility. The authoritative current PDF digest is
 [validation/manuscript-pdf.sha256](validation/manuscript-pdf.sha256).
 Use the current check scripts and `BUILD_STATUS.md` to reproduce and
 interpret validation of the present source.

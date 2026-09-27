@@ -1,0 +1,18 @@
+PACKAGE INTEGRITY AND SCOPE — 2026-09-19
+
+Manuscript assets: main.tex, main.pdf, bibliography, and all three figure PDFs present.
+PDF SHA-256: feee07c1d78444bab3d4eea25807840935bd116c7c5888decb71587055cfa66b
+TeX SHA-256: 8ac5cbdac07ece71a04a0370ddb98566bc891ad329ad8e85b4e6a9de4757978f
+The supplied manuscript files were preserved.
+All 110 active labels agree with compiled source; all 20 theorem labels match numbers.
+Supplied and rebuilt manuscript text agrees on all 48 pages after normalization.
+Corollary 2.4 matches the existing Lean statement with a prefactor depending only on c.
+All 165 Lean files and three dependency configurations match the verified proof version.
+That version passed the full library build, public import, and 281-declaration axiom audit.
+The reader-guide example compiles and current local documentation links resolve.
+Documentation introduces the entire package, its results, definitions, proofs, and checks.
+The independent nonconvex Appendix B extension remains outside formalized scope.
+
+SHA256SUMS.txt covers the distributed formalization/ files except itself,
+excluding .lake/, tmp/, validation/local/, Git metadata, and compiled artifacts.
+Historical evidence is retained under validation/historical/.

@@ -1,0 +1,14 @@
+LEAN KERNEL VERIFICATION PASSED — 2026-09-19
+
+Full-gate log: validation/local/mixing-corollary-gate.log
+Toolchain: Lean 4.33.0; Lake 5.0.0; mathlib 4.33.0.
+Build completed successfully (3976 jobs).
+Public import: lake env lean UniformRandomMALA/AllResults.lean passed.
+AXIOM AUDIT PASSED: 281 declarations; only Classical.choice, Quot.sound, propext.
+Full-gate PowerShell wrapper exit status: 0.
+
+All 165 Lean source files and three dependency-configuration files match the
+checksums of that verified version. The later manuscript wording and documentation
+changes required no Lean proof changes and no repeat of the complete build.
+The current manuscript and documentation checks are recorded separately in
+CHECK_OUTPUT.txt and validation/lean-reference-audit.txt.

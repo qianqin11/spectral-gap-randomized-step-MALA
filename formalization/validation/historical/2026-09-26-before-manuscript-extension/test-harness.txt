@@ -1,0 +1,10 @@
+VALIDATION HARNESS PASSED — 2026-09-16
+
+Full PowerShell gate: PASS (exit 0).
+Library build: PASS (3439 jobs); public import: PASS.
+Axiom allow-list check: PASS (266 declarations; standard axioms only).
+Manuscript audit regression suite: PASS (21 tests).
+Source references and Lean label/number concordance: PASS.
+Numerical sanity checks: PASS (2000 deterministic trials).
+Separate LaTeX build: PASS (47 pages).
+Bundled/rebuilt PDF normalized text comparison: PASS (47 pages).

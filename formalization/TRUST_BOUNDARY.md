@@ -1,7 +1,7 @@
 # Trust boundary
 
-The mathematical input, proof dependencies, and scope limits described here
-apply to the public first-order interface. The latest validation evidence is
+This document explains the inputs, proof dependencies, and scope of the
+public MALA, aggregation, and sample-average results. The latest validation evidence is
 in [BUILD_STATUS.md](BUILD_STATUS.md); reproducible commands are in
 [README.md](README.md). The reader guide links the
 [algorithm and quantity definitions](PAPER_READER_GUIDE.md#3-compare-definitions-with-the-paper)
@@ -18,7 +18,7 @@ gradient. These correspond to `eq:first-order-assumptions` in the bundled
 
 `C1Potential.upperTaylor` proves the descent inequality, and
 `C1Potential.toFirstOrderPotential` sets the internal drift to `∇ U`.
-`C1Potential.exists_universal_paperMasterRHS_bounds` states both clauses of
+`C1Potential.exists_universal_normalizedMasterRHS_bounds` states both clauses of
 Theorem 2.1 (`thm:main`) with constants chosen before all dimensions,
 potentials, and time horizons. The record and theorem require no Hessian,
 independent drift, upper-Taylor assumption, stationary-rejection certificate,
@@ -34,10 +34,13 @@ The rejection result uses finite Gaussian likelihoods, Euler energy bounds,
 Euler/RWM comparison, weak-limit density closure, and moment interpolation.
 The interpolation lemma assumes integrability of the powers in its
 statement; the rejection application establishes this from the bounded
-rejection mass. The rejection theorem retains strong convexity. Appendix B's
-additional nonconvex generalization and continuous-time proof are outside
-the formalized scope. The required strongly convex conclusion of
-Proposition B.1 (`prop:stationary-rejection`) is supplied internally.
+rejection mass. The nonconvex endpoint uses `NonconvexPotential`: an actual
+C¹ potential with Lipschitz gradient and integrable Boltzmann weight. Its
+gradient moments are proved without a position-moment assumption, and its
+Euler comparison allows Lipschitz growth in place of convex contraction.
+`Nonconvex/StationaryRejection.lean` supplies the full Proposition B.1
+(`prop:stationary-rejection`). Lemmas B.2–B.5 are excluded from the requested
+scope and are not assumed by this proof.
 
 The Hessian adapter and smooth hard-target/minimax endpoints are optional
 special cases. Importing them does not add differentiability hypotheses to
@@ -48,12 +51,29 @@ analytic inputs through proved results.
 The mixing-time corollary additionally takes the paper's initial-law
 assumptions: a probability measure absolutely continuous with respect to the
 target and a square-integrable Radon–Nikodym density. Its TV-decay bound is
-proved in `L2MixingBase.lean`, `L2MixingEnergy.lean`, `L2Mixing.lean`,
-`L2DensityTV.lean`, and `L2MixingTV.lean` using mathlib integration and
-the existing variational gap. No external mixing theorem or convergence
-certificate is assumed. The prefactor depends only on the tuning parameter,
-as stated in the manuscript; [THEOREM_MAP.md](THEOREM_MAP.md) locates its
-definition and the optional fixed-tuning specialization.
+proved through actual kernel integration in `KernelLpBasic.lean`, the
+`L²` energy and positivity arguments in `KernelLpL2.lean` and
+`KernelLpContraction.lean`, and Radon–Nikodym density evolution in
+`L2DensityEvolution.lean`. `L2DensityTV.lean` supplies the exact TV factor.
+The earlier bounded-observable route remains available in `L2Mixing*.lean`. No external mixing theorem or convergence
+certificate is assumed. The prefactor is a universal multiple of
+`max c (1/c)`; [THEOREM_MAP.md](THEOREM_MAP.md) locates its definition.
+
+The variance clauses of Corollary 2.6 and both bounds in Corollary 2.8
+are connected to the actual MALA kernels and finite sample averages.
+Their operator, density, interpolation, and covariance estimates are
+proved internally. Corollary 2.7 uses the extended stationary variance:
+`VarianceSeparationExtended.lean` proves its actual limit, including at zero
+gap, and `VarianceSeparationFixedStep.lean` constructs the required observable.
+The CLT clauses of Corollary 2.6 are proved in `PaperCentralLimit.lean`
+for measurable `L²(π)` observables and every initial probability measure.
+The proof constructs the infinite trajectory law, identifies its finite
+prefixes, and establishes the actual Poisson martingale's conditional
+expectations. It derives the Lindeberg and conditional-variance limits,
+proves Gaussian convergence, and removes restrictions on the initial law
+through density approximation and acceptance. No CLT, Harris-recurrence,
+Lindeberg, or initial-density certificate is an input to the paper wrappers.
+[FORMALIZATION_STATUS.md](FORMALIZATION_STATUS.md) summarizes the scope.
 
 ## External dependencies and logical axioms
 

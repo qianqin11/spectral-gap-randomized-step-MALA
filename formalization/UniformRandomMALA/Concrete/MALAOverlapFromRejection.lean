@@ -23,8 +23,8 @@ namespace FirstOrderPotential
 
 variable {d : ℕ} (V : FirstOrderPotential d)
 
-/-- The concrete fixed-step stationary rejection estimate that remains to be
-supplied by the discrete-time analysis.  The factor `Cr / 3` is chosen so that
+/-- The concrete fixed-step stationary rejection estimate supplied by
+`MALAFullPathAssembly` and the discrete-time analysis. The factor `Cr / 3` is chosen so that
 Markov's inequality produces the paper's exceptional-set constant `Cr`.
 
 The estimate is required only in the same small-step regime used by the local

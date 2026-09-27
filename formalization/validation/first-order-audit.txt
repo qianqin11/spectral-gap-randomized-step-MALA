@@ -1,5 +1,5 @@
 FIRST-ORDER SOURCE AUDIT PASSED
-Local import graph: 165 modules; no cycles
+Local import graph: 275 modules; no cycles
 Direct external library: mathlib only (standard transitive dependencies retained)
 C1 input: actual gradient; no Hessian or upper-Taylor certificate field
 No detected native_decide, unsafe, implemented_by, sorryAx, or ofReduceBool

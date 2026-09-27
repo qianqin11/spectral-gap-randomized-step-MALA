@@ -1,142 +1,104 @@
 # Formalization status
 
-This document describes the mathematical scope of the accompanying Lean
-source. [BUILD_STATUS.md](BUILD_STATUS.md) records the latest kernel check
-and manuscript validation. The paper, TeX source, bibliography, and figure
-PDFs are bundled in `paper/`. Use the [reader guide](PAPER_READER_GUIDE.md)
-for a reading route and [the theorem map](THEOREM_MAP.md) to locate individual
-statements and their definitions.
+This document records mathematical coverage. [BUILD_STATUS.md](BUILD_STATUS.md)
+records the current package build and validation evidence. Use the
+[reader guide](PAPER_READER_GUIDE.md) to compare definitions and follow proofs,
+and [THEOREM_MAP.md](THEOREM_MAP.md) for exact declarations and manuscript labels.
 
-## Main result
+## Coverage
 
-The package gives an end-to-end proof of Theorem 2.1 (`thm:main`) under the
-paper's first-order assumptions (`eq:first-order-assumptions`): `U` is `C¹`,
-satisfies the `m`-strong-convexity supporting inequality, and has an
-`L`-Lipschitz actual gradient. The public theorem uses the paper's `L²`
-Rayleigh spectral gap and covers both the concrete non-lazy uniform MALA
-kernel and its half-lazy version.
+Every result in the requested scope has a formalized endpoint. The explicit
+exclusions are Lemmas B.2–B.5. This coverage statement is separate from the
+full package verification gate recorded in `BUILD_STATUS.md`.
 
-```text
-C1Potential
-  -> derived upper Taylor inequality
-  -> FirstOrderPotential with gradU = ∇U
-  -> target isoperimetry, rejection/overlap, and multiscale aggregation
-  -> concrete uniform MALA gap
-  -> Rayleigh-gap and half-lazy statements
-```
+| Manuscript result | Coverage and entry point |
+|---|---|
+| Theorem 2.1 and Corollary 2.2 | Both nonlazy and half-lazy gap statements and all three corollary bounds: [PaperNormalizedGap.lean](UniformRandomMALA/Concrete/PaperNormalizedGap.lean). |
+| Proposition 2.3 and Proposition A.1 | Smooth hard potential, fixed-step obstruction, and minimax optimization: [FixedStepMinimax.lean](UniformRandomMALA/Concrete/FixedStepMinimax.lean). |
+| Corollary 2.5 and `eq:TVbound` | Actual density and total-variation decay, followed by both mixing-time ceilings: [PaperDensityConvergence.lean](UniformRandomMALA/Concrete/PaperDensityConvergence.lean) and [PaperNormalizedMixing.lean](UniformRandomMALA/Concrete/PaperNormalizedMixing.lean). |
+| Corollary 2.6 | Nonlazy and half-lazy CLTs from every initial distribution in [PaperCentralLimit.lean](UniformRandomMALA/Concrete/PaperCentralLimit.lean), with the actual stationary variance limits and both bounds in [PaperAsymptoticVariance.lean](UniformRandomMALA/Concrete/PaperAsymptoticVariance.lean). |
+| Corollary 2.7 | Both variance-comparison assertions, including zero-gap and infinite-variance cases: [VarianceSeparationCorollary.lean](UniformRandomMALA/Concrete/VarianceSeparationCorollary.lean) and [VarianceSeparationFixedStep.lean](UniformRandomMALA/Concrete/VarianceSeparationFixedStep.lean). |
+| Corollary 2.8 | Both finite-sample mean-square error bounds for the actual nonstationary path law: [PaperNonstationaryMSE.lean](UniformRandomMALA/Concrete/PaperNonstationaryMSE.lean). |
+| Section 3 | Mixture energy, overlap, separated sets, flow, fractional aggregation, and component aggregation. In particular, Lemma 3.5 and Theorem 3.6 are general proved theorems in [FractionalAggregation.lean](UniformRandomMALA/Concrete/FractionalAggregation.lean). |
+| Proposition B.1 | Full nonconvex `C¹`, Lipschitz-gradient, normalizable Boltzmann scope, for every real `p ≥ 1`: [Nonconvex/StationaryRejection.lean](UniformRandomMALA/Nonconvex/StationaryRejection.lean). |
+| Appendices C–F | Gaussian tail and shift estimates, defective conductance, exceptional budgets, aggregation, and ladder bounds; see the [appendix map](THEOREM_MAP.md#appendix-results-and-proof-correspondence). |
+| Proposition G.1 and Remark 2.4 | Small-step fixed-MALA gap and its dimension endpoint: [SmallFixedStepGap.lean](UniformRandomMALA/Concrete/SmallFixedStepGap.lean). |
+| Lemmas B.2–B.5 | Explicitly excluded. Their continuous-time statements are bypassed by the proved finite-chain rejection argument. |
 
-The public statement chooses its universal constants before the dimension,
-potential, and step endpoint, and uses the same constants for both clauses.
+## What makes the endpoints end-to-end
 
-## General aggregation results
+The main lower-bound input is `C1Potential`: the actual potential is `C¹`,
+strongly convex in the first-order sense, and has a Lipschitz gradient.
+The adapter proves the descent inequality and uses that actual gradient as
+the MALA drift. Target normalization, measurable proposals, acceptance and
+rejection, reversibility, isoperimetry, overlap, flow, and aggregation are
+constructed or proved before the final spectral-gap theorem is applied.
+The universal constants are chosen before the dimension, potential, and step.
 
-The fractional aggregation lemma (Lemma 3.5, `lem:fractional`) and the
-component-aggregation theorem (Theorem 3.6, `thm:aggregation`) are also
-formalized as reusable results for finite families of Markov kernels,
-independently of MALA or the assumptions on its potential.
-[FractionalAggregation.lean](UniformRandomMALA/Concrete/FractionalAggregation.lean)
-proves `fractionalAggregation_poincareLower` and
-`fractionalAggregation_le_spectralGap`, then derives
-`hardAssignmentAggregation_poincareLower` and
-`hardAssignmentAggregation_le_spectralGap` by the paper's reciprocal-flow
-coefficient substitution. The energy-domination premise has exactly the
-paper's `L²` scope. The internal gap bounds transfer to the paper's Rayleigh
-gap through `spectralGap_le_rayleighSpectralGap`.
+The mixing corollary starts from the actual iterated kernel and the initial
+Radon–Nikodym density. Full `L²` contraction and density evolution prove both
+inequalities in `eq:TVbound`. The initial law has the manuscript's absolute
+continuity and square-integrable density assumptions; the mixing prefactor
+depends only on the positive tuning parameter.
 
-All four declarations are exported by
-[AllResults.lean](UniformRandomMALA/AllResults.lean) and included in
-[DependencyAudit.lean](UniformRandomMALA/DependencyAudit.lean). The
-[reader guide](PAPER_READER_GUIDE.md#aggregation-lemma-35-and-theorem-36)
-locates their statements and explains how they connect to the paper.
+The sample-average results use `finiteMarkovPathLaw`, its proved coordinate
+and pair laws, and the integral defining the actual sample error. The
+stationary variance theorem proves existence of the scaled-variance limit
+and identifies it through the Poisson equation. The variance-separation
+theorem constructs a smooth target and an actual unit-variance observable;
+the extended variance theorem covers infinite limits. The nonstationary
+MSE proof derives its `L⁴` decay, density pairing, and covariance sum internally.
+No external MSE bound is supplied as a hypothesis.
 
-## Coverage of paper results
+The CLT uses the actual infinite Markov path law, with finite-prefix and
+conditional-expectation identities proved from its construction. The
+Poisson equation gives genuine adapted martingale increments. Their
+Lindeberg tails and conditional variance convergence are proved before the
+martingale limit theorem is applied. Bounded-density approximation,
+acceptance, and a negligible finite prefix extend the result to every
+initial probability measure. The final theorem requires a measurable
+`L²(π)` observable and imposes no initial-density or initial-moment condition.
 
-In this table, “formalized” describes the result's presence in the Lean
-source; verification evidence is maintained separately in `BUILD_STATUS.md`.
-Declaration names have prefix `UniformRandomMALA.`.
+The aggregation lemma and theorem retain their stated energy-domination
+and flow hypotheses. These are reusable general theorems. For MALA, the
+concrete assembly proves the hypotheses before applying them. Both the
+Poincaré and spectral-gap forms are exported and selected for dependency
+inspection; the Rayleigh transfer is proved explicitly.
 
-| Paper item and TeX label | Scope | Principal Lean declaration |
-|---|---|---|
-| First-order assumptions (`eq:first-order-assumptions`) | Formalized | `Concrete.C1Potential` |
-| Upper Taylor consequence and actual-gradient adapter | Formalized | `Concrete.C1Potential.upperTaylor`; `Concrete.C1Potential.toFirstOrderPotential` |
-| Poincaré/Rayleigh relationship | Formalized | `Concrete.l2PoincareLower_iff_le_rayleighSpectralGap`; `Concrete.l2SpectralGap_eq_rayleighSpectralGap` |
-| Theorem 2.1 (`thm:main`), non-lazy | Formalized | `Concrete.C1Potential.universal_masterRHS_rayleighSpectralGap_lower` |
-| Theorem 2.1, half-lazy | Formalized | `Concrete.C1Potential.universal_half_masterRHS_lazy_rayleighSpectralGap_lower` |
-| Theorem 2.1, both clauses with shared constants | Formalized | `Concrete.C1Potential.exists_universal_paperMasterRHS_bounds` |
-| Corollary 2.2 (`cor:sqrt-d-endpoint`), first bound | Formalized | `Concrete.C1Potential.sqrtDimensionCorollary_rayleighSpectralGap_lower` |
-| Corollary 2.2, simplified bound | Formalized | `Concrete.C1Potential.sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower` |
-| Corollary 2.2, tuned third bound | Formalized | `Concrete.C1Potential.tunedSqrtDimensionCorollary_rayleighSpectralGap_lower` |
-| TV decay `eq:TVbound`, half-lazy reversible kernels | Formalized | `Concrete.setwiseTV_iterate_halfLazy_le` |
-| Corollary 2.4 (`cor:mixing`), both ceiling inequalities | Formalized | `Concrete.C1Potential.mixingTimeCorollary` |
-| Corollary 2.4, optional fixed-tuning specialization | Formalized | `Concrete.C1Potential.exists_universal_mixingTimeCorollary` |
-| Lemma 3.1 (`lem:Kt`), mixture-energy comparison | Formalized | `Dirichlet.sum_energy_parameterMixture_restrict_le`; `Concrete.FirstOrderPotential.energy_restricted_uniformStep_eq_weight_dyadic` |
-| Proposition 3.2 (`prop:overlap`), `p ≥ 1` | Formalized | `Concrete.C1Potential.mala_overlap_bounds` |
-| Proposition 3.3 (`prop:separated`) | Formalized | `Concrete.C1Potential.separatedSets` |
-| Proposition 3.4 (`prop:flow`), both flow bounds | Formalized | `Concrete.C1Potential.allParameterMALAFlowBounds` |
-| Lemma 3.5 (`lem:fractional`) | Formalized | `Concrete.fractionalAggregation_poincareLower`; `fractionalAggregation_le_spectralGap` |
-| Theorem 3.6 (`thm:aggregation`) | Formalized | `Concrete.hardAssignmentAggregation_poincareLower`; `Concrete.hardAssignmentAggregation_le_spectralGap` |
-| Proposition A.1 (`prop:generic-fixed-step-obstruction`) | Formalized, smooth hard witness | `Concrete.exists_universal_fixedStepHardPotential_obstruction_allDimensions` and the smoothness/Hessian declarations in `Concrete/FixedStepHardPotential.lean` |
-| Proposition 2.3 (`prop:minimax-fixed-step-ceiling`) | Formalized | `Concrete.exists_universal_fixedStepMinimaxGap_paper_upper` |
-| Proposition B.1 (`prop:stationary-rejection`) | Formalized under standing strong convexity | `Concrete.C1Potential.stationary_rejection_moments` |
-| Appendix B's additional nonconvex `C¹` scope | Not formalized | See below |
+## Analytic route and exclusions
 
-[THEOREM_MAP.md](THEOREM_MAP.md) supplies the more detailed component map.
+The isoperimetry proof uses Gaussian OU/Bobkov interpolation, finite-Euler
+transport, and weak limits. The rejection proof uses finite Gaussian
+likelihoods, Euler energy bounds, Euler/RWM comparison, endpoint density
+identification, Metropolis meets, and moment interpolation.
 
-## Mixing-time corollary
+For Proposition B.1, `NonconvexPotential` records only the appendix's
+regularity, Lipschitz-gradient, and normalizability assumptions. Gradient
+moments are proved without assuming target position moments, and the Euler
+comparison allows Lipschitz growth instead of relying on convex contraction.
+The `Nonconvex/` modules specialize this finite-chain route and reuse its
+potential-independent probability lemmas. Lemmas B.2–B.5 are neither
+formalized nor assumed by that proof.
 
-The mixing-time proof starts from the actual half-lazy uniform MALA kernel
-and its proved Rayleigh gap. It establishes exact `L²` contraction of
-bounded centered observables, pairs their iterates with the initial
-Radon–Nikodym density, and obtains total-variation decay with the paper's
-factor `1/2`. The initial law is absolutely continuous with square-integrable
-density, as in the manuscript. The proof covers zero mixing time and the
-maximal lazy-gap case.
+Conditional interfaces remain useful intermediate APIs. A theorem taking a
+convergence or analytic premise is not, by itself, the paper endpoint; the
+reader guide shows where the concrete proof discharges each such premise.
 
-The mixing prefactor depends only on the positive tuning constant `c`,
-matching the manuscript. An optional specialization fixes a universal
-tuning and obtains a universal prefactor. See the
-[reader guide](PAPER_READER_GUIDE.md#main-results) for the declarations and
-[the theorem map](THEOREM_MAP.md#main-results) for the explicit constant.
+## Verification and correspondence
 
-## Analytic route and scope qualifications
+[README.md](README.md#reproduce-the-verification) gives the check commands.
+The Lean build checks proof terms; the selected axiom audit allows only
+`propext`, `Classical.choice`, and `Quot.sound`. See
+[TRUST_BOUNDARY.md](TRUST_BOUNDARY.md) for the scope of those checks.
 
-`C1Potential` uses mathlib's `gradient U`, the Riesz representative of the
-Fréchet derivative. The proof derives the upper Taylor inequality by
-restricting the potential to an affine line and applying the gradient
-Lipschitz bound. The internal MALA drift is definitionally this gradient.
-The optional `HessianBoundedPotential.toFirstOrderPotential` adapter is a
-smooth special case used by the hard example, not a hypothesis of the
-lower-bound endpoint.
+The supplied manuscript's Lean-verification narrative predates this
+expansion: it still describes Proposition B.1 as restricted to strong
+convexity and records older audit counts. The current theorem matches the
+full nonconvex mathematical statement. The supplied paper assets are
+preserved; use `BUILD_STATUS.md` for current verification evidence.
 
-Target Gaussian enlargement is proved through Gaussian OU/Bobkov
-interpolation, smooth ramps, finite-Euler transport, weak-limit stability,
-and identification of the target. Rejection moments use finite Gaussian
-likelihoods, finite-Euler energy estimates, Euler/RWM comparison, and
-weak-limit closure. The public `p ≥ 1` range follows by moment interpolation
-from the retained `p ≥ 2` core; the rejection wrapper supplies the required
-integrability from boundedness of the rejection mass.
-
-The concrete half-lazy kernel is Markov and reversible, with Dirichlet
-energy and Rayleigh gap equal to one half of those of the non-lazy kernel.
-The simplification in Corollary 2.2 does not assume `pStar ≤ d`.
-The aggregation proofs allow extended-valued energies and zero fractional
-flow coefficients, using bounded truncations and monotone convergence.
-
-The package does not prove the independent Appendix B extension to arbitrary
-possibly nonconvex `C¹` potentials with Lipschitz gradient and integrable
-`exp(-U)`. It also does not transcribe the continuous-time proofs of
-`lem:linear-increment`, `lem:integrated-increments`,
-`lem:frozen-endpoint-law`, or `lem:path-likelihood`. The discrete proof
-supplies the strongly convex rejection input needed for Theorem 2.1.
-
-## Validation and manuscript correspondence
-
-[README.md](README.md) gives reproducible check commands.
-[TRUST_BOUNDARY.md](TRUST_BOUNDARY.md) explains the logical assumptions and
-the finite selection used by the axiom audit. Manuscript source checks
-compare active TeX labels, references, citations, and figure dependencies,
-and validate Lean's paper references. The supplied PDF's identity is
-recorded in [validation/manuscript-pdf.sha256](validation/manuscript-pdf.sha256).
-These checks are separate from kernel verification and LaTeX typesetting;
-`BUILD_STATUS.md` reports the results of each. Older records under
-`validation/historical/` preserve provenance and are not current results.
+Manuscript labels, citations, figure dependencies, typesetting, and file
+checksums are separate validation evidence. They help locate the right
+statement but do not replace comparing mathematical assumptions and
+definitions. Historical records describe earlier snapshots, not the current
+verification result.

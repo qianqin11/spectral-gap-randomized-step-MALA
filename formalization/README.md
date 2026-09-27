@@ -1,8 +1,8 @@
 # Uniform-random MALA: Lean verification
 
-This package accompanies Qian Qin's *A global spectral gap for
+This package accompanies Qian Qin's *A spectral gap for
 Metropolis-adjusted Langevin algorithm with a uniformly randomized step size*.
-It contains Lean proofs of the paper's main results, definitions of the
+It contains Lean proofs, definitions of the
 algorithms and quantities they concern, and reusable results about Markov
 kernels. The [paper PDF](paper/main.pdf), [LaTeX source](paper/main.tex),
 bibliography, and figures are included.
@@ -11,11 +11,18 @@ bibliography, and figures are included.
 
 | Part of the paper | Main source files |
 |---|---|
-| Randomized-step spectral-gap bound and its corollary: Theorem 2.1 and Corollary 2.2 | [C1MainTheorem.lean](UniformRandomMALA/Concrete/C1MainTheorem.lean) and [TunedSpectralGap.lean](UniformRandomMALA/Concrete/TunedSpectralGap.lean) |
+| Randomized-step spectral-gap bound and its corollary: Theorem 2.1 and Corollary 2.2 | [PaperNormalizedGap.lean](UniformRandomMALA/Concrete/PaperNormalizedGap.lean) |
 | Fixed-step minimax obstruction: Proposition 2.3 | [FixedStepMinimax.lean](UniformRandomMALA/Concrete/FixedStepMinimax.lean) |
-| Mixing-time bound: Corollary 2.4 | [MixingTime.lean](UniformRandomMALA/Concrete/MixingTime.lean) |
+| Mixing-time bound: Corollary 2.5 | [PaperNormalizedMixing.lean](UniformRandomMALA/Concrete/PaperNormalizedMixing.lean) |
+| Central limit theorem from every initial distribution, with stationary variance limits and bounds: Corollary 2.6 | [PaperCentralLimit.lean](UniformRandomMALA/Concrete/PaperCentralLimit.lean), [PaperAsymptoticVariance.lean](UniformRandomMALA/Concrete/PaperAsymptoticVariance.lean) |
+| Randomized versus fixed-step variance comparison: Corollary 2.7 | [VarianceSeparationCorollary.lean](UniformRandomMALA/Concrete/VarianceSeparationCorollary.lean) |
+| Nonstationary mean-square error: Corollary 2.8 | [PaperNonstationaryMSE.lean](UniformRandomMALA/Concrete/PaperNonstationaryMSE.lean) |
+| Small-step fixed-MALA gap: Proposition G.1 and Remark 2.4 | [SmallFixedStepGap.lean](UniformRandomMALA/Concrete/SmallFixedStepGap.lean) |
 | Fractional aggregation lemma and component-aggregation theorem: Lemma 3.5 and Theorem 3.6 | [FractionalAggregation.lean](UniformRandomMALA/Concrete/FractionalAggregation.lean) |
+| Stationary rejection under the nonconvex appendix assumptions: Proposition B.1 | [StationaryRejection.lean](UniformRandomMALA/Nonconvex/StationaryRejection.lean) |
 
+To check a result, start at its public declaration in the table, compare
+the definitions in the reader guide, then follow the linked proof path.
 The MALA proofs start from the paper's assumptions on the potential. The
 target distribution, transition kernels, rejection and isoperimetric
 estimates, and final gap and mixing bounds are constructed or proved within
@@ -24,10 +31,12 @@ their stated energy and flow hypotheses and can be reused independently of
 MALA.
 
 The [theorem map](THEOREM_MAP.md) covers the supporting results and their
-scope. Lean uses different proofs for isoperimetry and rejection;
-Appendix B's continuous-time lemmas and additional nonconvex generalization
-are outside the formalized scope. These boundaries are described in
-[FORMALIZATION_STATUS.md](FORMALIZATION_STATUS.md).
+scope. All results in the requested scope have formalized endpoints.
+The explicit exclusions are Lemmas B.2–B.5: their continuous-time route is
+bypassed by the proved finite-chain rejection argument.
+[FORMALIZATION_STATUS.md](FORMALIZATION_STATUS.md) describes the mathematical
+coverage; [BUILD_STATUS.md](BUILD_STATUS.md) records the separate package
+verification result.
 
 ## Where to start
 
@@ -58,6 +67,7 @@ import UniformRandomMALA.AllResults
 |---|---|
 | `UniformRandomMALA/Concrete/` | Target and MALA definitions, public statements, and their proofs |
 | `UniformRandomMALA/DiscreteTime/` | Probability and finite-chain arguments supporting the analysis |
+| `UniformRandomMALA/Nonconvex/` | Rejection proof under the weaker appendix assumptions, reusing the finite-chain foundations |
 | Other `UniformRandomMALA/` modules | General kernel, energy, arithmetic, and assembly results |
 | `paper/` | Manuscript source, PDF, bibliography, and figures |
 | `scripts/` | Reproducible build and audit commands |

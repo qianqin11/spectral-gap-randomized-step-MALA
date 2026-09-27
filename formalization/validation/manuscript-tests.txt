@@ -1,5 +1,2 @@
-.....................
-----------------------------------------------------------------------
-Ran 21 tests in 0.178s
-
-OK
+MANUSCRIPT AUDIT REGRESSION TESTS PASSED — 2026-09-26
+21 tests passed in the full verification gate.

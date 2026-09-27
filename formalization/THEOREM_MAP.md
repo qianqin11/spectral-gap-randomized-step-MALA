@@ -19,30 +19,36 @@ full below, declaration names have the prefix `UniformRandomMALA.Concrete.`.
 
 | Manuscript statement and TeX label | Lean declaration | Source |
 |---|---|---|
-| Theorem 2.1 (`thm:main`), non-lazy bound `eq:master-gap` | `C1Potential.universal_masterRHS_rayleighSpectralGap_lower` | [C1MainTheorem.lean](UniformRandomMALA/Concrete/C1MainTheorem.lean) |
-| Theorem 2.1 (`thm:main`), lazy clause | `C1Potential.universal_half_masterRHS_lazy_rayleighSpectralGap_lower` | [C1MainTheorem.lean](UniformRandomMALA/Concrete/C1MainTheorem.lean) |
-| Theorem 2.1 (`thm:main`), both clauses with the same universal constants | `C1Potential.exists_universal_paperMasterRHS_bounds` | [C1MainTheorem.lean](UniformRandomMALA/Concrete/C1MainTheorem.lean) |
-| Corollary 2.2 (`cor:sqrt-d-endpoint`), first display | `C1Potential.sqrtDimensionCorollary_rayleighSpectralGap_lower` | [C1MainTheorem.lean](UniformRandomMALA/Concrete/C1MainTheorem.lean) |
-| Corollary 2.2 (`cor:sqrt-d-endpoint`), simplified display | `C1Potential.sqrtDimensionCorollarySimplified_rayleighSpectralGap_lower` | [C1MainTheorem.lean](UniformRandomMALA/Concrete/C1MainTheorem.lean) |
-| Corollary 2.2 (`cor:sqrt-d-endpoint`), tuned third display | `C1Potential.tunedSqrtDimensionCorollary_rayleighSpectralGap_lower` | [TunedSpectralGap.lean](UniformRandomMALA/Concrete/TunedSpectralGap.lean) |
+| Theorem 2.1 (`thm:main`), non-lazy bound `eq:master-gap` | `C1Potential.normalized_masterRHS_rayleighSpectralGap_lower` | [PaperNormalizedGap.lean](UniformRandomMALA/Concrete/PaperNormalizedGap.lean) |
+| Theorem 2.1 (`thm:main`), lazy clause | `FirstOrderPotential.rayleighSpectralGap_lazyUniformMALA` (exact halving) | [LazyKernel.lean](UniformRandomMALA/Concrete/LazyKernel.lean) |
+| Theorem 2.1 (`thm:main`), both clauses with the same universal constants | `C1Potential.exists_universal_normalizedMasterRHS_bounds` | [PaperNormalizedGap.lean](UniformRandomMALA/Concrete/PaperNormalizedGap.lean) |
+| Corollary 2.2 (`cor:sqrt-d-endpoint`), first display | `C1Potential.normalizedSquareRootCorollary_rayleighSpectralGap_lower` | [PaperNormalizedGap.lean](UniformRandomMALA/Concrete/PaperNormalizedGap.lean) |
+| Corollary 2.2 (`cor:sqrt-d-endpoint`), simplified display | `C1Potential.normalizedSimplifiedCorollary_rayleighSpectralGap_lower` | [PaperNormalizedGap.lean](UniformRandomMALA/Concrete/PaperNormalizedGap.lean) |
+| Corollary 2.2 (`cor:sqrt-d-endpoint`), tuned third display | `C1Potential.normalizedTunedCorollary_rayleighSpectralGap_lower` | [PaperNormalizedGap.lean](UniformRandomMALA/Concrete/PaperNormalizedGap.lean) |
 | Proposition 2.3 (`prop:minimax-fixed-step-ceiling`), fixed-step minimax upper bound | `exists_universal_fixedStepMinimaxGap_paper_upper` | [FixedStepMinimax.lean](UniformRandomMALA/Concrete/FixedStepMinimax.lean) |
-| Corollary 2.4 (`cor:mixing`), both ceiling bounds with explicit tuning dependence | `C1Potential.mixingTimeCorollary` | [MixingTime.lean](UniformRandomMALA/Concrete/MixingTime.lean) |
-| Optional specialization of Corollary 2.4, universal prefactor at fixed universal tuning | `C1Potential.exists_universal_mixingTimeCorollary` | [MixingTime.lean](UniformRandomMALA/Concrete/MixingTime.lean) |
-| TV convergence estimate `eq:TVbound`, for half-lazy reversible kernels | `setwiseTV_iterate_halfLazy_le` | [L2MixingTV.lean](UniformRandomMALA/Concrete/L2MixingTV.lean) |
+| Corollary 2.5 (`cor:mixing`), both ceiling bounds with explicit tuning dependence | `C1Potential.normalizedMixingTimeCorollary` | [PaperNormalizedMixing.lean](UniformRandomMALA/Concrete/PaperNormalizedMixing.lean) |
+| Corollary 2.5, universal coefficient before all tuning parameters | `C1Potential.exists_universal_normalizedMixingTimeCorollary` | [PaperNormalizedMixing.lean](UniformRandomMALA/Concrete/PaperNormalizedMixing.lean) |
+| Both density and TV inequalities `eq:TVbound`, for positive or half-lazy reversible kernels | `densityTV_iterate_of_positive_actualGap`; `densityTV_iterate_halfLazy_actualGap` | [L2DensityEvolution.lean](UniformRandomMALA/Concrete/L2DensityEvolution.lean) |
+| `eq:TVbound` for the actual randomized MALA law | `C1Potential.densityTVConvergence` | [PaperDensityConvergence.lean](UniformRandomMALA/Concrete/PaperDensityConvergence.lean) |
+| Remark 2.4 (`rem:minimax-fixed-step-ceiling`), fixed-step lower bound | `C1Potential.dimensionStep_rayleighSpectralGap_lower` | [SmallFixedStepGap.lean](UniformRandomMALA/Concrete/SmallFixedStepGap.lean) |
+| Corollary 2.6 (`cor:asymptotic-variance`), actual variance limits and bounds | `C1Potential.stationaryAsymptoticVariance_nonlazy_bounds`; `C1Potential.stationaryAsymptoticVariance_lazy_bounds` | [PaperAsymptoticVariance.lean](UniformRandomMALA/Concrete/PaperAsymptoticVariance.lean) |
+| Corollary 2.6, nonlazy and half-lazy CLT from every initial distribution | `C1Potential.central_limit_nonlazy`; `C1Potential.central_limit_lazy` | [PaperCentralLimit.lean](UniformRandomMALA/Concrete/PaperCentralLimit.lean) |
+| Corollary 2.7 (`cor:variance-separation`), both variance-comparison assertions | `exists_universal_varianceSeparation_randomized_upper`; `exists_universal_fixedStep_variance_separation` | [VarianceSeparationCorollary.lean](UniformRandomMALA/Concrete/VarianceSeparationCorollary.lean), [VarianceSeparationFixedStep.lean](UniformRandomMALA/Concrete/VarianceSeparationFixedStep.lean) |
+| Corollary 2.8 (`cor:nonstationary-variance`), both mean-square error bounds | `C1Potential.nonstationaryMSE_corollary`; `C1Potential.nonstationaryMSE_actualGap_bound` | [PaperNonstationaryMSE.lean](UniformRandomMALA/Concrete/PaperNonstationaryMSE.lean) |
 
 The main theorem chooses its universal constants before the dimension,
-potential, and endpoint. The definitions `C1Potential.paperMomentThreshold`
-and `C1Potential.paperMasterRHS` spell out `p⋆` and the right-hand side of
+potential, and endpoint. The definitions `C1Potential.normalizedMomentThreshold`
+and `C1Potential.normalizedMasterRHS` spell out `p⋆` and the right-hand side of
 `eq:master-gap`.
 
 The first two gap-corollary declarations use `H = c/(L√d)`. The simplified
 bound does not require `p⋆ ≤ d`; the third substitutes `c/√p⋆`, yielding
 the endpoint `H = c/(L√(d p⋆))` used by the mixing corollary.
 
-For arbitrary `c`, the mixing prefactor is
-`paperMixingConstant c = 2/[c₀ min{c, b₀²/(2c)}]`, which depends only on
-`c`, as stated in the manuscript. The optional universal-constant theorem
-fixes `c = b₀` before the dimension, potential, initial law, and accuracy.
+For arbitrary positive `c`, `normalizedMixingConstant c` is exactly a
+universal positive coefficient multiplied by `max c (1/c)`. The normalized
+threshold is `1 + log d + log (L/m)`, as in the current manuscript. Older
+constant conventions remain available in internal and compatibility APIs.
 The [definition map in the reader guide](PAPER_READER_GUIDE.md#3-compare-definitions-with-the-paper)
 locates the initial-density norm, logarithm, kernel iterates, and mixing-time
 definition and explains the proved spectral-gap-to-TV connection.
@@ -54,6 +60,15 @@ The definitions `smoothHessianPotentialGapValues`,
 `fixedStepWorstPotentialGap`, and `fixedStepMinimaxGap` at the start of
 [FixedStepMinimax.lean](UniformRandomMALA/Concrete/FixedStepMinimax.lean)
 specify that class and the order of the infimum and supremum.
+
+The CLT wrappers allow every initial probability distribution and every
+measurable `L²(π)` observable. Their actual trajectory law is
+`infiniteMarkovPathLaw`, their normalized sum is `normalizedMarkovSum`, and
+their Gaussian variance is `stationaryAsymptoticVariance`. The variance
+bounds use this same proved limit. The MSE theorem instead assumes the
+paper's `L²` initial density and `L⁴` observable and integrates the squared
+error under `finiteMarkovPathLaw`; the [definition map](PAPER_READER_GUIDE.md#3-compare-definitions-with-the-paper)
+locates these objects.
 
 ## Assumptions and spectral-gap convention
 
@@ -108,15 +123,17 @@ the fractional lemma to the component-aggregation theorem.
 |---|---|---|
 | Proposition A.1 (`prop:generic-fixed-step-obstruction`), potential `eq:generic-hard-potential` and curvature `eq:generic-hard-curvature` | `fixedStepHardPotential`; `contDiff_infty_fixedStepHardPotential`; `fixedStepHardPotential_hessian_lower`; `fixedStepHardPotential_hessian_upper` | [FixedStepHardPotential.lean](UniformRandomMALA/Concrete/FixedStepHardPotential.lean) |
 | Proposition A.1 (`prop:generic-fixed-step-obstruction`), bound `eq:generic-fixed-step-gap-upper` | `exists_universal_fixedStepHardPotential_obstruction_allDimensions`, for the same witness and every `d ≥ 2` | [FixedStepHardPotentialObstruction.lean](UniformRandomMALA/Concrete/FixedStepHardPotentialObstruction.lean) |
-| Proposition B.1 (`prop:stationary-rejection`), estimate `eq:stationary-rejection` | `C1Potential.stationary_rejection_moments`, every `p ≥ 1` under the standing strongly convex assumptions | [C1MainTheorem.lean](UniformRandomMALA/Concrete/C1MainTheorem.lean) |
-| Lemma B.2 (`lem:linear-increment`) and Lemma B.3 (`lem:integrated-increments`) | Continuous-time statements are not formalized. Finite Gaussian maximal and Euler-energy estimates supply the corresponding inputs to the discrete proof. | [GaussianMaximum.lean](UniformRandomMALA/DiscreteTime/GaussianMaximum.lean); [FiniteEulerEnergyMGF.lean](UniformRandomMALA/Concrete/FiniteEulerEnergyMGF.lean) |
-| Lemma B.4 (`lem:frozen-endpoint-law`) | The continuous frozen-drift path statement is replaced by finite Gaussian change-of-measure and endpoint-law identities. | [FiniteGaussianLikelihood.lean](UniformRandomMALA/DiscreteTime/FiniteGaussianLikelihood.lean); [FiniteGaussianEndpointLaw.lean](UniformRandomMALA/DiscreteTime/FiniteGaussianEndpointLaw.lean) |
-| Lemma B.5 (`lem:path-likelihood`) | The continuous likelihood-moment statement is replaced by finite-product likelihood bounds followed by a weak-limit argument. | [FiniteEulerRealMoments.lean](UniformRandomMALA/Concrete/FiniteEulerRealMoments.lean); [MALAFullPathAssembly.lean](UniformRandomMALA/Concrete/MALAFullPathAssembly.lean) |
+| Proposition A.1, condition-number form `eq:generic-fixed-step-gap-upper-kappa` | The same obstruction composed with `hardObstructionScalar_le_twoBranchEnvelope` | [FixedStepMinimax.lean](UniformRandomMALA/Concrete/FixedStepMinimax.lean) |
+| Proposition B.1 (`prop:stationary-rejection`), estimate `eq:stationary-rejection` | `NonconvexPotential.exists_universal_stationary_rejection_moments`, every real `p ≥ 1` under the full nonconvex appendix assumptions | [StationaryRejection.lean](UniformRandomMALA/Nonconvex/StationaryRejection.lean) |
+| Lemma B.2 (`lem:linear-increment`) and Lemma B.3 (`lem:integrated-increments`) | Explicitly excluded; their continuous-time statements are not formalized. Finite Gaussian maximal and Euler-energy estimates supply the corresponding inputs to the discrete proof. | [GaussianMaximum.lean](UniformRandomMALA/DiscreteTime/GaussianMaximum.lean); [FiniteEulerEnergyMGF.lean](UniformRandomMALA/Concrete/FiniteEulerEnergyMGF.lean) |
+| Lemma B.4 (`lem:frozen-endpoint-law`) | Explicitly excluded; the continuous frozen-drift path statement is bypassed by finite Gaussian change-of-measure and endpoint-law identities. | [FiniteGaussianLikelihood.lean](UniformRandomMALA/DiscreteTime/FiniteGaussianLikelihood.lean); [FiniteGaussianEndpointLaw.lean](UniformRandomMALA/DiscreteTime/FiniteGaussianEndpointLaw.lean) |
+| Lemma B.5 (`lem:path-likelihood`) | Explicitly excluded; the continuous likelihood-moment statement is bypassed by finite-product likelihood bounds followed by a weak-limit argument. | [FiniteEulerRealMoments.lean](UniformRandomMALA/Concrete/FiniteEulerRealMoments.lean); [MALAFullPathAssembly.lean](UniformRandomMALA/Concrete/MALAFullPathAssembly.lean) |
 | Lemma C.1, Mills bounds `eq:mills-two-sided` and log-tail bound `eq:log-tail-simple` | `mills_lower`; `mills_upper`; `log_one_div_normalTailReal_le` | [GaussianMills.lean](UniformRandomMALA/Concrete/GaussianMills.lean); [StandardGaussianShift.lean](UniformRandomMALA/Concrete/StandardGaussianShift.lean) |
 | Lemma C.2 (`lem:gaussian-shift`) | `standardGaussianShift` | [StandardGaussianShift.lean](UniformRandomMALA/Concrete/StandardGaussianShift.lean) |
 | Lemma D.1 (`lem:defective`), defective conductance | `defectiveConductance_of_separatedSets` | [DefectiveConductance.lean](UniformRandomMALA/Concrete/DefectiveConductance.lean) |
 | Lemma D.2 (`lem:exceptional-budget`), exceptional-set arithmetic and universal parameters | `UniformRandomMALA.exceptional_budget_unsaturated`; `UniformRandomMALA.exceptional_budget_endpoint_of_log_condition`; `FirstOrderPotential.concreteA0_exceptional_choice` | [ExceptionalBudgetArithmetic.lean](UniformRandomMALA/ExceptionalBudgetArithmetic.lean); [UniversalConstants.lean](UniformRandomMALA/Concrete/UniversalConstants.lean) |
 | Lemma F.1 (`lem:ladder-sum`), harmonic sum for the chosen universal parameters | `ladderHarmonicReal_le`; `ladder_harmonicCost_le` | [LadderComponents.lean](UniformRandomMALA/Concrete/LadderComponents.lean) |
+| Proposition G.1 (`prop:small-fixed-step-gap`), small-step fixed-MALA bound and dimension endpoint | `C1Potential.exists_universal_smallFixedStep_gap_constant` | [SmallFixedStepGap.lean](UniformRandomMALA/Concrete/SmallFixedStepGap.lean) |
 
 Lemma C.1 has no theorem-level `\label` in the source. Its two equation
 labels identify it unambiguously; `lem:gaussian-shift` belongs to Lemma C.2.
@@ -124,11 +141,13 @@ Appendix E (`app:fractional`) proves Lemma 3.5 and introduces no additional
 numbered theorem. The final overlap argument is in Appendix B.4, within
 `app:rejection-overlap`; Lemma B.4 is a different reference.
 
-Appendix B states Proposition B.1 and Lemmas B.2–B.5 under assumptions that
-also allow nonconvex potentials. That extra scope is not formalized. The
-public stationary-rejection theorem retains strong convexity, exactly the
-scope required for the main theorem. Its proof uses finite discrete chains
-and weak limits rather than the manuscript's continuous-time path lemmas.
+Proposition B.1 is proved under the full nonconvex assumptions. The interface
+`NonconvexPotential` records a continuously differentiable potential, a
+Lipschitz actual gradient, and an integrable Boltzmann weight. The final
+theorem supplies every analytic input internally. It uses the gradient
+moment theorem, finite Gaussian likelihoods, Euler/RWM comparison, and weak
+limits in place of the excluded continuous-time Lemmas B.2–B.5. The earlier
+strongly convex rejection theorem remains available for the main proof.
 
 ## Isoperimetry, the ladder, and lazification
 

@@ -2,9 +2,9 @@
 
 Current verification scope and results are summarized in
 [BUILD_STATUS.md](../BUILD_STATUS.md). `kernel-gate-passed.txt` records the
-last complete Lean gate. The root `CHECK_OUTPUT.txt` and `CHECK_STATUS.txt`
-combine that verified proof version with the current manuscript and
-documentation checks, identifying which checks were refreshed.
+full gate for the current Lean source. The root `CHECK_OUTPUT.txt` and
+`CHECK_STATUS.txt` combine that result with the current manuscript and
+documentation checks. Earlier records are preserved under `historical/`.
 
 | Record | Contents |
 |---|---|
@@ -25,8 +25,8 @@ LaTeX is a separate build as described in the package README.
 `historical/` preserves earlier snapshots, including the first-order revision
 and previous manuscript distributions. Candidate patches and old build logs
 describe their recorded stages, not the current manuscript. `source-changes.json`
-records the scope of the latest manuscript comparison and documentation
-review, together with the source identity of the checked Lean development.
+records the current mathematical scope, manuscript comparison, documentation
+review, and source identity of the checked Lean development.
 
 `SHA256SUMS.txt` uses repository-relative paths under `formalization/` and
 excludes itself, `.lake/`, `tmp/`, `validation/local/`, Git metadata, and

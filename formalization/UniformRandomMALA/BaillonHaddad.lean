@@ -3,9 +3,9 @@ import UniformRandomMALA.Arithmetic
 /-!
 # Baillon--Haddad consequences used by MALA
 
-The functional-analytic Baillon--Haddad theorem itself remains an imported
-convex-analysis input.  The two algebraic consequences used in the paper
-are proved here from its scalar inequalities:
+The concrete Baillon--Haddad inequality is proved in `Concrete.Cocoercivity`
+from the potential assumptions. This module gives two algebraic
+consequences from its scalar inequalities:
 
 1. cocoercivity makes the proposal mean map nonexpansive for `h ≤ 2/L`;
 2. the one-sided inequality gives the safe Metropolis log-ratio lower bound.

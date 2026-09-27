@@ -1,0 +1,30 @@
+PACKAGE VERIFICATION RECORD — 2026-09-19
+
+Retained checks from the successful full gate:
+  Lean source and interface audits: passed; 165 files; 2161 declarations.
+  Library build: passed; 3976 jobs.
+  Public AllResults import: passed.
+  Dependency audit: passed; 281 declarations; standard logical axioms only.
+  Supporting numerics: passed; 2000 deterministic trials.
+All 165 Lean files and three dependency-configuration files match the verified version.
+The full build was not repeated for the documentation-only revision.
+Full-gate log: validation/local/mixing-corollary-gate.log
+
+Refreshed manuscript and documentation checks:
+MANUSCRIPT AUDIT PASSED
+PDF SHA-256: feee07c1d78444bab3d4eea25807840935bd116c7c5888decb71587055cfa66b
+Bundled manuscript: main.tex, main.pdf, bibliography, and referenced figures
+TeX labels: 110; references: 257 uses over 105 labels
+Citations: 132 key uses over 55 keys; bibliography: 65 entries
+Figures: 3 includes
+Lean manuscript labels: 134 uses; numbered theorem/label pairs: 90
+Source checks only; LaTeX compilation and Lean kernel verification are separate checks.
+
+Manuscript regression tests: 21 passed.
+Corollary 2.4: matches the Lean theorem; C depends only on c.
+Reader-guide Lean example: compiled successfully.
+Documentation: 245 local links and 23 anchors across 19 documents passed.
+Typesetting: 48 pages; no unresolved references or citations.
+Supplied/rebuilt PDF text: equal after normalization on all 48 pages.
+Details of nonfatal typesetting warnings: validation/manuscript-build.txt.
+Supplied manuscript assets were preserved.

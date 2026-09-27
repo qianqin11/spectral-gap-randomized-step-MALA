@@ -1,13 +1,15 @@
 # Uniform-random MALA
 
-This repository accompanies the paper *A global spectral gap for
+This repository accompanies the paper *A spectral gap for
 Metropolis-adjusted Langevin algorithm with a uniformly randomized step size*.
 
 - The [simulation package](simulation/README.md) contains the code and data
   for reproducing the numerical results in Section 6.
-- The [Lean package](formalization/README.md) contains formal proofs of the
-  randomized-step spectral-gap and mixing-time bounds, the fixed-step
-  minimax obstruction, and the general aggregation lemma and theorem.
+- The [Lean package](formalization/README.md) formalizes all results in the
+  paper except Lemmas B.2–B.5. Coverage includes spectral gaps, mixing,
+  Gaussian CLTs from arbitrary initial distributions, variance comparisons,
+  nonstationary mean-square error, the nonconvex rejection bound, and the
+  general aggregation lemma and theorem.
 
 Start with the [paper reader guide](formalization/PAPER_READER_GUIDE.md)
 for an introduction to the formalization, a map from the paper to the source

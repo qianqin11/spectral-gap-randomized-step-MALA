@@ -1,0 +1,25 @@
+PAPER-TO-LEAN REFERENCE AUDIT PASSED — 2026-09-19
+
+All 110 active source labels match the freshly compiled LaTeX auxiliary file.
+All 20 theorem-level labels have matching printed numbers. The equation labels
+identifying the unlabeled Mills Lemma C.1 complete the 21 theorem environments.
+Lean comments: 134 manuscript-label uses and 90 numbered theorem/label pairs checked.
+
+Corollary 2.4 matches C1Potential.mixingTimeCorollary: the same potential and
+initial-law assumptions, step size, actual kernel iterates, density norm,
+logarithmic factor, and both ceiling bounds. The positive constant depends
+only on c, as stated in both the supplied TeX and PDF. No proof changes needed.
+
+The 56 declaration names in THEOREM_MAP.md were already compiled through
+AllResults; their names and the verified Lean source are unchanged.
+The reorganized reader-guide example compiles through AllResults and prints
+only the standard logical dependencies for its selected declarations.
+245 local links and 23 Markdown anchors resolve across 19 current documents.
+
+The general guide covers the whole package: reading routes, paper results,
+algorithm and quantity definitions, complete proof paths, verification, and reuse.
+The continuous-time Appendix B scope remains distinguished from the discrete proofs.
+
+TeX SHA-256: 8ac5cbdac07ece71a04a0370ddb98566bc891ad329ad8e85b4e6a9de4757978f
+Compiled label data: validation/manuscript-labels.json
+Reader-guide check: validation/local/reader-guide-review.log

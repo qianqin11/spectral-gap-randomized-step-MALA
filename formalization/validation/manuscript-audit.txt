@@ -1,8 +1,8 @@
 MANUSCRIPT AUDIT PASSED
-PDF SHA-256: feee07c1d78444bab3d4eea25807840935bd116c7c5888decb71587055cfa66b
+PDF SHA-256: 11ab696a4591e8ccc76521ea5f6fe2f33923d6041c6145dee69b4ee2e614be66
 Bundled manuscript: main.tex, main.pdf, bibliography, and referenced figures
-TeX labels: 110; references: 257 uses over 105 labels
-Citations: 132 key uses over 55 keys; bibliography: 65 entries
+TeX labels: 122; references: 299 uses over 116 labels
+Citations: 145 key uses over 62 keys; bibliography: 76 entries
 Figures: 3 includes
-Lean manuscript labels: 134 uses; numbered theorem/label pairs: 90
+Lean manuscript labels: 185 uses; numbered theorem/label pairs: 135
 Source checks only; LaTeX compilation and Lean kernel verification are separate checks.

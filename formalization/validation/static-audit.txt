@@ -1,7 +1,7 @@
 STATIC AUDIT PASSED
-Lean files: 165
-Declarations: 2161
-Explicit `by` proof blocks: 5951
+Lean files: 275
+Declarations: 3234
+Explicit `by` proof blocks: 8570
 Placeholders (`sorry`, `admit`, project `axiom`): none
 Local imports: resolved
 Comments, strings, and (), [], {} delimiters: balanced

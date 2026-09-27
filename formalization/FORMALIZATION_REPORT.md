@@ -1,61 +1,42 @@
 # Formalization report: uniform-random MALA
 
-This Lean development covers the randomized-step spectral-gap and mixing-time
-bounds, the smooth fixed-step minimax upper bound, and the general aggregation
-lemma and theorem in Qian Qin's
-*A global spectral gap for Metropolis-adjusted Langevin algorithm with a
-uniformly randomized step size*. The paper, its TeX source, bibliography,
-and figure PDFs are included in `paper/`.
+This package develops the mathematics of Qian Qin's *A spectral gap for
+Metropolis-adjusted Langevin algorithm with a uniformly randomized step size*
+in Lean using mathlib. The manuscript, source, bibliography, and figures are
+bundled in `paper/`. Begin with [PAPER_READER_GUIDE.md](PAPER_READER_GUIDE.md)
+to locate statements, compare definitions, and follow complete proofs.
 
-The public record `Concrete.C1Potential` expresses continuous
-differentiability, first-order strong convexity, and global Lipschitz
-continuity of the actual Riesz gradient (`eq:first-order-assumptions`).
-`C1Potential.upperTaylor` derives the descent inequality, and
-`toFirstOrderPotential` connects these hypotheses to the discrete analytic
-core without requiring an additional analytic certificate.
+## Mathematical architecture
 
-The principal endpoint is:
+| Layer | Role and principal sources |
+|---|---|
+| Assumptions and algorithms | `C1ToFirstOrder.lean` uses the actual gradient and derives its Taylor bound. `EuclideanTarget.lean`, `MALA.lean`, `MALAFamily.lean`, and `LazyKernel.lean` construct the normalized target and the fixed, randomized, and half-lazy algorithms. |
+| Rejection and isoperimetry | Finite Gaussian likelihoods and Euler/RWM weak limits establish rejection. Gaussian OU/Bobkov interpolation and finite-Euler transport establish target enlargement. `Nonconvex/StationaryRejection.lean` also proves full Proposition B.1 under its weaker assumptions. |
+| Gap and mixing | General energy and flow aggregation lead to `PaperNormalizedGap.lean`. Actual `L²` kernel contraction and density evolution lead to `PaperNormalizedMixing.lean`. |
+| Sample averages | Actual finite path laws, a centered kernel operator, the Poisson equation, and covariance identities give stationary variance limits. `L⁴` interpolation and density pairing give the nonstationary MSE theorem. Extended variance and Rayleigh witnesses prove the fixed-step comparison. |
+| Reusable probability | `KernelLp*.lean`, `StationaryPath*.lean`, `MarkovInfinite*.lean`, and `MartingaleCLT*.lean` supply kernel integration, path laws, conditional expectations, and martingale limit arguments. `PaperCentralLimit.lean` proves both CLTs from every initial distribution with the actual stationary limiting variance. |
 
-```lean
-UniformRandomMALA.Concrete.C1Potential.exists_universal_paperMasterRHS_bounds
-```
+The general fractional aggregation lemma and component-aggregation theorem
+are fully formalized in `FractionalAggregation.lean`. Their energy and flow
+hypotheses match the general paper statements; the MALA proof establishes
+those hypotheses before using the theorems.
 
-It packages the non-lazy and concrete half-lazy clauses of Theorem 2.1
-(`thm:main`) using the paper's `L²` Rayleigh spectral gap and common
-universal constants. The development also covers all three bounds of
-Corollary 2.2 (`cor:sqrt-d-endpoint`), the mixing-time result of Corollary 2.4
-(`cor:mixing`), the mixture, overlap, separation, flow, and aggregation
-ingredients, and Proposition 2.3 (`prop:minimax-fixed-step-ceiling`).
+The explicit excluded statements are Lemmas B.2–B.5. The finite-chain proof
+of Proposition B.1 bypasses their continuous-time stochastic-calculus route.
+This exclusion does not impose an unproved rejection premise on the public
+MALA theorems. [THEOREM_MAP.md](THEOREM_MAP.md) gives precise coverage and
+declarations; [FORMALIZATION_STATUS.md](FORMALIZATION_STATUS.md) records
+the completed scope and explicit exclusions.
 
-The mixing-time proof uses actual iterated half-lazy kernels, the initial
-Radon–Nikodym density, and a proved `L²`-to-TV estimate. Its prefactor depends
-only on the positive tuning constant, as in the manuscript. A fixed universal
-tuning gives an optional universal-prefactor specialization. The
-[reader guide](PAPER_READER_GUIDE.md#main-results) connects these statements
-to their quantity definitions and proof dependencies.
+## Verification
 
-The fractional aggregation lemma (Lemma 3.5) and component-aggregation
-theorem (Theorem 3.6) are formalized for general finite families of Markov
-kernels and can be reused independently of the MALA application.
+The pinned toolchain builds the proofs and the public `AllResults` import.
+The dependency audit inspects actual logical dependencies of selected
+declarations; [BUILD_STATUS.md](BUILD_STATUS.md) records its result and the
+full package gate. Source, manuscript, numerical, and typesetting checks
+provide separate evidence. Comparing the Lean definitions and theorem types
+with the paper remains part of the review.
 
-The manuscript's continuous-time Appendix B proof is not transcribed.
-The formal rejection estimate retains the standing strong-convexity
-assumption and follows a finite-Gaussian/Euler/RWM argument. Appendix B's
-additional nonconvex generalization remains outside the formalization.
-The optional Hessian adapter supplies smooth special cases, including
-the fixed-step hard witness.
-
-Mathematical coverage and exact declarations are documented in
-[FORMALIZATION_STATUS.md](FORMALIZATION_STATUS.md) and
-[THEOREM_MAP.md](THEOREM_MAP.md). The latest validation and its evidence are
-recorded in [BUILD_STATUS.md](BUILD_STATUS.md). The reproducibility gate
-builds the full source with the pinned toolchain, checks the public import,
-and audits selected declarations' actual axiom dependencies. Manuscript
-source checks and numerical trials provide separate supporting checks;
-they are not substitutes for the Lean kernel check.
-
-For an introduction, see [PAPER_READER_GUIDE.md](PAPER_READER_GUIDE.md).
-[PROOF_STRATEGY_LEDGER.md](PROOF_STRATEGY_LEDGER.md),
+For more detail, use [PROOF_STRATEGY_LEDGER.md](PROOF_STRATEGY_LEDGER.md),
 [REUSABLE_RESULTS.md](REUSABLE_RESULTS.md), and
-[TRUST_BOUNDARY.md](TRUST_BOUNDARY.md) describe the proof architecture,
-reusable mathematics, and logical assumptions.
+[TRUST_BOUNDARY.md](TRUST_BOUNDARY.md).
